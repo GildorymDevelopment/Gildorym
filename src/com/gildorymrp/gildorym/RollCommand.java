@@ -60,6 +60,10 @@ public class RollCommand implements CommandExecutor {
 			rollTotal += roll;
 		}
 		rollTotal += rollInfo[2];
+		if (rollInfo[2] < 0) {
+			output = output.substring(0, output.length() - 1);
+		}
+		
 		output += rollInfo[2] + ") = " + rollTotal;
 
 		if (sender instanceof Player) {
@@ -71,7 +75,7 @@ public class RollCommand implements CommandExecutor {
 			if (rollInfo[2] > 0) {
 				message = message + "+" + rollInfo[2];
 			} else if (rollInfo[2] < 0) {
-				message = message + "-" + rollInfo[2];
+				message = message + rollInfo[2];
 			}
 
 			// Sends message and output to all players within 24 of sender
@@ -95,10 +99,16 @@ public class RollCommand implements CommandExecutor {
 	// the arithmetic modifier for the overall roll, respectively.
 	private int[] parseArgs(String[] args) throws NumberFormatException {
 		int[] rollInfo = new int[3];
+		
+		if (args.length == 0) {
+			//If there are no arguments, defaults to 1d20+0
+			return new int[] { 1, 20, 0 };
+		}
+		
 		String rollString = args[0];
 
 		if (args[0].equals(null)) {
-			// If no arguments are given, defaults to 1d20+0
+			// If the arguments are blank, defaults to 1d20+0
 			return new int[] { 1, 20, 0 };
 		}
 
@@ -113,9 +123,9 @@ public class RollCommand implements CommandExecutor {
 
 		// If roll is in form ?+x, sets arithmetic modifier of roll to x
 		if (rollString.contains("+")) {
-			String modString = rollString.split("+")[1];
+			String modString = rollString.split("\\+")[1];
 			rollInfo[2] = Integer.parseInt(modString);
-			rollString = rollString.split("+")[0];
+			rollString = rollString.split("\\+")[0];
 		}
 
 		// If roll is in form ?-x, sets arithmetic modifier of roll to -x
