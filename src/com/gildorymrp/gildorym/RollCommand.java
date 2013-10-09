@@ -28,6 +28,8 @@ public class RollCommand implements CommandExecutor {
 		} catch (NumberFormatException ex) {
 			sender.sendMessage(ChatColor.RED + "Invalid roll!");
 			return true;
+		} catch (NullPointerException ex) {
+			rollInfo = new int[]{1, 20, 0};
 		}
 
 		// Filters out invalid arguments (rolling 0 or negative dice; rolling
@@ -95,7 +97,7 @@ public class RollCommand implements CommandExecutor {
 		int[] rollInfo = new int[3];
 		String rollString = args[0];
 
-		if (args[0] == null) {
+		if (args[0].equals(null)) {
 			// If no arguments are given, defaults to 1d20+0
 			return new int[] { 1, 20, 0 };
 		}
@@ -104,7 +106,7 @@ public class RollCommand implements CommandExecutor {
 		if (rollString.contains("d")) {
 			String amountString = rollString.split("d")[0];
 			rollInfo[0] = Integer.parseInt(amountString);
-			rollString.substring(amountString.length() + 1);
+			rollString = rollString.split("d")[1];
 		} else {
 			rollInfo[0] = 1;
 		}
@@ -113,16 +115,18 @@ public class RollCommand implements CommandExecutor {
 		if (rollString.contains("+")) {
 			String modString = rollString.split("+")[1];
 			rollInfo[2] = Integer.parseInt(modString);
-			rollString = rollString.substring(0, rollString.length()
-					- modString.length() - 1);
+			rollString = rollString.split("+")[0];
 		}
 
 		// If roll is in form ?-x, sets arithmetic modifier of roll to -x
 		if (rollString.contains("-")) {
-			String modString = rollString.split("-")[1];
-			rollInfo[2] = -1 * Integer.parseInt(modString);
-			rollString = rollString.substring(0, rollString.length()
-					- modString.length() - 1);
+			if (!rollString.split("-")[0].equals(null)) {
+				String modString = rollString.split("-")[1];
+				rollInfo[2] = -1 * Integer.parseInt(modString);
+				rollString = rollString.split("-")[0];
+			} else {
+				rollInfo[2] = 0;
+			}
 		}
 
 		// What remains of the string is set as the size of the dice to be used
