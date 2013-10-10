@@ -15,3 +15,12 @@ commands:
     roll:
         usage: /<command> [roll]
         description: Rolls, broadcasting the result to players within 32 blocks
+    renameitem:
+        usage: /<command> [name]
+        description: Renames the item in hand
+    setlore:
+        usage: /<command> [loretext]
+        description: Sets the lore text on the item in hand
+    addlore:
+        usage: /<command> [loretext]
+        description: Adds additional lore text to the item in hand
