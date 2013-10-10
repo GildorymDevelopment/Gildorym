@@ -8,7 +8,7 @@ public class Gildorym extends JavaPlugin {
 	
 	public void onEnable() {
 		this.getCommand("newcharacter").setExecutor(new NewCharacterCommand());
-		this.getCommand("setname").setExecutor(new SetnameCommand());
+		this.getCommand("setname").setExecutor(new SetNameCommand());
 		this.getCommand("rollinfo").setExecutor(new RollInfoCommand());
 		this.getCommand("roll").setExecutor(new RollCommand());
 		this.getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(this), this);
