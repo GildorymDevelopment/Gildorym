@@ -11,6 +11,11 @@ public class Gildorym extends JavaPlugin {
 		this.getCommand("setname").setExecutor(new SetNameCommand());
 		this.getCommand("rollinfo").setExecutor(new RollInfoCommand());
 		this.getCommand("roll").setExecutor(new RollCommand());
+		MetaEditorCommands mec = new MetaEditorCommands();
+		this.getCommand("renameitem").setExecutor(mec);
+		this.getCommand("setlore").setExecutor(mec);
+		this.getCommand("addlore").setExecutor(mec);
+		this.getCommand("removelore").setExecutor(mec);
 		this.getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
 	}
