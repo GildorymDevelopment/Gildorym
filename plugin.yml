@@ -45,3 +45,6 @@ permissions:
     gildorym.mec
         description: Allows you to use metadata editing commands.
         default: op
+    gildorym.mec.signitem
+        description: Allows you to sign items
+        default: op
