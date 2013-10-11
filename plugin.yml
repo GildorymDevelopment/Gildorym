@@ -27,3 +27,6 @@ commands:
     removelore:
         usage: /<command>
         description: Removes lore from the item in hand
+    signitem:
+        usage: /<command>
+        description: Adds the user's name to the lore of the item in hand
