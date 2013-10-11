@@ -1,5 +1,5 @@
 name: Gildorym
-authors: [Lucariatias, godpuppet, melodichand]
+authors: [Lucariatias, godpuppet, melodichand, Hohahihehu]
 version: 2.1.8
 main: com.gildorymrp.gildorym.Gildorym
 commands:
@@ -24,3 +24,6 @@ commands:
     addlore:
         usage: /<command> [loretext]
         description: Adds additional lore text to the item in hand
+    removelore:
+        usage: /<command>
+        description: Removes lore from the item in hand
