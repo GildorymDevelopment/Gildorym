@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.earth2me.essentials.Essentials;
 
-public class SetnameCommand implements CommandExecutor {
+public class SetNameCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {

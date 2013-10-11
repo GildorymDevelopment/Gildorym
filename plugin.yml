@@ -1,5 +1,5 @@
 name: Gildorym
-authors: [Lucariatias, godpuppet, melodichand]
+authors: [Lucariatias, godpuppet, melodichand, Hohahihehu]
 version: 2.1.8
 main: com.gildorymrp.gildorym.Gildorym
 commands:
@@ -17,6 +17,21 @@ commands:
     roll:
         usage: /<command> [roll]
         description: Rolls, broadcasting the result to players within 24 blocks
+    addlore:
+        usage: /<command> [loretext]
+        description: Adds additional lore text to the item in hand.
+    removelore:
+        usage: /<command>
+        description: Removes lore text from the item in hand.
+    renameitem:
+        usage: /<command> [name]
+        description: Changes the display name of the item in hand.
+    setlore: 
+        usage: /<command> [loretext]
+        description: Sets the lore text of the item in hand.
+    signitem:
+        usage: /<command>
+        description: Signs the user's name onto the item in hand.
 permissions:
     gildorym.setname:
         description: Allows you to set your name.
@@ -26,4 +41,7 @@ permissions:
         default: op
     gildorym.setname.other:
         description: Allows you to set someone elses name.
+        default: op
+    gildorym.mec
+        description: Allows you to use metadata editing commands.
         default: op
