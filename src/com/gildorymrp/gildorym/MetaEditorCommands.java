@@ -49,7 +49,9 @@ public class MetaEditorCommands implements CommandExecutor {
 				for (String arg : args) {
 					displayName += mcFormat(arg) + " ";
 				}
-				item.getItemMeta().setDisplayName(displayName.trim());
+				ItemMeta metadata = item.getItemMeta();
+				metadata.setDisplayName(displayName.trim());
+				((Player) sender).getItemInHand().setItemMeta(metadata);
 				sender.sendMessage(ChatColor.GRAY
 						+ "The item's name has been changed.");
 				return true;
@@ -81,7 +83,9 @@ public class MetaEditorCommands implements CommandExecutor {
 						lore.add(loreTextLine);
 					}
 				}
-				item.getItemMeta().setLore(lore);
+				ItemMeta metadata = item.getItemMeta();
+				metadata.setLore(lore);
+				((Player) sender).getItemInHand().setItemMeta(metadata);
 				sender.sendMessage(ChatColor.GRAY
 						+ "The item's lore text has been set.");
 				return true;
@@ -119,7 +123,8 @@ public class MetaEditorCommands implements CommandExecutor {
 						lore.add(loreTextLine);
 					}
 				}
-				item.getItemMeta().setLore(lore);
+				metadata.setLore(lore);
+				((Player) sender).getItemInHand().setItemMeta(metadata);
 				sender.sendMessage(ChatColor.GRAY
 						+ "The item's lore text has been added to.");
 				return true;
@@ -137,7 +142,9 @@ public class MetaEditorCommands implements CommandExecutor {
 					return true;
 				}
 				List<String> lore = new ArrayList<String>();
-				item.getItemMeta().setLore(lore);
+				ItemMeta metadata = item.getItemMeta();
+				metadata.setLore(lore);
+				((Player) sender).getItemInHand().setItemMeta(metadata);
 				sender.sendMessage(ChatColor.GRAY
 						+ "The item's lore text has been removed.");
 				return true;
@@ -167,8 +174,10 @@ public class MetaEditorCommands implements CommandExecutor {
 					lore = new ArrayList<String>();
 				}
 				lore.add(ChatColor.GRAY + "[ Event Item -" + playername + " ]");
-				item.getItemMeta().setLore(lore);
+				metadata.setLore(lore);
+				((Player) sender).getItemInHand().setItemMeta(metadata);
 				sender.sendMessage(ChatColor.GRAY + "The item has been signed.");
+				return true;
 			}
 		}
 		return false;
