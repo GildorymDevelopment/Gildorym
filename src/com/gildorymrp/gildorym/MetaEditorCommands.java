@@ -30,6 +30,10 @@ public class MetaEditorCommands implements CommandExecutor {
 		}
 
 		if (cmd.getName().equalsIgnoreCase("renameitem")) {
+			if (!sender.hasPermission("gildorym.mec.renameitem")) {
+				sender.sendMessage(ChatColor.RED
+						+ "You don't have permission to use that command!");
+			}
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(ChatColor.RED
 						+ "Only a player can use this command!");
@@ -57,6 +61,10 @@ public class MetaEditorCommands implements CommandExecutor {
 				return true;
 			}
 		} else if (cmd.getName().equalsIgnoreCase("setlore")) {
+			if (!sender.hasPermission("gildorym.mec.setlore")) {
+				sender.sendMessage(ChatColor.RED
+						+ "You don't have permission to use that command!");
+			}
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(ChatColor.RED
 						+ "Only a player can use this command!");
@@ -91,6 +99,10 @@ public class MetaEditorCommands implements CommandExecutor {
 				return true;
 			}
 		} else if (cmd.getName().equalsIgnoreCase("addlore")) {
+			if (!sender.hasPermission("gildorym.mec.addlore")) {
+				sender.sendMessage(ChatColor.RED
+						+ "You don't have permission to use that command!");
+			}
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(ChatColor.RED
 						+ "Only a player can use this command!");
@@ -130,6 +142,10 @@ public class MetaEditorCommands implements CommandExecutor {
 				return true;
 			}
 		} else if (cmd.getName().equalsIgnoreCase("removelore")) {
+			if (!sender.hasPermission("gildorym.mec.removelore")) {
+				sender.sendMessage(ChatColor.RED
+						+ "You don't have permission to use that command!");
+			}
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(ChatColor.RED
 						+ "Only a player can use this command!");
