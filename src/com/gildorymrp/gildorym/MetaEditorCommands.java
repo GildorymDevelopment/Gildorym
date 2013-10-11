@@ -154,7 +154,7 @@ public class MetaEditorCommands implements CommandExecutor {
 				ItemStack item = ((Player) sender).getItemInHand();
 				if (item == null || item.getType() == Material.AIR) {
 					sender.sendMessage(ChatColor.RED
-							+ "You have an item in hand!");
+							+ "You must have an item in hand!");
 					return true;
 				}
 				List<String> lore = new ArrayList<String>();
@@ -200,7 +200,7 @@ public class MetaEditorCommands implements CommandExecutor {
 	}
 
 	private String mcFormat(String str) {
-		return str.replace('&', '§');
+		return str.replace('&', 'ï¿½');
 	}
 
 }
