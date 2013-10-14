@@ -26,6 +26,7 @@ public class RollCommand implements CommandExecutor {
 				&& !sender.hasPermission("gildorym.dmroll")) {
 			sender.sendMessage(ChatColor.RED
 					+ "You do not have permission to perform that command!");
+			return true;
 		}
 
 		int[] rollInfo;
