@@ -28,6 +28,7 @@ public class MetaEditorCommands implements CommandExecutor {
 			if (!sender.hasPermission("gildorym.mec.renameitem")) {
 				sender.sendMessage(ChatColor.RED
 						+ "You don't have permission to use that command!");
+				return true;
 			}
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(ChatColor.RED
@@ -59,6 +60,7 @@ public class MetaEditorCommands implements CommandExecutor {
 			if (!sender.hasPermission("gildorym.mec.setlore")) {
 				sender.sendMessage(ChatColor.RED
 						+ "You don't have permission to use that command!");
+				return true;
 			}
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(ChatColor.RED
@@ -97,6 +99,7 @@ public class MetaEditorCommands implements CommandExecutor {
 			if (!sender.hasPermission("gildorym.mec.addlore")) {
 				sender.sendMessage(ChatColor.RED
 						+ "You don't have permission to use that command!");
+				return true;
 			}
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(ChatColor.RED
@@ -140,6 +143,7 @@ public class MetaEditorCommands implements CommandExecutor {
 			if (!sender.hasPermission("gildorym.mec.removelore")) {
 				sender.sendMessage(ChatColor.RED
 						+ "You don't have permission to use that command!");
+				return true;
 			}
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(ChatColor.RED
@@ -164,6 +168,7 @@ public class MetaEditorCommands implements CommandExecutor {
 			if (!sender.hasPermission("gildorym.mec.signitem")) {
 				sender.sendMessage(ChatColor.RED
 						+ "You don't have permission to use that command!");
+				return true;
 			}
 			if (!(sender instanceof Player)) {
 				sender.sendMessage(ChatColor.RED
@@ -195,7 +200,7 @@ public class MetaEditorCommands implements CommandExecutor {
 	}
 
 	private String mcFormat(String str) {
-		return str.replace('&', '§');
+		return str.replace('&', 'ï¿½');
 	}
 
 }
