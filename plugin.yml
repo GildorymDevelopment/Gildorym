@@ -11,15 +11,13 @@ commands:
         description: Sets your name
     setnameother:
         usage: /cmd [user] <name> <name> <name> <name> <name>
+        description: Sets another user's name
     rollinfo:
         usage: /<command>
         description: Shows your roll info
     roll:
         usage: /<command> [roll]
         description: Rolls, broadcasting the result to players within 24 blocks
-    dmroll:
-        usage: /<command> [roll]
-        description: Allows a DM to roll without broadcasting the result.
     addlore:
         usage: /<command> [loretext]
         description: Adds additional lore text to the item in hand.
@@ -38,17 +36,20 @@ commands:
     radiusemote:
         description: Sends an emote to a certain radius. Use && for colours.
         usage: /<command> [radius] [message]
+    dmroll:
+        usage: /<command> [roll]
+        description: Allows a DM to roll without broadcasting the result.
 permissions:
-    gildorym.createboatsigns:
-        description: Allows the user to creat boat signs.
-        default: op
     gildorym.dmroll:
         description: Allows you to roll silently.
+        default: op
+    gildorym.boatsigns.create:
+        description: Allows creation of boat signs
         default: op
     gildorym.radiusemote:
         description: Allows using of radius emotes.
         default: op
-    gildorym.falldamagealert:
+    gildorym.falldamage.alert:
         description: Allows you to be notified of fall distances
         default: op
     gildorym.setname:
