@@ -10,7 +10,7 @@ public class SignChangeListener implements Listener {
 	@EventHandler
 	public void onSignChange(SignChangeEvent event) {
 		if (event.getLine(0).equalsIgnoreCase("[boat]")) {
-			if (event.getPlayer().hasPermission("boatsigns.create")) {
+			if (event.getPlayer().hasPermission("gildorym.boatsigns.create")) {
 				event.setLine(0, ChatColor.BLUE + "[boat]");
 			} else {
 				event.getBlock().breakNaturally();
