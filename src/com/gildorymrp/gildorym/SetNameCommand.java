@@ -49,33 +49,13 @@ public class SetNameCommand implements CommandExecutor {
 					return true;
 				}
 			}else if(args.length == 3){
-					if (sender.hasPermission("gildorym.setname") && sender instanceof Player){
+					if (sender.hasPermission("gildorym.setname.title") && sender instanceof Player){
 						essentials.getUserMap().getUser(sender.getName()).setNickname(args[0] + " " + args[1] + " " + args[2]);
 						name = essentials.getUser(sender).getNickname();
 						sender.sendMessage(ChatColor.DARK_AQUA + "name changed: " + name);
 						return true;
 				}else{
 						sender.sendMessage("You don't have permission");
-					return true;
-				}
-			}else if(args.length == 4){
-				if (sender.hasPermission("gildorym.setname.title")){
-					essentials.getUserMap().getUser(sender.getName()).setNickname(args[0] + " " + args[1] + " " + args[2] + " " + args[3]);
-					name = essentials.getUser(sender).getNickname();
-					sender.sendMessage(ChatColor.DARK_AQUA + "name changed: " + name);
-					return true;
-				}else{
-					sender.sendMessage("You don't have permission");
-					return true;
-				}
-			}else if(args.length == 5){
-				if (sender.hasPermission("gildorym.setname.title") && sender instanceof Player){
-					essentials.getUserMap().getUser(sender.getName()).setNickname(args[0] + " " + args[1] + " " + args[2] + " " + args[3] + " " + args[4]);
-					name = essentials.getUser(sender).getNickname();
-					sender.sendMessage(ChatColor.DARK_AQUA + "name changed: " + name);
-					return true;
-				}else{
-					sender.sendMessage("You don't have permission");
 					return true;
 				}
 			}else{
