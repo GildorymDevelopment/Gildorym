@@ -59,26 +59,6 @@ public class SetNameOtherCommand implements CommandExecutor {
 						sender.sendMessage("You don't have permission");
 						return true;
 					}
-				}else if(args.length == 5){
-					if (sender.hasPermission("gildorym.setname.other")){
-						essentials.getUserMap().getUser(target.getName()).setNickname(args[1] + " " + args[2] + " " + args[3] + " " + args[4]);
-						name = essentials.getUser(target).getNickname();
-						target.sendMessage(ChatColor.DARK_AQUA + "name changed: " + name);
-						return true;
-					}else{
-						sender.sendMessage("You don't have permission");
-						return true;
-					}
-				}else if(args.length == 6){
-					if (sender.hasPermission("gildorym.setname.other")){
-						essentials.getUserMap().getUser(target.getName()).setNickname(args[1] + " " + args[2] + " " + args[3] + " " + args[4] + " " + args[5]);
-						name = essentials.getUser(target).getNickname();
-						target.sendMessage(ChatColor.DARK_AQUA + "name changed: " + name);
-						return true;
-					}else{
-						sender.sendMessage("You don't have permission");
-						return true;
-					}
 				}else{
 					sender.sendMessage(ChatColor.DARK_RED + "illegal argument amount");
 					return false;
