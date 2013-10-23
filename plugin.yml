@@ -1,6 +1,7 @@
-name: Gildorym
+name: ${project.name}
 authors: [Lucariatias, godpuppet, melodichand, Hohahihehu]
-version: 2.1.8
+version: ${project.version}
+description: ${project.description}
 main: com.gildorymrp.gildorym.Gildorym
 commands:
     newcharacter:

@@ -47,7 +47,7 @@ public class MetaEditorCommands implements CommandExecutor {
 				}
 				String displayName = "";
 				for (String arg : args) {
-					displayName += mcFormat(arg) + " ";
+					displayName += ChatColor.translateAlternateColorCodes('&', arg) + " ";
 				}
 				ItemMeta metadata = item.getItemMeta();
 				metadata.setDisplayName(displayName.trim());
@@ -79,7 +79,7 @@ public class MetaEditorCommands implements CommandExecutor {
 				}
 				String loreText = "";
 				for (String arg : args) {
-					loreText += mcFormat(arg) + " ";
+					loreText += ChatColor.translateAlternateColorCodes('&', arg) + " ";
 				}
 				String[] loreTextLines = loreText.split("\\|");
 				List<String> lore = new ArrayList<String>();
@@ -118,7 +118,7 @@ public class MetaEditorCommands implements CommandExecutor {
 				}
 				String loreText = "";
 				for (String arg : args) {
-					loreText += mcFormat(arg) + " ";
+					loreText += ChatColor.translateAlternateColorCodes('&', arg) + " ";
 				}
 				String[] loreTextLines = loreText.split("\\|");
 				ItemMeta metadata = item.getItemMeta();
@@ -197,10 +197,6 @@ public class MetaEditorCommands implements CommandExecutor {
 			}
 		}
 		return false;
-	}
-
-	private String mcFormat(String str) {
-		return str.replace('&', '�');
 	}
 
 }
