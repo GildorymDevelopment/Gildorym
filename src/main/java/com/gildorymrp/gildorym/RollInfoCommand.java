@@ -266,8 +266,12 @@ public class RollInfoCommand implements CommandExecutor {
 			// Melee Attack +3
 			case IRON_SWORD:
 			case IRON_AXE:
-			case IRON_SPADE:
+			case DIAMOND_HOE:
 				meleeAttack += 3.0D;
+				break;
+			// Melee Attack +4
+			case DIAMOND_SPADE:
+				meleeAttack += 4.0D;
 				break;
 			// Melee Attack +5
 			case DIAMOND_SWORD:
@@ -284,7 +288,7 @@ public class RollInfoCommand implements CommandExecutor {
 				break;
 			// Ranged Attack +5
 			case BOW:
-				rangedAttack += 5.0D;
+				rangedAttack += 3.0D;
 				break;
 			// Melee Attack +1; Magic Attack +3
 			case WOOD_HOE:
@@ -306,6 +310,11 @@ public class RollInfoCommand implements CommandExecutor {
 				meleeAttack += 3.0D;
 				magicAttack += 2.0D;
 				break;
+			// Melee Attack +3; Magic Attack +3
+			case IRON_SPADE:
+				meleeAttack += 3.0D;
+				magicAttack += 3.0D;
+				break;
 			// Melee Attack +3; Magic Attack +4
 			case GOLD_AXE:
 			case GOLD_HOE:
@@ -317,12 +326,10 @@ public class RollInfoCommand implements CommandExecutor {
 				magicAttack += 2.0D;
 				break;
 			// Magic Attack +3
-			case DIAMOND_HOE:
 			case EYE_OF_ENDER:
 				magicAttack += 3.0D;
 				break;
 			// Magic Attack +4
-			case DIAMOND_SPADE:
 			case BLAZE_ROD:
 			case GOLDEN_APPLE:
 				magicAttack += 4.0D;
