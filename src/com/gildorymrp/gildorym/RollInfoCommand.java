@@ -65,7 +65,7 @@ public class RollInfoCommand implements CommandExecutor {
 				luck += (level + 2);
 				reflex += (20 + 2);
 			}
-			
+
 			if (level == 1) {
 				BAB_avg = 1;
 				BAB_poor = 1;
@@ -334,7 +334,7 @@ public class RollInfoCommand implements CommandExecutor {
 			default:
 				break;
 			}
-			
+
 			// Helmets
 			if (player.getInventory().getHelmet() != null) {
 				Material helmetType = player.getInventory().getHelmet().getType();
@@ -352,7 +352,7 @@ public class RollInfoCommand implements CommandExecutor {
 					rangedDefence += 1.0D;
 				}
 			}
-			
+
 			// Chestplates
 			if (player.getInventory().getChestplate() != null) {
 				Material chestplateType = player.getInventory().getChestplate().getType();
@@ -370,7 +370,7 @@ public class RollInfoCommand implements CommandExecutor {
 					rangedDefence += 3.5D;
 				}
 			}
-			
+
 			// Leggings
 			if (player.getInventory().getLeggings() != null) {
 				Material leggingsType = player.getInventory().getLeggings().getType();
@@ -388,7 +388,7 @@ public class RollInfoCommand implements CommandExecutor {
 					rangedDefence += 2.5D;
 				}
 			}
-			
+
 			// Boots
 			if (player.getInventory().getBoots() != null) {
 				Material bootsType = player.getInventory().getBoots().getType();
@@ -408,7 +408,7 @@ public class RollInfoCommand implements CommandExecutor {
 			}
 
 			// Obsolete Enchantment Handler
-			
+
 			/*
 			 * Iterator<Enchantment> enchantmentIterator; enchantmentIterator =
 			 * ((Player)

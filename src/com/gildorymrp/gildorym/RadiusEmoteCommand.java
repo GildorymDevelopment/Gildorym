@@ -19,7 +19,7 @@ public class RadiusEmoteCommand implements CommandExecutor {
 						message += args[i] + " ";
 					}
 
-					message = message.replaceAll("&&", "Â¤");
+					message = message.replaceAll("&&", "¤");
 
 					for (Player player : ((Player) sender).getLocation().getWorld().getPlayers()) {
 						if (((Player) sender).getLocation().distance(player.getLocation()) <= Integer.parseInt(args[0])) {

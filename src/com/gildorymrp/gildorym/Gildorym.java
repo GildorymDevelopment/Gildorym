@@ -42,18 +42,16 @@ public class Gildorym extends JavaPlugin {
 		this.getServer().getPluginManager().registerEvents(new SignChangeListener(), this);
 	}
 
-	public void onInjury(Player player, String type,int dieSize, int fallDistance) {		
+	public void onInjury(Player player, String type, int dieSize, int fallDistance) {		
 		int severity = (new Random()).nextInt(dieSize) + 1;
 
-		if(type.equalsIgnoreCase("none")){
+		if(type.equalsIgnoreCase("none") && severity == 1){
 			player.sendMessage(ChatColor.BLUE + "You have fallen " + fallDistance + " blocks, escaping without injury.");
 			
-		}
-		
-		if (type.equalsIgnoreCase("major")) {
+		}else if (type.equalsIgnoreCase("major")) {
 			for (Player player2 : Bukkit.getServer().getOnlinePlayers()) {
-				if (player2.hasPermission("falldamagedetector.notify")) {
-					player2.sendMessage(ChatColor.BLUE + player.getName() + " has just fallen " + fallDistance + " blocks, taking a major injury. Check on them if you want.");
+				if (player2.hasPermission("gildorym.falldamage.alert")) {
+					player2.sendMessage(player.getName() + ChatColor.BLUE + " has just fallen " + fallDistance + " blocks, taking a " + ChatColor.DARK_RED + " major " + ChatColor.BLUE + "injury. Check on them if you want.");
 				}
 			}
 			
@@ -74,8 +72,8 @@ public class Gildorym extends JavaPlugin {
 		} else if (type.equalsIgnoreCase("minor")) {
 			for (Player player2 : Bukkit.getServer()
 					.getOnlinePlayers()) {
-				if (player2.hasPermission("falldamagedetector.notify")) {
-					player2.sendMessage(ChatColor.BLUE + player.getName() + " has just fallen " + fallDistance + " blocks, taking a minor injury. Check on them if you want.");
+				if (player2.hasPermission("gildorym.falldamage.alert")) {
+					player2.sendMessage(player.getName() + ChatColor.BLUE + " has just fallen " + fallDistance + " blocks, taking a" + ChatColor.GOLD + " minor " + ChatColor.BLUE + "injury. Check on them if you want.");
 				}
 			}
 			
@@ -98,10 +96,16 @@ public class Gildorym extends JavaPlugin {
 				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance + " blocks, receiving only a few scratches.");
 				
 			}
-		} else if(type.equalsIgnoreCase("death")){
+		} else if(type.equalsIgnoreCase("death") && severity == 1){
+			for (Player player2 : Bukkit.getServer()
+					.getOnlinePlayers()) {
+				if (player2.hasPermission("gildorym.falldamage.alert")) {
+					player2.sendMessage(player.getName() + ChatColor.BLUE + " has just fallen " + fallDistance + " blocks, and " + ChatColor.DARK_RED + "died.");
+				}
+			}
 			player.sendMessage(ChatColor.DARK_RED + "You have fallen " + fallDistance + " blocks, and died.");
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 999999999, 10), true);
-			
+			Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "warp deathbox " + player.getName());
 		} else {
 			player.sendMessage(ChatColor.RED + "Error : Injury type "
 					+ ChatColor.RESET + type + ChatColor.RED

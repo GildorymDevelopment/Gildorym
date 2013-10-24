@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/Users/Administrator.Banditt-PC/Desktop/Coding/bukkit-1.6.4-R0.1-20130920.192155-2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Administrator.Banditt-PC/Desktop/Coding/Server/plugins/Essentials.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Administrator.Banditt-PC/Desktop/Coding/Server/plugins/GildorymClasses.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Administrator.Banditt-PC/Desktop/Coding/Server/plugins/Vault.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Administrator.Banditt-PC/Desktop/Coding/Server/plugins/GildorymCharacterCards.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

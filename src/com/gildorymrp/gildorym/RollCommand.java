@@ -13,11 +13,11 @@ public class RollCommand implements CommandExecutor {
 	private final int MAXIMUM_DIE_SIZE = 100;
 	private final int MAXIMUM_NUMBER_OF_DICE = 10;
 	private Gildorym plugin;
-	
+
 	public RollCommand(Gildorym plugin) {
 		this.plugin = plugin;
 	}
-	
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label,
 			String[] args) {
@@ -75,7 +75,7 @@ public class RollCommand implements CommandExecutor {
 		if (rollInfo[2] < 0) {
 			output = output.substring(0, output.length() - 1);
 		}
-		
+
 		output += rollInfo[2] + ") = " + rollTotal;
 		if (sender instanceof Player) {
 			// Generates human-friendly message when player runs the command
@@ -102,7 +102,7 @@ public class RollCommand implements CommandExecutor {
 				((Player) sender).sendMessage(message);
 				((Player) sender).sendMessage(output);
 			}
-			
+
 			// Sends result of roll to console.
 			String log = "Player " + ((Player) sender).getName() + " rolled " + rollInfo[0] + "d" + rollInfo[1];
 			if (rollInfo[2] > 0) {
@@ -125,12 +125,12 @@ public class RollCommand implements CommandExecutor {
 	// the arithmetic modifier for the overall roll, respectively.
 	private int[] parseArgs(String[] args) throws NumberFormatException {
 		int[] rollInfo = new int[3];
-		
+
 		if (args.length == 0) {
 			//If there are no arguments, defaults to 1d20+0
 			return new int[] { 1, 20, 0 };
 		}
-		
+
 		String rollString = args[0];
 
 		if (args[0].equals(null)) {

@@ -200,7 +200,7 @@ public class MetaEditorCommands implements CommandExecutor {
 	}
 
 	private String mcFormat(String str) {
-		return str.replace('&', 'ï¿½');
+		return str.replace('&', '§');
 	}
 
 }
