@@ -26,11 +26,10 @@ public class EntityDamageListener implements Listener {
 		int fall = (int) event.getEntity().getFallDistance();
 		int roll = randomGenerator.nextInt(20) + 1;
 
-		Player damaged = (Player) event.getEntity();
-
 		if (event.isCancelled() != true) {
 			// Automated Fall Damage & Damage Messages
 			if (event.getEntity() instanceof Player) {
+				Player damaged = (Player) event.getEntity();
 				if (event.getCause() == DamageCause.FALL) {
 					if (fall < 5) {
 						event.setCancelled(true);
