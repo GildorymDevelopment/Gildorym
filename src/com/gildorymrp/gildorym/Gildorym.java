@@ -42,13 +42,18 @@ public class Gildorym extends JavaPlugin {
 		this.getServer().getPluginManager().registerEvents(new SignChangeListener(), this);
 	}
 
-	public void onInjury(Player player, String type, int dieSize, int fallDistance) {		
-		int severity = (new Random()).nextInt(dieSize) + 1;
+	public void onInjury(Player player, String type, int dieSize, int fallDistance) {
+		int severity;
+		if (dieSize > 0) {
+			severity = (new Random()).nextInt(dieSize) + 1;
+		} else {
+			severity = 1;
+		}
 
 		if(type.equalsIgnoreCase("none") && severity == 1){
 			player.sendMessage(ChatColor.BLUE + "You have fallen " + fallDistance + " blocks, escaping without injury.");
 			
-		}else if (type.equalsIgnoreCase("major")) {
+		} else if (type.equalsIgnoreCase("major")) {
 			for (Player player2 : Bukkit.getServer().getOnlinePlayers()) {
 				if (player2.hasPermission("gildorym.falldamage.alert")) {
 					player2.sendMessage(player.getName() + ChatColor.BLUE + " has just fallen " + fallDistance + " blocks, taking a " + ChatColor.DARK_RED + " major " + ChatColor.BLUE + "injury. Check on them if you want.");
