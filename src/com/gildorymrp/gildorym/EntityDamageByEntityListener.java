@@ -66,7 +66,7 @@ public class EntityDamageByEntityListener implements Listener {
 							}
 
 							if (roll >= noinjury) {
-								plugin.onInjury(damaged, "none", 0, fall);
+								plugin.onInjury(damaged, "none", 1, fall);
 								event.setCancelled(true);
 								return;
 							} else if (roll >= minorinjury) {
@@ -76,7 +76,7 @@ public class EntityDamageByEntityListener implements Listener {
 								plugin.onInjury(damaged, "major", 50, fall);
 								return;
 							} else {
-								plugin.onInjury(damaged, "death", 0, fall);
+								plugin.onInjury(damaged, "death", 1, fall);
 							}
 						}
 						return;

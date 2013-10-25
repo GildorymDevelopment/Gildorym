@@ -65,4 +65,8 @@ public class SetNameCommand implements CommandExecutor {
 		}
 		return false;	
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> e728ca6dd7c1f8d2497bcacd856809fea14e974b

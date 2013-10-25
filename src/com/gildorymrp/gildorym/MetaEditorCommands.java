@@ -200,7 +200,11 @@ public class MetaEditorCommands implements CommandExecutor {
 	}
 
 	private String mcFormat(String str) {
+<<<<<<< HEAD
 		return str.replace('&', 'ยง');
+=======
+		return str.replace('&', 'ง');
+>>>>>>> e728ca6dd7c1f8d2497bcacd856809fea14e974b
 	}
 
 }
