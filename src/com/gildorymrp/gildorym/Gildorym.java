@@ -37,7 +37,7 @@ public class Gildorym extends JavaPlugin {
 		this.getCommand("removelore").setExecutor(mec);
 		this.getCommand("signitem").setExecutor(mec);
 		
-		this.getServer().getPluginManager().registerEvents(new EntityDamageByEntityListener(this), this);
+		this.getServer().getPluginManager().registerEvents(new EntityDamageListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new SignChangeListener(), this);
 	}
