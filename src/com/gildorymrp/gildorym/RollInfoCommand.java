@@ -512,27 +512,14 @@ public class RollInfoCommand implements CommandExecutor {
 			 */
 
 			sender.sendMessage(ChatColor.GRAY + "======================");
-			sender.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD
-					+ player.getDisplayName() + "'s Roll Info");
-			sender.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "Class: "
-					+ characterClass);
+			sender.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + player.getDisplayName() + "'s Roll Info");
+			sender.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "Class: " + characterClass);
 			sender.sendMessage(ChatColor.GRAY + "======================");
-			sender.sendMessage(ChatColor.RED + "Melee   - Attack: "
-					+ ChatColor.WHITE + (int) Math.floor(meleeAttack)
-					+ ChatColor.RED + "  Defence: " + ChatColor.WHITE
-					+ (int) Math.floor(meleeDefence));
-			sender.sendMessage(ChatColor.RED + "Ranged - Attack: "
-					+ ChatColor.WHITE + (int) Math.floor(rangedAttack)
-					+ ChatColor.RED + "  Defence: " + ChatColor.WHITE
-					+ (int) Math.floor(rangedDefence));
-			sender.sendMessage(ChatColor.RED + "Magic   - Attack: "
-					+ ChatColor.WHITE + (int) Math.floor(magicAttack)
-					+ ChatColor.RED + "  Defence: " + ChatColor.WHITE
-					+ (int) Math.floor(magicDefence));
-			sender.sendMessage(ChatColor.RED + "Luck: " + ChatColor.WHITE
-					+ (int) Math.floor(luck));
-			sender.sendMessage(ChatColor.RED + "Reflex: " + ChatColor.WHITE
-					+ (int) Math.floor(reflex));
+			sender.sendMessage(ChatColor.RED + "Melee   - Attack: " + ChatColor.WHITE + (int) Math.floor(meleeAttack) + ChatColor.RED + "  Defence: " + ChatColor.WHITE + (int) Math.floor(meleeDefence));
+			sender.sendMessage(ChatColor.RED + "Ranged - Attack: " + ChatColor.WHITE + (int) Math.floor(rangedAttack) + ChatColor.RED + "  Defence: " + ChatColor.WHITE + (int) Math.floor(rangedDefence));
+			sender.sendMessage(ChatColor.RED + "Magic   - Attack: " + ChatColor.WHITE + (int) Math.floor(magicAttack) + ChatColor.RED + "  Defence: " + ChatColor.WHITE + (int) Math.floor(magicDefence));
+			sender.sendMessage(ChatColor.RED + "Luck: " + ChatColor.WHITE + (int) Math.floor(luck));
+			sender.sendMessage(ChatColor.RED + "Reflex: " + ChatColor.WHITE + (int) Math.floor(reflex));
 		} else {
 			sender.sendMessage(ChatColor.DARK_RED
 					+ "Could not find that player!");
