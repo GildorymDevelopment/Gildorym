@@ -40,11 +40,6 @@ public class Gildorym extends JavaPlugin {
 		this.getServer().getPluginManager().registerEvents(new EntityDamageListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new SignChangeListener(), this);
-		saveConfig();
-	}
-	
-	public void onDisable() {
-		saveConfig();
 	}
 
 	public void onInjury(Player player, String type, int dieSize, int fallDistance) {
@@ -116,16 +111,6 @@ public class Gildorym extends JavaPlugin {
 			player.sendMessage(ChatColor.DARK_RED + "You have fallen " + fallDistance + " blocks, and died.");
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 999999999, 10), true);
 			Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "warp deathbox " + player.getName());
-		} else if (type.equalsIgnoreCase("unconcious")){
-			for (Player player2 : player.getLocation().getWorld().getPlayers()) {
-				if (player2.getLocation().distance(player.getLocation()) <= 12) {
-					player2.sendMessage(player.getDisplayName() + ChatColor.YELLOW + " has fallen unconcious!");
-				}
-			}
-			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 15000, 10), true);
-			player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 15000, 1), true );
-			player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 15000, -20), true );
-			
 		} else {
 			player.sendMessage(ChatColor.RED + "Error : Injury type "
 					+ ChatColor.RESET + type + ChatColor.RED
