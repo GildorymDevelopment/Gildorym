@@ -95,6 +95,17 @@ public class EntityDamageListener implements Listener {
 						}
 					}
 				}
+				
+				if (damaged.getHealth() <= event.getDamage()){
+					damaged.setHealth(event.getDamage() + 1.0);
+					plugin.getConfig().set("unconcious", damaged.getName());
+					plugin.onInjury(damaged, "unconcious", 0, 0);
+				}
+				
+				if (plugin.getConfig().getStringList("unconcious").contains(damaged.getName())){
+					event.setCancelled(true);
+					return;
+				}
 			}
 		}
 	}
