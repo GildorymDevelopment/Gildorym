@@ -51,7 +51,7 @@ public class Gildorym extends JavaPlugin {
 		}
 
 		if(type.equalsIgnoreCase("none") && severity == 1){
-			player.sendMessage(ChatColor.BLUE + "You have fallen " + fallDistance + " blocks, escaping without injury.");
+			player.sendMessage(ChatColor.BLUE + "You have fallen " + fallDistance * 3 + " feet, escaping without injury.");
 			
 		} else if (type.equalsIgnoreCase("major")) {
 			for (Player player2 : Bukkit.getServer().getOnlinePlayers()) {
@@ -61,16 +61,16 @@ public class Gildorym extends JavaPlugin {
 			}
 			
 			if (severity < 16) {
-				player.sendMessage(ChatColor.RED + "You have fallen " + fallDistance + " blocks, receiving a Punctured Organ (Anything but the Heart), Completely Crushed Limb, Cracked Skull or Cracked Vertebra; 4 Damage.");
+				player.sendMessage(ChatColor.RED + "You have fallen " + fallDistance * 3 + " feet, receiving a Punctured Organ (Anything but the Heart), Completely Crushed Limb, Cracked Skull or Cracked Vertebra; 4 Damage.");
 				player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 35000, 4), true); 
 				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 35000, 4), true);
 				
 			} else if (severity < 31) {
-				player.sendMessage(ChatColor.RED + "You have fallen " + fallDistance + " blocks, receiving a Crushed Small limb (Such as hand/foot), Shattered Bones, or Severe Concussion; 3 Damage.");
+				player.sendMessage(ChatColor.RED + "You have fallen " + fallDistance * 3 + " feet, receiving a Crushed Small limb (Such as hand/foot), Shattered Bones, or Severe Concussion; 3 Damage.");
 				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 35000, 4), true);
 				
 			} else if (severity < 51) {
-				player.sendMessage(ChatColor.RED + "You have fallen " + fallDistance + " blocks, receiving a Cleanly Broken Bone, Torn Major Muscle, or Loss of a Minor Limb; 2 Damage.");
+				player.sendMessage(ChatColor.RED + "You have fallen " + fallDistance * 3 + " feet, receiving a Cleanly Broken Bone, Torn Major Muscle, or Loss of a Minor Limb; 2 Damage.");
 				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 35000, 3), true);
 				
 			}
@@ -83,22 +83,22 @@ public class Gildorym extends JavaPlugin {
 			}
 			
 			if (severity < 11) {
-				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance + " blocks, receiving a Minor Fracture, Brused Ribs, or Dislocation; 1 damage.");
+				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance * 3 + " feet, receiving a Minor Fracture, Brused Ribs, or Dislocation; 1 damage.");
 				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 35000, 2), true);
 				
 			} else if (severity < 21) {
-				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance + " blocks, receiving a Minor Torn Ligement, Chipped Bone, or Light Concussion; 1 damage.");
+				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance * 3 + " feet, receiving a Minor Torn Ligement, Chipped Bone, or Light Concussion; 1 damage.");
 				player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 35000, 2), true);
 				
 			} else if (severity < 35) {
-				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance + " blocks, receiving a Mild Sprain, Mild Laceration, or Badly Pulled Muscle; 1 damage.");
+				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance * 3 + " feet, receiving a Mild Sprain, Mild Laceration, or Badly Pulled Muscle; 1 damage.");
 				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 15000, 2), true);
 				
 			} else if (severity < 50) {
-				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance + " blocks, receiving Bruises, Mild Lacerations, or Minor Sprain; 1 damage.");
+				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance * 3 + " feet, receiving Bruises, Mild Lacerations, or Minor Sprain; 1 damage.");
 				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5000, 1), true);
 			} else if (severity == 50) {
-				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance + " blocks, receiving only a few scratches.");
+				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance * 3 + " feet, receiving only a few scratches.");
 				
 			}
 		} else if(type.equalsIgnoreCase("death") && severity == 1){
@@ -108,7 +108,7 @@ public class Gildorym extends JavaPlugin {
 					player2.sendMessage(player.getName() + ChatColor.BLUE + " has just fallen " + fallDistance + " blocks, and " + ChatColor.DARK_RED + "died.");
 				}
 			}
-			player.sendMessage(ChatColor.DARK_RED + "You have fallen " + fallDistance + " blocks, and died.");
+			player.sendMessage(ChatColor.DARK_RED + "You have fallen " + fallDistance * 3 + " feet, and died.");
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 999999999, 10), true);
 			Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "warp deathbox " + player.getName());
 		} else {
