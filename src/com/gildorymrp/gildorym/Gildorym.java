@@ -50,13 +50,13 @@ public class Gildorym extends JavaPlugin {
 		rollPercent = roll * 5;
 		severityPercent = severity * 2;
 		
-		String messageP1, messageP2, reflex, injury, alert, alert2; 
+		String messageP1, messageP2, reflex, injury, alert1, alert2; 
 
 		messageP1 = "You have fallen ";
 		messageP2 = ChatColor.WHITE + "" + fallInFeet + "";
 		reflex = ChatColor.RED + "Reflex: " + rollPercent + "%";
 		injury = ChatColor.RED + "  Injury: " + severityPercent + "%";
-		alert = player.getName() + ChatColor.BLUE + " has just fallen " + ChatColor.WHITE + fallDistance + ChatColor.BLUE + " blocks, taking a " + ChatColor.DARK_RED + " major " + ChatColor.BLUE + "injury. Check on them if you want.";
+		alert1 = player.getName() + ChatColor.BLUE + " has just fallen " + ChatColor.WHITE + fallDistance + ChatColor.BLUE + " blocks, taking a " + ChatColor.DARK_RED + " major " + ChatColor.BLUE + "injury. Check on them if you want.";
 		alert2 = player.getName() + ChatColor.BLUE + " has just fallen " + ChatColor.WHITE + fallDistance + ChatColor.BLUE + " blocks, taking a " + ChatColor.GOLD + " minor " + ChatColor.BLUE + "injury. Check on them if you want.";
 		
 		if(type.equalsIgnoreCase("none")){
@@ -66,7 +66,7 @@ public class Gildorym extends JavaPlugin {
 		} else if (type.equalsIgnoreCase("major")) {
 			for (Player player2 : Bukkit.getServer().getOnlinePlayers()) {
 				if (player2.hasPermission("gildorym.falldamage.alert")) {
-					player2.sendMessage(player.getName() + ChatColor.BLUE + " has just fallen " + fallDistance + " blocks, taking a " + ChatColor.DARK_RED + " major " + ChatColor.BLUE + "injury. Check on them if you want.");
+					player2.sendMessage(alert1);
 				}
 			}
 			
@@ -91,7 +91,7 @@ public class Gildorym extends JavaPlugin {
 			for (Player player2 : Bukkit.getServer()
 					.getOnlinePlayers()) {
 				if (player2.hasPermission("gildorym.falldamage.alert")) {
-					player2.sendMessage(player.getName() + ChatColor.BLUE + " has just fallen " + fallDistance + " blocks, taking a" + ChatColor.GOLD + " minor " + ChatColor.BLUE + "injury. Check on them if you want.");
+					player2.sendMessage(alert2);
 				}
 			}
 			
