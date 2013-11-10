@@ -42,16 +42,26 @@ public class Gildorym extends JavaPlugin {
 		this.getServer().getPluginManager().registerEvents(new SignChangeListener(), this);
 	}
 
-	public void onInjury(Player player, String type, int dieSize, int fallDistance) {
-		int severity;
-		if (dieSize > 0) {
-			severity = (new Random()).nextInt(dieSize) + 1;
-		} else {
-			severity = 1;
-		}
+	public void onInjury(Player player, String type, int dieSize, int fallDistance, int roll) {
+		int severity, fallInFeet, rollPercent, severityPercent;
+		
+		fallInFeet = fallDistance * 3;
+		severity = (new Random()).nextInt(dieSize) + 1;
+		rollPercent = roll * 5;
+		severityPercent = severity * 2;
+		
+		String messageP1, messageP2, reflex, injury, alert, alert2; 
 
-		if(type.equalsIgnoreCase("none") && severity == 1){
-			player.sendMessage(ChatColor.BLUE + "You have fallen " + fallDistance * 3 + " feet, escaping without injury.");
+		messageP1 = "You have fallen ";
+		messageP2 = ChatColor.WHITE + "" + fallInFeet + "";
+		reflex = ChatColor.RED + "Reflex: " + rollPercent + "%";
+		injury = ChatColor.RED + "  Injury: " + severityPercent + "%";
+		alert = player.getName() + ChatColor.BLUE + " has just fallen " + ChatColor.WHITE + fallDistance + ChatColor.BLUE + " blocks, taking a " + ChatColor.DARK_RED + " major " + ChatColor.BLUE + "injury. Check on them if you want.";
+		alert2 = player.getName() + ChatColor.BLUE + " has just fallen " + ChatColor.WHITE + fallDistance + ChatColor.BLUE + " blocks, taking a " + ChatColor.GOLD + " minor " + ChatColor.BLUE + "injury. Check on them if you want.";
+		
+		if(type.equalsIgnoreCase("none")){
+			player.sendMessage(reflex);
+			player.sendMessage(ChatColor.BLUE + messageP1 + messageP2 + ChatColor.BLUE + "escaping without injury.");
 			
 		} else if (type.equalsIgnoreCase("major")) {
 			for (Player player2 : Bukkit.getServer().getOnlinePlayers()) {
@@ -61,16 +71,19 @@ public class Gildorym extends JavaPlugin {
 			}
 			
 			if (severity < 16) {
-				player.sendMessage(ChatColor.RED + "You have fallen " + fallDistance * 3 + " feet, receiving a Punctured Organ (Anything but the Heart), Completely Crushed Limb, Cracked Skull or Cracked Vertebra; 4 Damage.");
+				player.sendMessage(reflex + injury);
+				player.sendMessage(ChatColor.RED + messageP1 + messageP2 + " feet, receiving a Punctured Organ (Anything but the Heart), Completely Crushed Limb, Cracked Skull or Cracked Vertebra; 4 Damage.");
 				player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 35000, 4), true); 
 				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 35000, 4), true);
 				
 			} else if (severity < 31) {
-				player.sendMessage(ChatColor.RED + "You have fallen " + fallDistance * 3 + " feet, receiving a Crushed Small limb (Such as hand/foot), Shattered Bones, or Severe Concussion; 3 Damage.");
+				player.sendMessage(reflex + injury);
+				player.sendMessage(ChatColor.RED + messageP1 + messageP2 + " feet, receiving a Crushed Small limb (Such as hand/foot), Shattered Bones, or Severe Concussion; 3 Damage.");
 				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 35000, 4), true);
 				
 			} else if (severity < 51) {
-				player.sendMessage(ChatColor.RED + "You have fallen " + fallDistance * 3 + " feet, receiving a Cleanly Broken Bone, Torn Major Muscle, or Loss of a Minor Limb; 2 Damage.");
+				player.sendMessage(reflex + injury);
+				player.sendMessage(ChatColor.RED + messageP1 + messageP2 + " feet, receiving a Cleanly Broken Bone, Torn Major Muscle, or Loss of a Minor Limb; 2 Damage.");
 				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 35000, 3), true);
 				
 			}
@@ -83,25 +96,30 @@ public class Gildorym extends JavaPlugin {
 			}
 			
 			if (severity < 11) {
-				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance * 3 + " feet, receiving a Minor Fracture, Brused Ribs, or Dislocation; 1 damage.");
+				player.sendMessage(reflex + injury);
+				player.sendMessage(ChatColor.GOLD + messageP1 + messageP2 + " feet, receiving a Minor Fracture, Brused Ribs, or Dislocation; 1 damage.");
 				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 35000, 2), true);
 				
 			} else if (severity < 21) {
-				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance * 3 + " feet, receiving a Minor Torn Ligement, Chipped Bone, or Light Concussion; 1 damage.");
+				player.sendMessage(reflex + injury);
+				player.sendMessage(ChatColor.GOLD + messageP1 + messageP2 + " feet, receiving a Minor Torn Ligement, Chipped Bone, or Light Concussion; 1 damage.");
 				player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 35000, 2), true);
 				
 			} else if (severity < 35) {
-				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance * 3 + " feet, receiving a Mild Sprain, Mild Laceration, or Badly Pulled Muscle; 1 damage.");
+				player.sendMessage(reflex + injury);
+				player.sendMessage(ChatColor.GOLD + messageP1 + messageP2 + " feet, receiving a Mild Sprain, Mild Laceration, or Badly Pulled Muscle; 1 damage.");
 				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 15000, 2), true);
 				
 			} else if (severity < 50) {
-				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance * 3 + " feet, receiving Bruises, Mild Lacerations, or Minor Sprain; 1 damage.");
+				player.sendMessage(reflex + injury);
+				player.sendMessage(ChatColor.GOLD + messageP1 + messageP2 + " feet, receiving Bruises, Mild Lacerations, or Minor Sprain; 1 damage.");
 				player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5000, 1), true);
 			} else if (severity == 50) {
-				player.sendMessage(ChatColor.GOLD + "You have fallen " + fallDistance * 3 + " feet, receiving only a few scratches.");
+				player.sendMessage(reflex + injury);
+				player.sendMessage(ChatColor.GOLD + messageP1 + messageP2 + " feet, receiving only a few scratches.");
 				
 			}
-		} else if(type.equalsIgnoreCase("death") && severity == 1){
+		} else if(type.equalsIgnoreCase("death")){
 			for (Player player2 : Bukkit.getServer()
 					.getOnlinePlayers()) {
 				if (player2.hasPermission("gildorym.falldamage.alert")) {
