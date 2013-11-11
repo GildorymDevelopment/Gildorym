@@ -108,10 +108,10 @@ public class RollInfoCommand implements CommandExecutor {
 			if (characterClass == CharacterClass.DRUID) {
 				meleeAttack += (3 + BAB_avg);
 				meleeDefence += (2 + BAB_avg);
-				rangedAttack += (1 + BAB_avg);
-				rangedDefence += (1 + BAB_avg);
-				magicAttack += (4 + BAB_avg);
-				magicDefence += (3 + BAB_avg);
+				rangedAttack += (1 + BAB_poor);
+				rangedDefence += (1 + BAB_poor);
+				magicAttack += (4 + BAB_good);
+				magicDefence += (3 + BAB_good);
 			}
 
 			if (characterClass == CharacterClass.FIGHTER) {
@@ -120,7 +120,7 @@ public class RollInfoCommand implements CommandExecutor {
 				rangedAttack += (3 + BAB_avg);
 				rangedDefence += (3 + BAB_good);
 				magicAttack = 0.0D;
-				magicDefence += (1 + BAB_good);
+				magicDefence += (1 + BAB_poor);
 			}
 
 			if (characterClass == CharacterClass.MONK) {
@@ -150,7 +150,7 @@ public class RollInfoCommand implements CommandExecutor {
 			}
 
 			if (characterClass == CharacterClass.RANGER) {
-				meleeAttack += (2 + BAB_avg);
+				meleeAttack += (3 + BAB_avg);
 				meleeDefence += (2 + BAB_avg);
 				rangedAttack += (4 + BAB_good);
 				rangedDefence += (2 + BAB_avg);
@@ -269,6 +269,9 @@ public class RollInfoCommand implements CommandExecutor {
 			case IRON_SPADE:
 				meleeAttack += 3.0D;
 				break;
+			// Melee Attack +4
+			case DIAMOND_SPADE:
+				meleeAttack += 4.0D;
 			// Melee Attack +5
 			case DIAMOND_SWORD:
 			case DIAMOND_AXE:
@@ -322,7 +325,6 @@ public class RollInfoCommand implements CommandExecutor {
 				magicAttack += 3.0D;
 				break;
 			// Magic Attack +4
-			case DIAMOND_SPADE:
 			case BLAZE_ROD:
 			case GOLDEN_APPLE:
 				magicAttack += 4.0D;

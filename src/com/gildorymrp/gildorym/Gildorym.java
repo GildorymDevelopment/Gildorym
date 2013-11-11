@@ -61,7 +61,7 @@ public class Gildorym extends JavaPlugin {
 		
 		if(type.equalsIgnoreCase("none")){
 			player.sendMessage(reflex);
-			player.sendMessage(ChatColor.BLUE + messageP1 + messageP2 + ChatColor.BLUE + "escaping without injury.");
+			player.sendMessage(ChatColor.BLUE + messageP1 + messageP2 + ChatColor.BLUE + " feet, escaping without injury.");
 			
 		} else if (type.equalsIgnoreCase("major")) {
 			for (Player player2 : Bukkit.getServer().getOnlinePlayers()) {
@@ -126,7 +126,7 @@ public class Gildorym extends JavaPlugin {
 					player2.sendMessage(player.getName() + ChatColor.BLUE + " has just fallen " + fallDistance + " blocks, and " + ChatColor.DARK_RED + "died.");
 				}
 			}
-			player.sendMessage(ChatColor.DARK_RED + "You have fallen " + fallDistance * 3 + " feet, and died.");
+			player.sendMessage(ChatColor.DARK_RED + messageP1 + messageP2 + " feet, and died.");
 			player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 999999999, 10), true);
 			Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "warp deathbox " + player.getName());
 		} else {
