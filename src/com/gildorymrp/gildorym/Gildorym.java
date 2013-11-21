@@ -49,7 +49,7 @@ public class Gildorym extends JavaPlugin {
 		ChatColor dr = ChatColor.DARK_RED;
 		ChatColor g = ChatColor.GOLD;
 		
-		int severity, fallInFeet, rollPercent, severityPercent, x, y, z;
+		int severity, fallInFeet, rollPercent, severityPercent, x, y, z, injuryRoll;
 		
 		fallInFeet = fallDistance * 3;
 		severity = (new Random()).nextInt(dieSize) + 1;
@@ -58,8 +58,9 @@ public class Gildorym extends JavaPlugin {
 		x = injured.getLocation().getBlockX();
 		y = injured.getLocation().getBlockY();
 		z = injured.getLocation().getBlockZ();
+		injuryRoll = (new Random()).nextInt(3) + 1;
 		
-		String message, reflexAlert, injuryAlert, alert, injury, deathLocation;
+		String message, reflexAlert, injuryAlert, alert, injury, deathLocation, damage;
 
 		message = "You have fallen " + w + "" + fallInFeet + "";
 		reflexAlert = r + "Reflex: " + w + rollPercent + r + "%";
@@ -76,59 +77,138 @@ public class Gildorym extends JavaPlugin {
 		} else if (type.equalsIgnoreCase("major")) {
 			message += r + " feet, recieving ";
 			injury = dr + "error";
+			damage = dr + "error";
 			
 			if (severity < 16) {
-				injury = "a Punctured Organ (Anything but the Heart), Completely Crushed Limb, Cracked Skull or Cracked Vertebra; 4 Damage.";
+				damage = w + " 4" + r + " damage";
+				
+				switch (injuryRoll) {
+				case 1: injury = "a punctured organ. (anything but the heart);";
+					break;
+				case 2: injury = "a completely crushed limb.;";
+					break;
+				case 3: injury = "a cracked skull or cracked vertebra.;";
+					break;
+				default: 
+					break;
+				}
 				injured.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 35000, 3), true); 
 				injured.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 35000, 3), true);
 				
 			} else if (severity < 31) {
-				injury = "a Crushed Small limb (Such as hand/foot), Shattered Bones, or Severe Concussion; 3 Damage.";
+				damage = w + " 3" + r + " damage";
+				
+				switch (injuryRoll) {
+				case 1: injury = "a crushed limb (Such as hand or foot);";
+					break;
+				case 2: injury = "shattered bones.;";
+					break;
+				case 3: injury = "a severe concussion.;";
+					break;
+				default: 
+					break;
+				}
 				injured.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 35000, 3), true);
 				
 			} else if (severity < 51) {
-				injury = "a Cleanly Broken Bone, Torn Major Muscle, or Loss of a Minor Limb; 2 Damage.";
+				damage = w + " 2" + r + " damage";
+				
+				switch (injuryRoll) {
+				case 1: injury = "a cleanly broken bone;";
+					break;
+				case 2: injury = "a torn major muscle.;";
+					break;
+				case 3: injury = "the loss of a minor limb.;";
+					break;
+				default: 
+					break;
+				}
 				injured.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 35000, 2), true);
 				
 			}
 			injured.sendMessage(reflexAlert + injuryAlert);
-			injured.sendMessage(r + message + r + injury);
+			injured.sendMessage(r + message + r + injury + damage);
 			
 			for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 				if (player.hasPermission("gildorym.falldamage.alert")) {
-					player.sendMessage(alert + r + injury);
+					player.sendMessage(alert + r + injury + " major");
 					player.sendMessage(reflexAlert + r + "  Injury: " + w + severity);
 				}
 			}
 		} else if (type.equalsIgnoreCase("minor")) {
 			message += g + " feet, recieving ";
 			injury = dr + "error";
+			damage = dr + "error";
 			
 			if (severity < 11) {
-				injury = "a Minor Fracture, Brused Ribs, or Dislocation; 1 damage.";
+				damage = w + " 1" + g + " damage";
+				
+				switch (injuryRoll) {
+				case 1: injury = "a minor fracture;";
+					break;
+				case 2: injury = "bruised ribs.;";
+					break;
+				case 3: injury = "dislocation.;";
+					break;
+				default: 
+					break;
+				}
 				injured.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 35000, 1), true);
 				
 			} else if (severity < 21) {
-				injury = "a Minor Torn Ligement, Chipped Bone, or Light Concussion; 1 damage.";
+				damage = w + " 1" + g + " damage";
+				
+				switch (injuryRoll) {
+				case 1: injury = "a minor torn ligement;";
+					break;
+				case 2: injury = "chipped bone.;";
+					break;
+				case 3: injury = "light concussion.;";
+					break;
+				default: 
+					break;
+				}
 				injured.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 35000, 1), true);
 				
 			} else if (severity < 35) {
-				injury = "a Mild Sprain, Mild Laceration, or Badly Pulled Muscle; 1 damage.";
+				damage = w + " 1" + g + " damage";
+				
+				switch (injuryRoll) {
+				case 1: injury = "a mild sprain;";
+					break;
+				case 2: injury = "a mild laceration.;";
+					break;
+				case 3: injury = "a badly pulled muscle.;";
+					break;
+				default: 
+					break;
+				}
 				injured.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 15000, 1), true);
 				
 			} else if (severity < 50) {
-				injury = "Bruises, Mild Lacerations, or Minor Sprain; 1 damage.";
+				damage = w + " 1" + g + " damage";
+				
+				switch (injuryRoll) {
+				case 1: injury = "bruises;";
+					break;
+				case 2: injury = "mild lacerations.;";
+					break;
+				case 3: injury = "minor sprain.;";
+					break;
+				default: 
+					break;
+				}
 				injured.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5000, 0), true);
 			} else if (severity == 50) {
 				injury = "only a few scratches.";
 				
 			}
 			injured.sendMessage(reflexAlert + injuryAlert);
-			injured.sendMessage(g + message + g + injury);
+			injured.sendMessage(g + message + g + injury + damage);
 			
 			for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 				if (player.hasPermission("gildorym.falldamage.alert")) {
-					player.sendMessage(alert + g + injury);
+					player.sendMessage(alert + g + injury + " minor");
 					player.sendMessage(reflexAlert + r + "  Injury: " + w + severity);
 				}
 			}

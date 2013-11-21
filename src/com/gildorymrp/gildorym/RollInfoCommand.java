@@ -16,8 +16,7 @@ import com.gildorymrp.gildorymclasses.GildorymClasses;
 public class RollInfoCommand implements CommandExecutor {
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command command,
-			String label, String[] args) {
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		Player player;
 		if (args.length == 0) {
 			player = (Player) sender;
@@ -50,20 +49,17 @@ public class RollInfoCommand implements CommandExecutor {
 			double rangedDefence = 0.0D;
 			double magicAttack = 0.0D;
 			double magicDefence = 0.0D;
-			double luck = 0.0D;
+			double fortitude = 0.0D;
 			double reflex = 0.0D;
+			double will = 0.0D;
 			int BAB_good = 0;
 			int BAB_avg = 0;
 			int BAB_poor = 0;
 
 			if (level <= 20) {
 				BAB_good = level;
-				luck += (level + 2);
-				reflex += (level + 2);
 			} else {
 				BAB_good = 20;
-				luck += (level + 2);
-				reflex += (20 + 2);
 			}
 
 			if (level == 1) {
@@ -84,6 +80,9 @@ public class RollInfoCommand implements CommandExecutor {
 				rangedDefence += (3 + BAB_avg);
 				magicAttack = 0.0D;
 				magicDefence += (1 + BAB_poor);
+				fortitude += 2 + (level / 2);
+				reflex += 0 + (level / 3);
+				will += 0 + (level / 3);
 			}
 
 			if (characterClass == CharacterClass.BARD) {
@@ -93,7 +92,9 @@ public class RollInfoCommand implements CommandExecutor {
 				rangedDefence += (1 + BAB_avg);
 				magicAttack += (2 + BAB_avg);
 				magicDefence += (1 + BAB_avg);
-				reflex += (0.25 * level);
+				fortitude += 0 + (level / 3);
+				reflex += 2 + (level / 2);
+				will += 2 + (level / 2);
 			}
 
 			if (characterClass == CharacterClass.CLERIC) {
@@ -103,6 +104,9 @@ public class RollInfoCommand implements CommandExecutor {
 				rangedDefence += (1 + BAB_avg);
 				magicAttack += (4 + BAB_good);
 				magicDefence += (3 + BAB_good);
+				fortitude += 2 + (level / 2);
+				reflex += 0 + (level / 3);
+				will += 2 + (level / 2);
 			}
 
 			if (characterClass == CharacterClass.DRUID) {
@@ -112,6 +116,9 @@ public class RollInfoCommand implements CommandExecutor {
 				rangedDefence += (1 + BAB_poor);
 				magicAttack += (4 + BAB_good);
 				magicDefence += (3 + BAB_good);
+				fortitude += 2 + (level / 2);
+				reflex += 0 + (level / 3);
+				will += 2 + (level / 2);
 			}
 
 			if (characterClass == CharacterClass.FIGHTER) {
@@ -121,6 +128,9 @@ public class RollInfoCommand implements CommandExecutor {
 				rangedDefence += (3 + BAB_good);
 				magicAttack = 0.0D;
 				magicDefence += (1 + BAB_poor);
+				fortitude += 2 + (level / 2);
+				reflex += 0 + (level / 3);
+				will += 0 + (level / 3);
 			}
 
 			if (characterClass == CharacterClass.MONK) {
@@ -130,7 +140,9 @@ public class RollInfoCommand implements CommandExecutor {
 				rangedDefence += (3 + BAB_good);
 				magicAttack = 0.0D;
 				magicDefence += (1 + BAB_poor);
-				reflex += (0.5 * level);
+				fortitude += 2 + (level / 2);
+				reflex += 2 + (level / 2);
+				will += 2 + (level / 2);
 				if ((player.getInventory().getBoots() == null)
 						&& (player.getInventory().getLeggings() == null)
 						&& (player.getInventory().getChestplate() == null)
@@ -147,6 +159,9 @@ public class RollInfoCommand implements CommandExecutor {
 				rangedDefence += (2 + BAB_good);
 				magicAttack += (3 + BAB_avg);
 				magicDefence += (3 + BAB_avg);
+				fortitude += 2 + (level / 2);
+				reflex += 0 + (level / 3);
+				will += 0 + (level / 3);
 			}
 
 			if (characterClass == CharacterClass.RANGER) {
@@ -156,7 +171,9 @@ public class RollInfoCommand implements CommandExecutor {
 				rangedDefence += (2 + BAB_avg);
 				magicAttack += (1 + BAB_avg);
 				magicDefence += (2 + BAB_avg);
-				reflex += (0.25 * level);
+				fortitude += 2 + (level / 2);
+				reflex += 2 + (level / 2);
+				will += 0 + (level / 3);
 			}
 
 			if (characterClass == CharacterClass.ROGUE) {
@@ -166,7 +183,9 @@ public class RollInfoCommand implements CommandExecutor {
 				rangedDefence += (3 + BAB_avg);
 				magicAttack = 0.0D;
 				magicDefence += (2 + BAB_avg);
-				reflex += (0.5 * level);
+				fortitude += 0 + (level / 3);
+				reflex += 2 + (level / 2);
+				will += 2 + (level / 3);
 			}
 
 			if (characterClass == CharacterClass.SORCERER) {
@@ -176,6 +195,9 @@ public class RollInfoCommand implements CommandExecutor {
 				rangedDefence += (1 + BAB_avg);
 				magicAttack += (5 + BAB_good);
 				magicDefence += (5 + BAB_good);
+				fortitude += 0 + (level / 3);
+				reflex += 0 + (level / 3);
+				will += 2 + (level / 2);
 			}
 
 			if (characterClass == CharacterClass.WIZARD) {
@@ -185,6 +207,9 @@ public class RollInfoCommand implements CommandExecutor {
 				rangedDefence += (2 + BAB_avg);
 				magicAttack += (5 + BAB_good);
 				magicDefence += (5 + BAB_good);
+				fortitude += 0 + (level / 3);
+				reflex += 0 + (level / 3);
+				will += 2 + (level / 2);
 			}
 
 			try {
@@ -204,10 +229,9 @@ public class RollInfoCommand implements CommandExecutor {
 
 			if (race == Race.ELF) {
 				rangedAttack += 2;
-				reflex += 2;
+				reflex += 1;
 				if (level > 1) {
 					rangedAttack += (0.125 * level);
-					reflex += (0.125 * level);
 				}
 			}
 
@@ -221,13 +245,12 @@ public class RollInfoCommand implements CommandExecutor {
 			}
 
 			if (race == Race.HALFLING) {
-				reflex += 2;
+				reflex += 1;
 				rangedAttack += 2;
 				meleeAttack -= 2;
 				if (level > 1) {
 					meleeAttack -= (0.125 * level);
 					rangedAttack += (0.125 * level);
-					reflex += (0.125 * level);
 				}
 			}
 
@@ -272,6 +295,7 @@ public class RollInfoCommand implements CommandExecutor {
 			// Melee Attack +4
 			case DIAMOND_SPADE:
 				meleeAttack += 4.0D;
+				break;
 			// Melee Attack +5
 			case DIAMOND_SWORD:
 			case DIAMOND_AXE:
@@ -409,110 +433,6 @@ public class RollInfoCommand implements CommandExecutor {
 				}
 			}
 
-			// Obsolete Enchantment Handler
-
-			/*
-			 * Iterator<Enchantment> enchantmentIterator; enchantmentIterator =
-			 * ((Player)
-			 * sender).getItemInHand().getEnchantments().keySet().iterator();
-			 * while (enchantmentIterator.hasNext()) { Enchantment enchantment =
-			 * enchantmentIterator.next(); if (((Player)
-			 * sender).getItemInHand().getType() == Material.BOW) { if
-			 * (enchantment == Enchantment.ARROW_DAMAGE || enchantment ==
-			 * Enchantment.ARROW_FIRE) { rangedAttack += ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); } }
-			 * 
-			 * if (((Player) sender).getItemInHand().getType() ==
-			 * Material.WOOD_SWORD || ((Player)
-			 * sender).getItemInHand().getType() == Material.STONE_SWORD ||
-			 * ((Player) sender).getItemInHand().getType() ==
-			 * Material.IRON_SWORD || ((Player)
-			 * sender).getItemInHand().getType() == Material.GOLD_SWORD ||
-			 * ((Player) sender).getItemInHand().getType() ==
-			 * Material.DIAMOND_SWORD) { if (enchantment ==
-			 * Enchantment.DAMAGE_ALL || enchantment == Enchantment.FIRE_ASPECT)
-			 * { meleeAttack += ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); } }
-			 * 
-			 * if (((Player) sender).getItemInHand().getType() == Material.STICK
-			 * || ((Player) sender).getItemInHand().getType() ==
-			 * Material.BLAZE_ROD || ((Player) sender).getItemInHand().getType()
-			 * == Material.ENDER_PEARL || ((Player)
-			 * sender).getItemInHand().getType() == Material.EYE_OF_ENDER) { if
-			 * (enchantment == Enchantment.DAMAGE_ALL || enchantment ==
-			 * Enchantment.FIRE_ASPECT) { magicAttack += ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); } }
-			 * 
-			 * if (((Player) sender).getInventory().getHelmet() != null) {
-			 * enchantmentIterator = ((Player)
-			 * sender).getInventory().getHelmet()
-			 * .getEnchantments().keySet().iterator(); while
-			 * (enchantmentIterator.hasNext()) { if (enchantment ==
-			 * Enchantment.PROTECTION_ENVIRONMENTAL) { meleeDefence += 0.25D *
-			 * ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); }
-			 * 
-			 * if (enchantment == Enchantment.PROTECTION_EXPLOSIONS) {
-			 * magicDefence += 0.25D * ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); }
-			 * 
-			 * if (enchantment == Enchantment.PROTECTION_PROJECTILE) {
-			 * rangedDefence += 0.25D * ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); } } }
-			 * 
-			 * if (((Player) sender).getInventory().getChestplate() != null) {
-			 * enchantmentIterator = ((Player)
-			 * sender).getInventory().getHelmet()
-			 * .getEnchantments().keySet().iterator(); while
-			 * (enchantmentIterator.hasNext()) { if (enchantment ==
-			 * Enchantment.PROTECTION_ENVIRONMENTAL) { meleeDefence += 0.25D *
-			 * ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); }
-			 * 
-			 * if (enchantment == Enchantment.PROTECTION_EXPLOSIONS) {
-			 * magicDefence += 0.25D * ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); }
-			 * 
-			 * if (enchantment == Enchantment.PROTECTION_PROJECTILE) {
-			 * rangedDefence += 0.25D * ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); } } }
-			 * 
-			 * if (((Player) sender).getInventory().getLeggings() != null) {
-			 * enchantmentIterator = ((Player)
-			 * sender).getInventory().getHelmet()
-			 * .getEnchantments().keySet().iterator(); while
-			 * (enchantmentIterator.hasNext()) { if (enchantment ==
-			 * Enchantment.PROTECTION_ENVIRONMENTAL) { meleeDefence += 0.25D *
-			 * ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); }
-			 * 
-			 * if (enchantment == Enchantment.PROTECTION_EXPLOSIONS) {
-			 * magicDefence += 0.25D * ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); }
-			 * 
-			 * if (enchantment == Enchantment.PROTECTION_PROJECTILE) {
-			 * rangedDefence += 0.25D * ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); } } }
-			 * 
-			 * if (((Player) sender).getInventory().getBoots() != null) {
-			 * enchantmentIterator = ((Player)
-			 * sender).getInventory().getHelmet()
-			 * .getEnchantments().keySet().iterator(); while
-			 * (enchantmentIterator.hasNext()) { if (enchantment ==
-			 * Enchantment.PROTECTION_ENVIRONMENTAL) { meleeDefence += 0.25D *
-			 * ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); }
-			 * 
-			 * if (enchantment == Enchantment.PROTECTION_EXPLOSIONS) {
-			 * magicDefence += 0.25D * ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); }
-			 * 
-			 * if (enchantment == Enchantment.PROTECTION_PROJECTILE) {
-			 * rangedDefence += 0.25D * ((Player)
-			 * sender).getItemInHand().getEnchantments().get(enchantment); } } }
-			 * }
-			 */
-
 			sender.sendMessage(ChatColor.GRAY + "======================");
 			sender.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + player.getDisplayName() + "'s Roll Info");
 			sender.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "Class: " + characterClass);
@@ -520,11 +440,11 @@ public class RollInfoCommand implements CommandExecutor {
 			sender.sendMessage(ChatColor.RED + "Melee   - Attack: " + ChatColor.WHITE + (int) Math.floor(meleeAttack) + ChatColor.RED + "  Defence: " + ChatColor.WHITE + (int) Math.floor(meleeDefence));
 			sender.sendMessage(ChatColor.RED + "Ranged - Attack: " + ChatColor.WHITE + (int) Math.floor(rangedAttack) + ChatColor.RED + "  Defence: " + ChatColor.WHITE + (int) Math.floor(rangedDefence));
 			sender.sendMessage(ChatColor.RED + "Magic   - Attack: " + ChatColor.WHITE + (int) Math.floor(magicAttack) + ChatColor.RED + "  Defence: " + ChatColor.WHITE + (int) Math.floor(magicDefence));
-			sender.sendMessage(ChatColor.RED + "Luck: " + ChatColor.WHITE + (int) Math.floor(luck));
-			sender.sendMessage(ChatColor.RED + "Reflex: " + ChatColor.WHITE + (int) Math.floor(reflex));
+			sender.sendMessage(ChatColor.RED + "Fort: " + ChatColor.WHITE + "1d20+" + (int) Math.floor(fortitude));
+			sender.sendMessage(ChatColor.RED + "Ref: " + ChatColor.WHITE + "1d20+" + (int) Math.floor(reflex));
+			sender.sendMessage(ChatColor.RED + "Will: " + ChatColor.WHITE + "1d20+" + (int) Math.floor(will));
 		} else {
-			sender.sendMessage(ChatColor.DARK_RED
-					+ "Could not find that player!");
+			sender.sendMessage(ChatColor.DARK_RED + "Could not find that player!");
 		}
 		return true;
 	}
