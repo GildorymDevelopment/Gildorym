@@ -73,7 +73,9 @@ public class RollInfoCommand implements CommandExecutor {
 				BAB_avg = 10;
 			}
 
-			if (characterClass == CharacterClass.BARBARIAN) {
+			
+			switch (characterClass) {
+			case BARBARIAN:
 				meleeAttack += (5 + BAB_good);
 				meleeDefence += (3 + BAB_good);
 				rangedAttack += (5 + BAB_avg);
@@ -83,9 +85,8 @@ public class RollInfoCommand implements CommandExecutor {
 				fortitude += 2 + (level / 2);
 				reflex += 0 + (level / 3);
 				will += 0 + (level / 3);
-			}
-
-			if (characterClass == CharacterClass.BARD) {
+				break;
+			case BARD:
 				meleeAttack += (3 + BAB_avg);
 				meleeDefence += (1 + BAB_avg);
 				rangedAttack += (3 + BAB_avg);
@@ -95,9 +96,8 @@ public class RollInfoCommand implements CommandExecutor {
 				fortitude += 0 + (level / 3);
 				reflex += 2 + (level / 2);
 				will += 2 + (level / 2);
-			}
-
-			if (characterClass == CharacterClass.CLERIC) {
+				break;
+			case CLERIC:
 				meleeAttack += (3 + BAB_avg);
 				meleeDefence += (2 + BAB_good);
 				rangedAttack += (1 + BAB_poor);
@@ -107,9 +107,8 @@ public class RollInfoCommand implements CommandExecutor {
 				fortitude += 2 + (level / 2);
 				reflex += 0 + (level / 3);
 				will += 2 + (level / 2);
-			}
-
-			if (characterClass == CharacterClass.DRUID) {
+				break;
+			case DRUID:
 				meleeAttack += (3 + BAB_avg);
 				meleeDefence += (2 + BAB_avg);
 				rangedAttack += (1 + BAB_poor);
@@ -119,9 +118,8 @@ public class RollInfoCommand implements CommandExecutor {
 				fortitude += 2 + (level / 2);
 				reflex += 0 + (level / 3);
 				will += 2 + (level / 2);
-			}
-
-			if (characterClass == CharacterClass.FIGHTER) {
+				break;
+			case FIGHTER:
 				meleeAttack += (5 + BAB_good);
 				meleeDefence += (5 + BAB_good);
 				rangedAttack += (3 + BAB_avg);
@@ -131,9 +129,8 @@ public class RollInfoCommand implements CommandExecutor {
 				fortitude += 2 + (level / 2);
 				reflex += 0 + (level / 3);
 				will += 0 + (level / 3);
-			}
-
-			if (characterClass == CharacterClass.MONK) {
+				break;
+			case MONK:
 				meleeAttack += (5 + BAB_good);
 				meleeDefence += (6 + BAB_good);
 				rangedAttack += (3 + BAB_avg);
@@ -143,16 +140,12 @@ public class RollInfoCommand implements CommandExecutor {
 				fortitude += 2 + (level / 2);
 				reflex += 2 + (level / 2);
 				will += 2 + (level / 2);
-				if ((player.getInventory().getBoots() == null)
-						&& (player.getInventory().getLeggings() == null)
-						&& (player.getInventory().getChestplate() == null)
-						&& (player.getInventory().getHelmet() == null)) {
+				if ((player.getInventory().getBoots() == null) && (player.getInventory().getLeggings() == null) && (player.getInventory().getChestplate() == null) && (player.getInventory().getHelmet() == null)) {
 					meleeDefence += (0.25 * level);
 					rangedDefence += (0.25 * level);
 				}
-			}
-
-			if (characterClass == CharacterClass.PALADIN) {
+				break;
+			case PALADIN:
 				meleeAttack += (4 + BAB_avg);
 				meleeDefence += (4 + BAB_good);
 				rangedAttack += (2 + BAB_avg);
@@ -162,9 +155,8 @@ public class RollInfoCommand implements CommandExecutor {
 				fortitude += 2 + (level / 2);
 				reflex += 0 + (level / 3);
 				will += 0 + (level / 3);
-			}
-
-			if (characterClass == CharacterClass.RANGER) {
+				break;
+			case RANGER:
 				meleeAttack += (3 + BAB_avg);
 				meleeDefence += (2 + BAB_avg);
 				rangedAttack += (4 + BAB_good);
@@ -174,9 +166,8 @@ public class RollInfoCommand implements CommandExecutor {
 				fortitude += 2 + (level / 2);
 				reflex += 2 + (level / 2);
 				will += 0 + (level / 3);
-			}
-
-			if (characterClass == CharacterClass.ROGUE) {
+				break;
+			case ROGUE:
 				meleeAttack += (5 + BAB_good);
 				meleeDefence += (4 + BAB_avg);
 				rangedAttack += (3 + BAB_good);
@@ -186,9 +177,8 @@ public class RollInfoCommand implements CommandExecutor {
 				fortitude += 0 + (level / 3);
 				reflex += 2 + (level / 2);
 				will += 2 + (level / 3);
-			}
-
-			if (characterClass == CharacterClass.SORCERER) {
+				break;
+			case SORCERER:
 				meleeAttack += (2 + BAB_poor);
 				meleeDefence += (2 + BAB_poor);
 				rangedAttack += (1 + BAB_avg);
@@ -198,9 +188,8 @@ public class RollInfoCommand implements CommandExecutor {
 				fortitude += 0 + (level / 3);
 				reflex += 0 + (level / 3);
 				will += 2 + (level / 2);
-			}
-
-			if (characterClass == CharacterClass.WIZARD) {
+				break;
+			case WIZARD:
 				meleeAttack += (1 + BAB_poor);
 				meleeDefence += (1 + BAB_poor);
 				rangedAttack += (2 + BAB_avg);
@@ -210,6 +199,10 @@ public class RollInfoCommand implements CommandExecutor {
 				fortitude += 0 + (level / 3);
 				reflex += 0 + (level / 3);
 				will += 2 + (level / 2);
+				break;
+			default:
+				break;
+			
 			}
 
 			try {
@@ -220,31 +213,33 @@ public class RollInfoCommand implements CommandExecutor {
 						+ "You must set your race first!");
 			}
 
-			if (race == Race.DWARF) {
+			switch (race){
+			case DWARF:
 				magicAttack -= 2;
+				fortitude += 1;
 				if (level > 1) {
 					magicAttack -= (0.125 * level);
 				}
-			}
-
-			if (race == Race.ELF) {
+				break;
+			case ELF:
 				rangedAttack += 2;
 				reflex += 1;
 				if (level > 1) {
 					rangedAttack += (0.125 * level);
 				}
-			}
-
-			if (race == Race.GNOME) {
+				break;
+			case GNOME:
 				meleeAttack -= 2;
 				rangedAttack -= 2;
+				fortitude += 1;
 				if (level > 1) {
 					meleeAttack -= (0.125 * level);
 					rangedAttack -= (0.125 * level);
 				}
-			}
-
-			if (race == Race.HALFLING) {
+				break;
+			case HALFELF:
+				break;
+			case HALFLING:
 				reflex += 1;
 				rangedAttack += 2;
 				meleeAttack -= 2;
@@ -252,9 +247,8 @@ public class RollInfoCommand implements CommandExecutor {
 					meleeAttack -= (0.125 * level);
 					rangedAttack += (0.125 * level);
 				}
-			}
-
-			if (race == Race.HALFORC) {
+				break;
+			case HALFORC:
 				meleeAttack += 2;
 				rangedAttack += 2;
 				magicAttack -= 4;
@@ -265,6 +259,15 @@ public class RollInfoCommand implements CommandExecutor {
 					magicAttack -= (0.25 * level);
 					magicDefence -= (0.125 * level);
 				}
+				break;
+			case HUMAN:
+				break;
+			case OTHER:
+				break;
+			case UNKNOWN:
+				break;
+			default:
+				break;
 			}
 
 			Material itemType = player.getItemInHand().getType();
