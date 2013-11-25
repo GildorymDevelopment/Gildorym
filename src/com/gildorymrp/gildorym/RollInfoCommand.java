@@ -305,16 +305,13 @@ public class RollInfoCommand implements CommandExecutor {
 				meleeAttack += 5.0D;
 				break;
 			// Ranged Attack +3
+			case BOW:
 			case CARROT_STICK:
 				rangedAttack += 3.0D;
 				break;
 			// Ranged Attack +4
 			case GOLD_PICKAXE:
 				rangedAttack += 4.0D;
-				break;
-			// Ranged Attack +5
-			case BOW:
-				rangedAttack += 5.0D;
 				break;
 			// Melee Attack +1; Magic Attack +3
 			case WOOD_HOE:
