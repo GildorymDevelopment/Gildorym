@@ -293,6 +293,7 @@ public class RollInfoCommand implements CommandExecutor {
 			case IRON_SWORD:
 			case IRON_AXE:
 			case IRON_SPADE:
+			case DIAMOND_HOE:
 				meleeAttack += 3.0D;
 				break;
 			// Melee Attack +4
@@ -344,7 +345,6 @@ public class RollInfoCommand implements CommandExecutor {
 				magicAttack += 2.0D;
 				break;
 			// Magic Attack +3
-			case DIAMOND_HOE:
 			case EYE_OF_ENDER:
 				magicAttack += 3.0D;
 				break;
