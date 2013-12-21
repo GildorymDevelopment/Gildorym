@@ -208,7 +208,7 @@ public class RollInfoCommand implements CommandExecutor {
 			try {
 				race = gildorymCharacterCards.getCharacterCards()
 						.get(player.getName()).getRace();
-			} catch (NullPointerException ex) {
+			} catch (Exception ex) {
 				sender.sendMessage(ChatColor.RED
 						+ "You must set your race first!");
 			}
