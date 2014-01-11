@@ -200,6 +200,8 @@ public class Gildorym extends JavaPlugin {
 				}
 				injured.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5000, 0), true);
 			} else if (severity == 50) {
+				damage = "";
+				
 				injury = "only a few scratches.";
 				
 			}
