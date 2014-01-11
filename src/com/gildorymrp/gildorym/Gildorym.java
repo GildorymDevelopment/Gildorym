@@ -11,6 +11,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.gildorymrp.charactercards.CharacterCard;
+import com.gildorymrp.charactercards.GildorymCharacterCards;
+
 public class Gildorym extends JavaPlugin {
 
 	public Economy economy;
@@ -50,6 +53,7 @@ public class Gildorym extends JavaPlugin {
 		ChatColor g = ChatColor.GOLD;
 		
 		int severity, fallInFeet, rollPercent, severityPercent, x, y, z, injuryRoll;
+		int damageValue = 0;
 		
 		fallInFeet = fallDistance * 3;
 		severity = (new Random()).nextInt(dieSize) + 1;
@@ -68,6 +72,7 @@ public class Gildorym extends JavaPlugin {
 		deathLocation = injured.getWorld().getName() + ": x: " + x + " y: " + y + " z: " + z;
 		alert = injured.getName() + b + " has just fallen " + w + fallDistance + b + " blocks, recieving ";
 		
+		
 		if(type.equalsIgnoreCase("none")){
 			message += b + "feet";
 			injury = " escaping without injury.";
@@ -81,6 +86,7 @@ public class Gildorym extends JavaPlugin {
 			
 			if (severity < 16) {
 				damage = w + " 4" + r + " damage";
+				damageValue = 4;
 				
 				switch (injuryRoll) {
 				case 1: injury = "a punctured organ. (anything but the heart);";
@@ -97,6 +103,7 @@ public class Gildorym extends JavaPlugin {
 				
 			} else if (severity < 31) {
 				damage = w + " 3" + r + " damage";
+				damageValue = 3;
 				
 				switch (injuryRoll) {
 				case 1: injury = "a crushed limb (Such as hand or foot);";
@@ -112,6 +119,7 @@ public class Gildorym extends JavaPlugin {
 				
 			} else if (severity < 51) {
 				damage = w + " 2" + r + " damage";
+				damageValue = 2;
 				
 				switch (injuryRoll) {
 				case 1: injury = "a cleanly broken bone;";
@@ -142,6 +150,7 @@ public class Gildorym extends JavaPlugin {
 			
 			if (severity < 11) {
 				damage = w + " 1" + g + " damage";
+				damageValue = 1;
 				
 				switch (injuryRoll) {
 				case 1: injury = "a minor fracture;";
@@ -157,6 +166,7 @@ public class Gildorym extends JavaPlugin {
 				
 			} else if (severity < 21) {
 				damage = w + " 1" + g + " damage";
+				damageValue = 1;
 				
 				switch (injuryRoll) {
 				case 1: injury = "a minor torn ligement;";
@@ -172,6 +182,7 @@ public class Gildorym extends JavaPlugin {
 				
 			} else if (severity < 35) {
 				damage = w + " 1" + g + " damage";
+				damageValue = 1;
 				
 				switch (injuryRoll) {
 				case 1: injury = "a mild sprain;";
@@ -187,6 +198,7 @@ public class Gildorym extends JavaPlugin {
 				
 			} else if (severity < 50) {
 				damage = w + " 1" + g + " damage";
+				damageValue = 1;
 				
 				switch (injuryRoll) {
 				case 1: injury = "bruises;";
@@ -232,6 +244,23 @@ public class Gildorym extends JavaPlugin {
 			injured.sendMessage(ChatColor.RED + "Error : Injury type "
 					+ ChatColor.RESET + type + ChatColor.RED
 					+ " does not exist.");
+		}
+		
+		if (damageValue > 0) {
+			GildorymCharacterCards gildorymCharacterCards = (GildorymCharacterCards) Bukkit
+					.getServer().getPluginManager()
+					.getPlugin("GildorymCharacterCards");
+			CharacterCard characterCard = gildorymCharacterCards.getCharacterCards().get(injured.getName());
+			if (damageValue >= characterCard.getHealth()) {
+				characterCard.setHealth(0);
+				for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+					if (player.hasPermission("gildorym.falldamage.alert")) {
+						player.sendMessage(injured.getName() + b + "'s health was reduced to 0 by the fall!");
+					}
+				}
+			} else {
+				characterCard.setHealth(characterCard.getHealth() - damageValue);
+			}
 		}
 
 	}
