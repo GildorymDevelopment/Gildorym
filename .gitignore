@@ -1,4 +1,4 @@
-# eclipse
+# Eclipse stuff
 /.classpath
 /.project
 /.settings
@@ -29,3 +29,7 @@
 
 # mac filesystem dust
 .DS_Store
+
+# jar files, if any dependencies are placed here (like bukkit.jar)
+/*.jar
+/Essentials/*
