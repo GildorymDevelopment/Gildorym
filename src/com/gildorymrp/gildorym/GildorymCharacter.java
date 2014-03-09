@@ -2,10 +2,9 @@ package com.gildorymrp.gildorym;
 
 import java.util.Arrays;
 
+
 import com.gildorymrp.charactercards.CharacterCard;
-import com.gildorymrp.gildorymclasses.CharacterBehavior;
 import com.gildorymrp.gildorymclasses.CharacterClass;
-import com.gildorymrp.gildorymclasses.CharacterMorality;
 import com.gildorymrp.gildorymclasses.CharacterProfession;
 
 /**
@@ -24,8 +23,6 @@ public class GildorymCharacter {
 	private int experience;
 	private int stamina;
 	private int magicalStamina;
-	private CharacterMorality morality;
-	private CharacterBehavior behavior;
 	private double x, y, z;
 	private String world;
 	
@@ -36,8 +33,7 @@ public class GildorymCharacter {
 	public GildorymCharacter(int uid, String name, String mcName,
 			CharacterCard CharCard, CharacterProfession[] professions,
 			CharacterClass CharClass, int level, int experience, int stamina,
-			int magicalStamina, CharacterMorality morality,
-			CharacterBehavior behavior, double x, double y, double z, String world) {
+			int magicalStamina, double x, double y, double z, String world) {
 		this(uid);
 		this.name = name;
 		this.mcName = mcName;
@@ -48,8 +44,6 @@ public class GildorymCharacter {
 		this.experience = experience;
 		this.stamina = stamina;
 		this.magicalStamina = magicalStamina;
-		this.morality = morality;
-		this.behavior = behavior;
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -117,18 +111,6 @@ public class GildorymCharacter {
 	public void setMagicalStamina(int magicalStamina) {
 		this.magicalStamina = magicalStamina;
 	}
-	public CharacterMorality getMorality() {
-		return morality;
-	}
-	public void setMorality(CharacterMorality morality) {
-		this.morality = morality;
-	}
-	public CharacterBehavior getBehavior() {
-		return behavior;
-	}
-	public void setBehavior(CharacterBehavior behavior) {
-		this.behavior = behavior;
-	}
 	public double getX() {
 		return x;
 	}
@@ -157,8 +139,6 @@ public class GildorymCharacter {
 		if (getClass() != obj.getClass())
 			return false;
 		GildorymCharacter other = (GildorymCharacter) obj;
-		if (behavior != other.behavior)
-			return false;
 		if (charCard == null) {
 			if (other.charCard != null)
 				return false;
@@ -176,8 +156,6 @@ public class GildorymCharacter {
 			if (other.mcName != null)
 				return false;
 		} else if (!mcName.equals(other.mcName))
-			return false;
-		if (morality != other.morality)
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -206,8 +184,7 @@ public class GildorymCharacter {
 				+ Arrays.toString(professions) + ", charClass=" + charClass
 				+ ", level=" + level + ", experience=" + experience
 				+ ", stamina=" + stamina + ", magicalStamina=" + magicalStamina
-				+ ", morality=" + morality + ", behavior=" + behavior + ", x="
-				+ x + ", y=" + y + ", z=" + z + "]";
+				+ ", x=" + x + ", y=" + y + ", z=" + z + "]";
 	}
 
 	public String getWorld() {

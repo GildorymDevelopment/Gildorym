@@ -8,12 +8,16 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.gildorymrp.charactercards.GildorymCharacterCards;
 import com.gildorymrp.charactercards.Race;
 import com.gildorymrp.gildorymclasses.CharacterClass;
-import com.gildorymrp.gildorymclasses.GildorymClasses;
 
 public class RollInfoCommand implements CommandExecutor {
+	
+	private Gildorym plugin;
+	
+	public RollInfoCommand(Gildorym plugin) {
+		this.plugin = plugin;
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -24,23 +28,14 @@ public class RollInfoCommand implements CommandExecutor {
 			player = Bukkit.getServer().getPlayer(args[0]);
 		}
 
-		GildorymClasses gildorymClasses = (GildorymClasses) Bukkit.getServer()
-				.getPluginManager().getPlugin("GildorymClasses");
-		GildorymCharacterCards gildorymCharacterCards = (GildorymCharacterCards) Bukkit
-				.getServer().getPluginManager()
-				.getPlugin("GildorymCharacterCards");
-
 		if (player != null) {
-			CharacterClass characterClass = null;
-			Race race = null;
-			int level = 0;
+			GildorymCharacter gChar = plugin.getActiveCharacters().get(player.getName());
+			CharacterClass characterClass = gChar.getCharClass();
+			Race race = gChar.getCharCard().getRace();
+			int level = gChar.getLevel();
 
-			try {
-				characterClass = gildorymClasses.classes.get(player.getName());
-				level = gildorymClasses.levels.get(player.getName());
-			} catch (NullPointerException ex) {
-				sender.sendMessage(ChatColor.RED
-						+ "You must set your class first!");
+			if (characterClass == null) {
+				sender.sendMessage(ChatColor.RED + "You must set your class first!");
 			}
 
 			double meleeAttack = 0.0D;
@@ -205,14 +200,6 @@ public class RollInfoCommand implements CommandExecutor {
 			
 			}
 
-			try {
-				race = gildorymCharacterCards.getCharacterCards()
-						.get(player.getName()).getRace();
-			} catch (Exception ex) {
-				sender.sendMessage(ChatColor.RED
-						+ "You must set your race first!");
-			}
-
 			switch (race){
 			case DWARF:
 				magicAttack -= 2;
@@ -237,8 +224,6 @@ public class RollInfoCommand implements CommandExecutor {
 					rangedAttack -= (0.125 * level);
 				}
 				break;
-			case HALFELF:
-				break;
 			case HALFLING:
 				reflex += 1;
 				rangedAttack += 2;
@@ -259,12 +244,6 @@ public class RollInfoCommand implements CommandExecutor {
 					magicAttack -= (0.25 * level);
 					magicDefence -= (0.125 * level);
 				}
-				break;
-			case HUMAN:
-				break;
-			case OTHER:
-				break;
-			case UNKNOWN:
 				break;
 			default:
 				break;

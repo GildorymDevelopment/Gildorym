@@ -1,5 +1,7 @@
 package com.gildorymrp.gildorym;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import net.milkbowl.vault.economy.Economy;
@@ -12,11 +14,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.gildorymrp.charactercards.CharacterCard;
-import com.gildorymrp.charactercards.GildorymCharacterCards;
 
 public class Gildorym extends JavaPlugin {
 
 	public Economy economy;
+	private Map<String, GildorymCharacter> activeCharacters = new HashMap<String, GildorymCharacter>();
 	
 	public void onEnable() {
 		this.economy = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class).getProvider();
@@ -24,11 +26,11 @@ public class Gildorym extends JavaPlugin {
 			this.getLogger().severe("Could not find a compatible economy, disabling!");
 			this.setEnabled(false);
 		}
-		
+				
 		this.getCommand("newcharacter").setExecutor(new NewCharacterCommand());
 		this.getCommand("setname").setExecutor(new SetNameCommand());
 		this.getCommand("setnameother").setExecutor(new SetNameOtherCommand());
-		this.getCommand("rollinfo").setExecutor(new RollInfoCommand());
+		this.getCommand("rollinfo").setExecutor(new RollInfoCommand(this));
 		this.getCommand("radiusemote").setExecutor(new RadiusEmoteCommand());
 		RollCommand rc = new RollCommand(this);
 		this.getCommand("roll").setExecutor(rc);
@@ -40,9 +42,62 @@ public class Gildorym extends JavaPlugin {
 		this.getCommand("removelore").setExecutor(mec);
 		this.getCommand("signitem").setExecutor(mec);
 		
+		this.activeCharacters = loadActiveCharacters();
+		
 		this.getServer().getPluginManager().registerEvents(new EntityDamageListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
+		this.getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new SignChangeListener(), this);
+	}
+	
+	public void onDisable() {
+		//TODO: Update the database with any changes made to activeCharacters.
+	}
+	
+	public Map<String, GildorymCharacter> getActiveCharacters() {
+		return activeCharacters;
+	}
+	
+	public Map<String, GildorymCharacter> loadActiveCharacters() {
+		Map<String, GildorymCharacter> activeCharacters = new HashMap<String, GildorymCharacter>();
+		for (Player player : this.getServer().getOnlinePlayers()) {
+			GildorymCharacter gChar = loadCharacter(player);
+			if (gChar != null) {
+				activeCharacters.put(player.getName(), gChar);
+			}
+		}
+		return activeCharacters;
+	}
+	
+	public GildorymCharacter loadCharacter(Player player) {
+		// TODO: Check if they have a character in the database, if so, retrieves their active character and returns it.
+		// If they do not have a character in the database, a new character in their name should be added to the database and returned.
+		// Default Character:
+		/*
+		new GildorymCharacter(uid, 
+				"", 
+				player.getName(), 
+				new CharacterCard(0,
+						Gender.UNKNOWN,
+						"",
+						Race.UNKNOWN,
+						1,
+						null,
+						CharacterBehavior.UNKNOWN,
+						CharacterMorality.UNKNOWN), 
+				null,
+				null,
+				1, 
+				0,
+				0, 
+				0,
+				player.getLocation().getX(), 
+				player.getLocation().getY(), 
+				player.getLocation().getZ(), 
+				player.getWorld().toString());
+		*/
+		// It should only return null due to an SQLException or something similar
+		return null;
 	}
 
 	public void onInjury(Player injured, String type, int dieSize, int fallDistance, int roll) {
@@ -247,10 +302,7 @@ public class Gildorym extends JavaPlugin {
 		}
 		
 		if (damageValue > 0) {
-			GildorymCharacterCards gildorymCharacterCards = (GildorymCharacterCards) Bukkit
-					.getServer().getPluginManager()
-					.getPlugin("GildorymCharacterCards");
-			CharacterCard characterCard = gildorymCharacterCards.getCharacterCards().get(injured.getName());
+			CharacterCard characterCard = getActiveCharacters().get(injured.getName()).getCharCard();
 			if (damageValue >= characterCard.getHealth()) {
 				characterCard.setHealth(0);
 				for (Player player : Bukkit.getServer().getOnlinePlayers()) {
@@ -264,4 +316,5 @@ public class Gildorym extends JavaPlugin {
 		}
 
 	}
+	
 }
