@@ -11,59 +11,72 @@ import com.earth2me.essentials.Essentials;
 
 public class SetNameOtherCommand implements CommandExecutor {
 
-		@Override
-		public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	private Gildorym gildorym;
+	private MySQLDatabase sqlDB;
 
-			String name;
-			Essentials essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
-			Player target = sender.getServer().getPlayer(args[0]);
+	public SetNameOtherCommand(Gildorym gildorym, MySQLDatabase sqlDB) {
+		this.gildorym = gildorym;
+		this.sqlDB = sqlDB;
+	}
+	
+	@Override
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 
-			if (args.length <= 6){
-				if (args.length == 1){
-					if (sender.hasPermission("gildorym.setname.other")){
-						essentials.getUserMap().getUser(target.getName()).setNickname(target.getName());
-						name = essentials.getUser(target).getNickname();
-						target.sendMessage(ChatColor.DARK_AQUA + "name changed: " + name);
-						return true;
-					}else{
-						sender.sendMessage("You don't have permission");
-						return true;
-					}	
-				}else if(args.length == 2){
-					if (sender.hasPermission("gildorym.setname.other")){
-						essentials.getUserMap().getUser(target.getName()).setNickname(args[1]);
-						name = essentials.getUser(target).getNickname();
-						target.sendMessage(ChatColor.DARK_AQUA + "name changed: " + name);
-						return true;
-					}else{
-						sender.sendMessage("You don't have permission");
-						return true;
-					}
-				}else if(args.length == 3){
-					if (sender.hasPermission("gildorym.setname.other")){
-						essentials.getUserMap().getUser(target.getName()).setNickname(args[1] + " " + args[2]);
-						name = essentials.getUser(target).getNickname();
-						target.sendMessage(ChatColor.DARK_AQUA + "name changed: " + name);
-						return true;
-					}else{
-						sender.sendMessage("You don't have permission");
-						return true;
-					}
-				}else if(args.length == 4){
-					if (sender.hasPermission("gildorym.setname.other")){
-						essentials.getUserMap().getUser(target.getName()).setNickname(args[1] + " " + args[2] + " " + args[3]);
-						name = essentials.getUser(target).getNickname();
-						target.sendMessage(ChatColor.DARK_AQUA + "name changed: " + name);
-						return true;
-					}else{
-						sender.sendMessage("You don't have permission");
-						return true;
-					}
-				}else{
-					sender.sendMessage(ChatColor.DARK_RED + "illegal argument amount");
-					return false;
+		String name;
+		Essentials essentials = (Essentials) Bukkit.getServer().getPluginManager().getPlugin("Essentials");
+		Player target = sender.getServer().getPlayer(args[0]);
+
+		if (args.length <= 6) {
+			if (args.length == 1) {
+				if (sender.hasPermission("gildorym.setname.other")) {
+					essentials.getUserMap().getUser(target.getName()).setNickname(target.getName());
+					name = essentials.getUser(target).getNickname();
+					target.sendMessage(ChatColor.DARK_AQUA + "name changed: " + name);
+				}else {
+					sender.sendMessage("You don't have permission");
+					return true;
+				}	
+			}else if(args.length == 2) {
+				if (sender.hasPermission("gildorym.setname.other")) {
+					essentials.getUserMap().getUser(target.getName()).setNickname(args[1]);
+					name = essentials.getUser(target).getNickname();
+					target.sendMessage(ChatColor.DARK_AQUA + "name changed: " + name);
+				}else {
+					sender.sendMessage("You don't have permission");
+					return true;
 				}
+			}else if(args.length == 3) {
+				if (sender.hasPermission("gildorym.setname.other")) {
+					essentials.getUserMap().getUser(target.getName()).setNickname(args[1] + " " + args[2]);
+					name = essentials.getUser(target).getNickname();
+					target.sendMessage(ChatColor.DARK_AQUA + "name changed: " + name);
+				}else {
+					sender.sendMessage("You don't have permission");
+					return true;
+				}
+			}else if(args.length == 4) {
+				if (sender.hasPermission("gildorym.setname.other")) {
+					essentials.getUserMap().getUser(target.getName()).setNickname(args[1] + " " + args[2] + " " + args[3]);
+					name = essentials.getUser(target).getNickname();
+					target.sendMessage(ChatColor.DARK_AQUA + "name changed: " + name);
+				}else {
+					sender.sendMessage("You don't have permission");
+					return true;
+				}
+			}else {
+				sender.sendMessage(ChatColor.DARK_RED + "illegal argument amount");
+				return false;
 			}
+		}else {
 			return false;
+		}
+
+		GildorymCharacter gChar = gildorym.getActiveCharacters().get(target.getName());
+		if(!gChar.getName().equals(name)) {
+			gChar.setName(name);
+			sqlDB.saveCharacter(gChar);
+		}
+
+		return true;
 	}
 }
