@@ -394,7 +394,7 @@ public class MySQLDatabase {
 				CreatedCharacterInfo cci = new CreatedCharacterInfo(createdId);
 				cci.setCharUid(resultSet.getInt("char_uid"));
 				cci.setCreatedUTC(resultSet.getLong("created_utc"));
-				cci.setgenerationMethod(resultSet.getString("generation_method"));
+				cci.setGenerationMethod(resultSet.getString("generation_method"));
 				result.add(cci);
 			}
 
@@ -414,7 +414,7 @@ public class MySQLDatabase {
 			statement.setInt(1, cci.getId());
 			statement.setInt(2, cci.getCharUid());
 			statement.setLong(3, cci.getCreatedUTC());
-			statement.setString(4, cci.getgenerationMethod());
+			statement.setString(4, cci.getGenerationMethod());
 
 			return statement.execute();
 		}catch(SQLException e) {
