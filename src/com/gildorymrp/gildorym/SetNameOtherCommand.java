@@ -14,9 +14,9 @@ public class SetNameOtherCommand implements CommandExecutor {
 	private Gildorym gildorym;
 	private MySQLDatabase sqlDB;
 
-	public SetNameOtherCommand(Gildorym gildorym, MySQLDatabase sqlDB) {
+	public SetNameOtherCommand(Gildorym gildorym) {
 		this.gildorym = gildorym;
-		this.sqlDB = sqlDB;
+		this.sqlDB = gildorym.getMySQLDatabase();
 	}
 	
 	@Override

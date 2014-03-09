@@ -39,8 +39,8 @@ public class Gildorym extends JavaPlugin {
 		}
 				
 		this.getCommand("newcharacter").setExecutor(new NewCharacterCommand(sqlDB, (IEssentials) this.getServer().getPluginManager().getPlugin("Essentials")));
-		this.getCommand("setname").setExecutor(new SetNameCommand(this, sqlDB));
-		this.getCommand("setnameother").setExecutor(new SetNameOtherCommand(this, sqlDB));
+		this.getCommand("setname").setExecutor(new SetNameCommand(this));
+		this.getCommand("setnameother").setExecutor(new SetNameOtherCommand(this));
 		this.getCommand("rollinfo").setExecutor(new RollInfoCommand(this));
 		this.getCommand("radiusemote").setExecutor(new RadiusEmoteCommand());
 		RollCommand rc = new RollCommand(this);
@@ -419,6 +419,10 @@ public class Gildorym extends JavaPlugin {
 						player.getLocation().getY(), 
 						player.getLocation().getZ(), 
 						player.getWorld().toString());
+	}
+
+	public MySQLDatabase getMySQLDatabase() {
+		return sqlDB;
 	}
 	
 }
