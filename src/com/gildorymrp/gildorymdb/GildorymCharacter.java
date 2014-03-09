@@ -1,4 +1,4 @@
-package com.gildorymrp.gildorym;
+package com.gildorymrp.gildorymdb;
 
 import java.util.Arrays;
 
