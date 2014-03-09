@@ -1,5 +1,9 @@
 package com.gildorymrp.gildorym;
 
+import java.math.BigDecimal;
+
+import net.ess3.api.MaxMoneyException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -9,18 +13,59 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.User;
+
+
 public class NewCharacterCommand implements CommandExecutor {
+	private IEssentials ess;
+	private MySQLDatabase sqlDB;
+	
+	public NewCharacterCommand(MySQLDatabase sqlDB, IEssentials essentials) {
+		this.sqlDB = sqlDB;
+		this.ess = essentials;
+	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "money set " + sender.getName() + " 100");
-        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "spawn " + sender.getName());
-        //TODO: This needs to be redone completely to make a new database character
-        Bukkit.getServer().dispatchCommand(sender, "nick " + sender.getName());
-        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "clearinventory " + sender.getName());
-        ((Player) sender).getInventory().addItem(new ItemStack[]{new ItemStack(Material.STONE_AXE, 1), new ItemStack(Material.STONE_PICKAXE, 1), new ItemStack(Material.STONE_SPADE, 1), new ItemStack(Material.STONE_SWORD, 1)});
-        sender.sendMessage(ChatColor.AQUA + "Your character has been reset and transported to the starting area. Ensure you write a new Character story in the Characters forum and update all your chracters values before venturing forth.");
-		return true;
+		if(!(sender instanceof Player)) {
+			sender.sendMessage("You can't do that from console, silly");
+			return true;
+		}
+		Player player = (Player) sender;
+		
+		
+		User user = ess.getUser(player);
+		try {
+			user.setMoney(new BigDecimal(100));
+		} catch (MaxMoneyException e) {
+			// what..?
+			e.printStackTrace();
+		}
+		
+      Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), "spawn " + player.getName());
+      user.setNickname(player.getName());
+      player.getInventory().clear();
+      player.getInventory().addItem(new ItemStack[]{new ItemStack(Material.STONE_AXE, 1), new ItemStack(Material.STONE_PICKAXE, 1), new ItemStack(Material.STONE_SPADE, 1), new ItemStack(Material.STONE_SWORD, 1)});
+      player.sendMessage(ChatColor.AQUA + "Your character has been reset and transported to the starting area. Ensure you write a new Character story in the Characters forum and update all your characters values before venturing forth.");
+      
+      GildorymCharacter gChar = Gildorym.createDefaultCharacter(player);
+      sqlDB.saveCharacter(gChar);
+      sqlDB.setCurrentCharacter(player.getName(), gChar.getUid());
+      
+      if(!sqlDB.saveCharacter(gChar))
+    	  throw new AssertionError("Assertion failed: saving the character was not successful");
+
+      // Get the created character id, which will have just been generated if this is the first
+      // time the player has joined the server
+
+      int createdCharacterId = sqlDB.getActive(player.getName())[1];
+
+      CreatedCharacterInfo cci = new CreatedCharacterInfo(gChar.getUid(), createdCharacterId, System.currentTimeMillis(), "CREATED_BY_PLAYER");
+      sqlDB.addCreatedCharacterInfo(cci);
+      
+      
+      return true;
 	}
 
 }

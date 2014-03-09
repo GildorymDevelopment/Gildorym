@@ -82,7 +82,7 @@ public class MySQLDatabase {
 			"SELECT * FROM created_characters WHERE id = ?;";
 
 	private static final String INSERT_CREATED_CHAR =
-			"INSERT INTO created_characters (id, char_uid, created_utc, approved_by) " +
+			"INSERT INTO created_characters (id, char_uid, created_utc, generation_method) " +
 					"VALUES(?, ?, ?, ?);";
 
 	private static final String CLEAR_CREATED_CHARS =
@@ -164,7 +164,7 @@ public class MySQLDatabase {
 					"`id` int(11) NOT NULL, " +
 					"`char_uid` int(11) NOT NULL DEFAULT -1," +
 					"`created_utc` BIGINT NOT NULL DEFAULT -1, " +
-					"`approved_by` TEXT DEFAULT NULL" +
+					"`generation_method` TEXT DEFAULT NULL" +
 					");");
 		}catch(SQLException ex) {
 			ex.printStackTrace();
@@ -394,7 +394,7 @@ public class MySQLDatabase {
 				CreatedCharacterInfo cci = new CreatedCharacterInfo(createdId);
 				cci.setCharUid(resultSet.getInt("char_uid"));
 				cci.setCreatedUTC(resultSet.getLong("created_utc"));
-				cci.setApprovedBy(resultSet.getString("approved_by"));
+				cci.setgenerationMethod(resultSet.getString("generation_method"));
 				result.add(cci);
 			}
 
@@ -414,7 +414,7 @@ public class MySQLDatabase {
 			statement.setInt(1, cci.getId());
 			statement.setInt(2, cci.getCharUid());
 			statement.setLong(3, cci.getCreatedUTC());
-			statement.setString(4, cci.getApprovedBy());
+			statement.setString(4, cci.getgenerationMethod());
 
 			return statement.execute();
 		}catch(SQLException e) {

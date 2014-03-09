@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import net.ess3.api.IEssentials;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
@@ -37,7 +38,7 @@ public class Gildorym extends JavaPlugin {
 			this.setEnabled(false);
 		}
 				
-		this.getCommand("newcharacter").setExecutor(new NewCharacterCommand());
+		this.getCommand("newcharacter").setExecutor(new NewCharacterCommand(sqlDB, (IEssentials) this.getServer().getPluginManager().getPlugin("Essentials")));
 		this.getCommand("setname").setExecutor(new SetNameCommand());
 		this.getCommand("setnameother").setExecutor(new SetNameOtherCommand());
 		this.getCommand("rollinfo").setExecutor(new RollInfoCommand(this));
@@ -158,27 +159,7 @@ public class Gildorym extends JavaPlugin {
 				 * 
 				 * Likely scenario: First time on the server / only character died
 				 */
-				result = new GildorymCharacter(-1, 
-						"", 
-						player.getName(), 
-						new CharacterCard(0,
-								Gender.UNKNOWN,
-								"",
-								Race.UNKNOWN,
-								1,
-								null,
-								CharacterBehavior.UNKNOWN,
-								CharacterMorality.UNKNOWN), 
-								null,
-								CharacterClass.UNKNOWN,
-								1, 
-								0,
-								0, 
-								0,
-								player.getLocation().getX(), 
-								player.getLocation().getY(), 
-								player.getLocation().getZ(), 
-								player.getWorld().toString());
+				result = createDefaultCharacter(player);
 				
 				if(!sqlDB.saveCharacter(result))
 					throw new AssertionError("Assertion failed: saving the character was not successful");
@@ -413,6 +394,31 @@ public class Gildorym extends JavaPlugin {
 			}
 		}
 
+	}
+
+
+	public static GildorymCharacter createDefaultCharacter(Player player) {
+		return new GildorymCharacter(-1, 
+				"", 
+				player.getName(), 
+				new CharacterCard(0,
+						Gender.UNKNOWN,
+						"",
+						Race.UNKNOWN,
+						1,
+						null,
+						CharacterBehavior.UNKNOWN,
+						CharacterMorality.UNKNOWN), 
+						null,
+						CharacterClass.UNKNOWN,
+						1, 
+						0,
+						0, 
+						0,
+						player.getLocation().getX(), 
+						player.getLocation().getY(), 
+						player.getLocation().getZ(), 
+						player.getWorld().toString());
 	}
 	
 }

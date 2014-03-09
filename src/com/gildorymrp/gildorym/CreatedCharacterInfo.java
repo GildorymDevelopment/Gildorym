@@ -4,7 +4,7 @@ public class CreatedCharacterInfo {
 	private int id;
 	private int charUid;
 	private long createdUTC;
-	private String approvedBy;
+	private String generationMethod;
 	
 	public CreatedCharacterInfo(int id) {
 		this.id = id;
@@ -15,14 +15,14 @@ public class CreatedCharacterInfo {
 	 * @param id
 	 * @param charUid
 	 * @param createdUTC
-	 * @param approvedBy
+	 * @param generationMethod
 	 */
 	public CreatedCharacterInfo(int id, int charUid, long createdUTC,
-			String approvedBy) {
+			String generationMethod) {
 		this.id = id;
 		this.charUid = charUid;
 		this.createdUTC = createdUTC;
-		this.approvedBy = approvedBy;
+		this.generationMethod = generationMethod;
 	}
 
 	public int getId() {
@@ -49,18 +49,18 @@ public class CreatedCharacterInfo {
 		this.createdUTC = createdUTC;
 	}
 
-	public String getApprovedBy() {
-		return approvedBy;
+	public String getgenerationMethod() {
+		return generationMethod;
 	}
 
-	public void setApprovedBy(String approvedBy) {
-		this.approvedBy = approvedBy;
+	public void setgenerationMethod(String generationMethod) {
+		this.generationMethod = generationMethod;
 	}
 
 	@Override
 	public String toString() {
 		return "CreatedCharacterInfo [id=" + id + ", charUid=" + charUid
-				+ ", createdUTC=" + createdUTC + ", approvedBy=" + approvedBy
+				+ ", createdUTC=" + createdUTC + ", generationMethod=" + generationMethod
 				+ "]";
 	}
 
@@ -69,7 +69,7 @@ public class CreatedCharacterInfo {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
-				+ ((approvedBy == null) ? 0 : approvedBy.hashCode());
+				+ ((generationMethod == null) ? 0 : generationMethod.hashCode());
 		result = prime * result + charUid;
 		result = prime * result + (int) (createdUTC ^ (createdUTC >>> 32));
 		result = prime * result + id;
@@ -85,10 +85,10 @@ public class CreatedCharacterInfo {
 		if (getClass() != obj.getClass())
 			return false;
 		CreatedCharacterInfo other = (CreatedCharacterInfo) obj;
-		if (approvedBy == null) {
-			if (other.approvedBy != null)
+		if (generationMethod == null) {
+			if (other.generationMethod != null)
 				return false;
-		} else if (!approvedBy.equals(other.approvedBy))
+		} else if (!generationMethod.equals(other.generationMethod))
 			return false;
 		if (charUid != other.charUid)
 			return false;
