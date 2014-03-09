@@ -49,11 +49,11 @@ public class CreatedCharacterInfo {
 		this.createdUTC = createdUTC;
 	}
 
-	public String getgenerationMethod() {
+	public String getGenerationMethod() {
 		return generationMethod;
 	}
 
-	public void setgenerationMethod(String generationMethod) {
+	public void setGenerationMethod(String generationMethod) {
 		this.generationMethod = generationMethod;
 	}
 
