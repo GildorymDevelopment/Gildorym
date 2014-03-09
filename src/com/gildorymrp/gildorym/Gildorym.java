@@ -1,6 +1,7 @@
 package com.gildorymrp.gildorym;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -13,12 +14,20 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.gildorymrp.charactercards.CharacterBehavior;
 import com.gildorymrp.charactercards.CharacterCard;
+import com.gildorymrp.charactercards.CharacterMorality;
+import com.gildorymrp.charactercards.Gender;
+import com.gildorymrp.charactercards.Race;
+import com.gildorymrp.gildorymclasses.CharacterClass;
 
 public class Gildorym extends JavaPlugin {
 
 	public Economy economy;
 	private Map<String, GildorymCharacter> activeCharacters = new HashMap<String, GildorymCharacter>();
+	
+	private MySQLDatabase sqlDB;
+	
 	
 	public void onEnable() {
 		this.economy = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class).getProvider();
@@ -48,6 +57,17 @@ public class Gildorym extends JavaPlugin {
 		this.getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new SignChangeListener(), this);
+		
+		String dbHost = this.getConfig().getString("database.host");
+		String port = this.getConfig().getString("database.port");
+		String db = this.getConfig().getString("database.database");
+		String user = this.getConfig().getString("database.username");
+		String pass = this.getConfig().getString("database.password");
+		
+		sqlDB = new MySQLDatabase(this, dbHost, port, db, user, pass);
+		sqlDB.connect();
+		sqlDB.initDatabase();
+		
 	}
 	
 	public void onDisable() {
@@ -69,35 +89,107 @@ public class Gildorym extends JavaPlugin {
 		return activeCharacters;
 	}
 	
+	/**
+	 * Loads the character of the specified player.<br>
+	 * <br>
+	 * <ul>
+	 * 	<li>
+	 * 		If the active character is valid ({@code not NULL}):<br>
+	 *			- The current active character is returned
+	 *	</li>
+	 *	<li>
+	 *		If the active character is not valid ({@code NULL}):<br>
+	 *			<ol>
+	 *				<li>
+	 *					If the created list is not valid ({@code NULL or EMPTY}):
+	 *						<p>- A new reasonable default character, which is then stored (with the newly generated uid set appropriately) and returned</p>
+	 *				</li>
+	 *				<li>
+	 *					If the created list is valid ({@code not NULL and not EMPTY}):
+	 *						<p>- Their oldest character, which is set as the new active character and returned</p>
+	 *				</li>
+	 *			</ol>
+	 *	</li>
+	 * </ul>
+	 * 
+	 * @param player the player to load the character for
+	 * @return the active character for {@code player}
+	 */
 	public GildorymCharacter loadCharacter(Player player) {
-		// TODO: Check if they have a character in the database, if so, retrieves their active character and returns it.
+		// Check if they have a character in the database, if so, retrieves their active character and returns it.
 		// If they do not have a character in the database, a new character in their name should be added to the database and returned.
-		// Default Character:
-		/*
-		new GildorymCharacter(uid, 
-				"", 
-				player.getName(), 
-				new CharacterCard(0,
-						Gender.UNKNOWN,
-						"",
-						Race.UNKNOWN,
-						1,
-						null,
-						CharacterBehavior.UNKNOWN,
-						CharacterMorality.UNKNOWN), 
-				null,
-				null,
-				1, 
-				0,
-				0, 
-				0,
-				player.getLocation().getX(), 
-				player.getLocation().getY(), 
-				player.getLocation().getZ(), 
-				player.getWorld().toString());
-		*/
+		
+		GildorymCharacter result = null;
+		int[] activeAndCreated = sqlDB.getActive(player.getName());
+		
+		int active = activeAndCreated != null ? activeAndCreated[0] : -1;
+		if(active == 0) {
+			if(activeAndCreated != null) {
+				/*
+				 * If they do not have a valid active character, AND they have 
+				 * created characters in the past, AND those characters haven't been
+				 * deleted (meaning they are still some in the database), then set
+				 * the last result (the youngest) created character as the active character
+				 * and return that
+				 * 
+				 * Likely scenario: Latest character died.
+				 */
+				int createdId = activeAndCreated[1];
+				if(createdId != -1) {
+					List<CreatedCharacterInfo> cciList = sqlDB.getCreatedCharacterInfo(createdId);
+					if(cciList.size() > 0) {
+						CreatedCharacterInfo cci = cciList.get(cciList.size() - 1); 
+						result = sqlDB.loadCharacter(cci.getCharUid());
+					}
+				}
+			}
+			
+			if(result == null) {
+				/*
+				 * Otherwise, if they do not have an active character AND they do not have
+				 * any created characters, create a reasonable default character, store it,
+				 * and return it
+				 * 
+				 * Likely scenario: First time on the server / only character died
+				 */
+				result = new GildorymCharacter(-1, 
+						"", 
+						player.getName(), 
+						new CharacterCard(0,
+								Gender.UNKNOWN,
+								"",
+								Race.UNKNOWN,
+								1,
+								null,
+								CharacterBehavior.UNKNOWN,
+								CharacterMorality.UNKNOWN), 
+								null,
+								CharacterClass.UNKNOWN,
+								1, 
+								0,
+								0, 
+								0,
+								player.getLocation().getX(), 
+								player.getLocation().getY(), 
+								player.getLocation().getZ(), 
+								player.getWorld().toString());
+				
+				if(!sqlDB.saveCharacter(result))
+					throw new AssertionError("Assertion failed: saving the character was not successful");
+				
+				// Get the created character id, which will have just been generated if this is the first
+				// time the player has joined the server
+				
+				int createdCharacterId = sqlDB.getActive(player.getName())[1];
+				
+				CreatedCharacterInfo cci = new CreatedCharacterInfo(result.getUid(), createdCharacterId, System.currentTimeMillis(), "AUTO-GENERATED");
+				sqlDB.addCreatedCharacterInfo(cci);
+			}
+		}else {
+			result = sqlDB.loadCharacter(activeAndCreated[0]);
+		}
 		// It should only return null due to an SQLException or something similar
-		return null;
+		return result;
 	}
 
 	public void onInjury(Player injured, String type, int dieSize, int fallDistance, int roll) {

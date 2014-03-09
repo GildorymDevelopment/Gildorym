@@ -72,7 +72,7 @@ public class MySQLDatabase {
 	private static final String REPLACE_PLAYER_CUR_CHAR_CREATED_CHAR =
 			"REPLACE INTO players (" +
 					"minecraft_account_name, " +
-					"created_character_id, " +
+					"created_characters_id, " +
 					"current_character_uid) VALUES (?, ?, ?);";
 
 	private static final String SELECT_CUR_CHAR_CREATED =
@@ -106,10 +106,11 @@ public class MySQLDatabase {
 		conn = null;
 	}
 
-	public void connect() {
+	public boolean connect() {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection("jdbc:mysql://" + HOSTNAME + ":" + PORT + "/" + DATABASE, USERNAME, PASSWORD);
+			return true;
 		} catch (SQLException ex) {
 			plugin.getLogger().log(Level.SEVERE, "Unable to establish MySQL connection to " + HOSTNAME + ":" + PORT + "/" + DATABASE);
 			ex.printStackTrace();
@@ -117,6 +118,7 @@ public class MySQLDatabase {
 			plugin.getLogger().log(Level.SEVERE, "Unable to detect JDBC drivers for MySQL!");
 			ex.printStackTrace();
 		}
+		return false;
 	}
 
 	/**
@@ -186,9 +188,14 @@ public class MySQLDatabase {
 
 	/**
 	 * Saves the specified gildorym character into the 'characters' table,
-	 * doing an insert if the characters uid
-	 * @param gChar
-	 * @return success
+	 * doing an insert if the characters uid is -1, otherwise doing a replace
+	 * 
+	 * In the event that an insert is made {@code gChar} will be modified to
+	 * resemble the new character id, and the created character id will be created
+	 * and accessible by {@code getActive(gChar.getMcName()}
+	 * 
+	 * @param gChar the character to save / update
+	 * @return success if no error has occured
 	 */
 	public boolean saveCharacter(GildorymCharacter gChar) {
 		try {
@@ -235,6 +242,14 @@ public class MySQLDatabase {
 				int uid = results.getInt(1);
 				results.close();
 				gChar.setUid(uid);
+				
+				statement = conn.prepareStatement("SELECT max(created_characters_id) FROM players");
+				results = statement.executeQuery();
+				
+				results.next();
+				int id = results.getInt(1) + 1;
+				
+				this.setPlayerCharactersCreatedAndActive(gChar.getMcName(), id, gChar.getUid());
 			}
 			return res;
 
