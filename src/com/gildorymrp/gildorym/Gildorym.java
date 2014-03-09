@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import net.milkbowl.vault.economy.Economy;
 
@@ -71,7 +72,12 @@ public class Gildorym extends JavaPlugin {
 	}
 	
 	public void onDisable() {
-		//TODO: Update the database with any changes made to activeCharacters.
+		Set<String> keys = activeCharacters.keySet();
+		
+		for(String str : keys) {
+			GildorymCharacter gChar = activeCharacters.get(str);
+			sqlDB.saveCharacter(gChar);
+		}
 	}
 	
 	public Map<String, GildorymCharacter> getActiveCharacters() {
