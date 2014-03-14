@@ -282,9 +282,8 @@ public class MySQLDatabase {
 			return res;
 
 		} catch (SQLException e) {
-//			plugin.getLogger().log(Level.SEVERE, "Unable to save character " + gChar + "!");
+			plugin.getLogger().log(Level.SEVERE, "Unable to save character " + gChar + "!");
 			e.printStackTrace();
-			System.exit(0);
 		}
 		return false;
 	}
