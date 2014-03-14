@@ -1,6 +1,9 @@
 package com.gildorymrp.gildorym;
 
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 import com.gildorymrp.charactercards.CharacterCard;
@@ -25,21 +28,24 @@ public class GildorymCharacter {
 	private int magicalStamina;
 	private double x, y, z;
 	private String world;
+	private int woundsID;
+	private List<Wound> wounds;
 	
 	public GildorymCharacter(int uid) {
 		this.uid = uid;
+		woundsID = -1;
+		wounds = new ArrayList<>();
 	}
 	
 	public GildorymCharacter(int uid, String name, String mcName,
-			CharacterCard CharCard, CharacterProfession[] professions,
-			CharacterClass CharClass, int level, int experience, int stamina,
-			int magicalStamina, double x, double y, double z, String world) {
+			CharacterCard charCard, CharacterProfession[] professions,
+			CharacterClass charClass, int level, int experience, int stamina,
+			int magicalStamina, int woundsID, double x, double y, double z, String world) {
 		this(uid);
-		this.name = name;
 		this.mcName = mcName;
-		this.charCard = CharCard;
+		this.charCard = charCard;
 		this.professions = professions;
-		this.charClass = CharClass;
+		this.charClass = charClass;
 		this.level = level;
 		this.experience = experience;
 		this.stamina = stamina;
@@ -48,9 +54,11 @@ public class GildorymCharacter {
 		this.y = y;
 		this.z = z;
 		this.world = world;
+		this.woundsID = woundsID;
 	}
-	
-	
+
+
+
 	public int getUid() {
 		return uid;
 	}
@@ -130,6 +138,58 @@ public class GildorymCharacter {
 		this.z = z;
 	}
 	
+	public String getWorld() {
+		return world;
+	}
+
+	public void setWorld(String world) {
+		this.world = world;
+	}
+
+	public int getWoundsID() {
+		return woundsID;
+	}
+	
+	public void setWoundsID(int woundsID) {
+		this.woundsID = woundsID;
+	}
+
+	public void setWounds(Collection<Wound> wounds) {
+		clearWounds();
+		addAllWounds(wounds);
+	}
+	
+	public void addAllWounds(Collection<Wound> wounds) {
+		this.wounds.addAll(wounds);
+	}
+
+	public void addWound(Wound w) {
+		wounds.add(w);
+	}
+	
+	public void removeWound(Wound w) {
+		this.wounds.remove(w);
+	}
+	
+	public void clearWounds() {
+		this.wounds.clear();
+	}
+
+	public List<Wound> getWounds() {
+		return wounds;
+	}
+	
+	@Override
+	public String toString() {
+		return "GildorymCharacter [uid=" + uid + ", name=" + name + ", mcName="
+				+ mcName + ", charCard=" + charCard + ", professions="
+				+ Arrays.toString(professions) + ", charClass=" + charClass
+				+ ", level=" + level + ", experience=" + experience
+				+ ", stamina=" + stamina + ", magicalStamina=" + magicalStamina
+				+ ", x=" + x + ", y=" + y + ", z=" + z + ", world=" + world
+				+ ", woundsID=" + woundsID + "]";
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -168,6 +228,13 @@ public class GildorymCharacter {
 			return false;
 		if (uid != other.uid)
 			return false;
+		if (world == null) {
+			if (other.world != null)
+				return false;
+		} else if (!world.equals(other.world))
+			return false;
+		if (woundsID != other.woundsID)
+			return false;
 		if (Double.doubleToLongBits(x) != Double.doubleToLongBits(other.x))
 			return false;
 		if (Double.doubleToLongBits(y) != Double.doubleToLongBits(other.y))
@@ -176,22 +243,6 @@ public class GildorymCharacter {
 			return false;
 		return true;
 	}
-
-	@Override
-	public String toString() {
-		return "GildorymCharacter [uid=" + uid + ", name=" + name + ", mcName="
-				+ mcName + ", charCard=" + charCard + ", professions="
-				+ Arrays.toString(professions) + ", charClass=" + charClass
-				+ ", level=" + level + ", experience=" + experience
-				+ ", stamina=" + stamina + ", magicalStamina=" + magicalStamina
-				+ ", x=" + x + ", y=" + y + ", z=" + z + "]";
-	}
-
-	public String getWorld() {
-		return world;
-	}
-
-	public void setWorld(String world) {
-		this.world = world;
-	}
+	
+	
 }

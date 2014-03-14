@@ -415,6 +415,7 @@ public class Gildorym extends JavaPlugin {
 						0,
 						0, 
 						0,
+						-1,
 						player.getLocation().getX(), 
 						player.getLocation().getY(), 
 						player.getLocation().getZ(), 

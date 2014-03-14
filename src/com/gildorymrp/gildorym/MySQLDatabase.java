@@ -35,10 +35,11 @@ public class MySQLDatabase {
 					"magical_stamina, " +
 					"morality, " +
 					"behavior, " +
+					"wounds_id, " +
 					"x, " +
 					"y, " +
 					"z, " +
-					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	private static final String INSERT_CHAR_STATEMENT =
 			"INSERT INTO characters (" +
@@ -57,10 +58,11 @@ public class MySQLDatabase {
 					"magical_stamina, " +
 					"morality, " +
 					"behavior, " +
+					"wounds_id, " +
 					"x, " +
 					"y, " +
 					"z, " +
-					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	private static final String SELECT_CHAR_STATEMENT =
 			"SELECT * FROM characters WHERE uid=?";
@@ -87,6 +89,20 @@ public class MySQLDatabase {
 
 	private static final String CLEAR_CREATED_CHARS =
 			"DELETE FROM created_characters WHERE id = ?;";
+	
+	private static final String INSERT_WOUND = 
+			"INSERT INTO wounds (wound_id, timestamp, damage_type, " +
+			"damage_amount, regen_time, notes) VALUES(?, ?, ?, ?, ?, ?);";
+	
+	private static final String SELECT_WOUNDS_BY_ID =
+			"SELECT * FROM wounds WHERE wound_id = ?";
+	
+	private static final String PRUNE_WOUNDS_BY_ID = 
+			"DELETE * FROM wounds WHERE wound_id = ? AND regen_time < ?";
+	
+	private static final String DELETE_WOUND =
+			"DELETE * FROM wounds WHERE wound_id = ? AND timestamp = ? AND damageType = ? " +
+			"AND damage_amount = ? AND regen_time = ? AND notes = ? LIMIT 1";
 
 	private final String HOSTNAME;
 	private final String PORT;
@@ -147,6 +163,7 @@ public class MySQLDatabase {
 					"`magical_stamina` int(11) DEFAULT NULL," +
 					"`morality` varchar(10) DEFAULT NULL," +
 					"`behavior` varchar(10) DEFAULT NULL," +
+					"`wounds_id` int(11) DEFAULT NULL," +
 					"`x` double DEFAULT NULL," +
 					"`y` double DEFAULT NULL," +
 					"`z` double DEFAULT NULL," +
@@ -165,6 +182,15 @@ public class MySQLDatabase {
 					"`char_uid` int(11) NOT NULL DEFAULT -1," +
 					"`created_utc` BIGINT NOT NULL DEFAULT -1, " +
 					"`generation_method` TEXT DEFAULT NULL" +
+					");");
+			
+			statement.execute("CREATE TABLE IF NOT EXISTS `wounds` (" +
+					"`wound_id` int(11) NOT NULL, " +
+					"`timestamp` BIGINT NOT NULL DEFAULT -1," +
+					"`damage_type` text DEFAULT NULL, " +
+					"`damage_amount` TINYINT DEFAULT NULL," +
+					"`regen_time` BIGINT NOT NULL DEFAULT -1," +
+					"`notes` text DEFAULT NULL" +
 					");");
 		}catch(SQLException ex) {
 			ex.printStackTrace();
@@ -227,10 +253,11 @@ public class MySQLDatabase {
 			statement.setInt(13 + posMod, gChar.getMagicalStamina());
 			statement.setString(14 + posMod, gChar.getCharCard().getMorality() != null ? gChar.getCharCard().getMorality().name() : null);
 			statement.setString(15 + posMod, gChar.getCharCard().getBehavior() != null ? gChar.getCharCard().getBehavior().name() : null);
-			statement.setDouble(16 + posMod, gChar.getX());
-			statement.setDouble(17 + posMod, gChar.getY());
-			statement.setDouble(18 + posMod, gChar.getZ());
-			statement.setString(19 + posMod, gChar.getWorld());
+			statement.setInt(16 + posMod, gChar.getWoundsID());
+			statement.setDouble(17 + posMod, gChar.getX());
+			statement.setDouble(18 + posMod, gChar.getY());
+			statement.setDouble(19 + posMod, gChar.getZ());
+			statement.setString(20 + posMod, gChar.getWorld());
 
 			boolean res = statement.execute();
 
@@ -250,12 +277,14 @@ public class MySQLDatabase {
 				int id = results.getInt(1) + 1;
 				
 				this.setPlayerCharactersCreatedAndActive(gChar.getMcName(), id, gChar.getUid());
+				results.close();
 			}
 			return res;
 
 		} catch (SQLException e) {
-			plugin.getLogger().log(Level.SEVERE, "Unable to save character " + gChar + "!");
+//			plugin.getLogger().log(Level.SEVERE, "Unable to save character " + gChar + "!");
 			e.printStackTrace();
+			System.exit(0);
 		}
 		return false;
 	}
@@ -287,10 +316,11 @@ public class MySQLDatabase {
 			result.setExperience(results.getInt(12));
 			result.setStamina(results.getInt(13));
 			result.setMagicalStamina(results.getInt(14));
-			result.setX(results.getDouble(17));
-			result.setY(results.getDouble(18));
-			result.setZ(results.getDouble(19));
-			result.setWorld(results.getString(20));
+			result.setWoundsID(results.getInt(17));
+			result.setX(results.getDouble(18));
+			result.setY(results.getDouble(19));
+			result.setZ(results.getDouble(20));
+			result.setWorld(results.getString(21));
 
 			results.close();
 
@@ -309,7 +339,8 @@ public class MySQLDatabase {
 			PreparedStatement statement = conn.prepareStatement(REPLACE_PLAYER_CUR_CHAR);
 			statement.setString(1, playerName);
 			statement.setInt(2, uid);
-			return statement.execute();
+			statement.execute();
+			return true;
 		}catch(SQLException e) {
 			plugin.getLogger().log(Level.SEVERE, "Unable to set active character of " + playerName + " to " + uid + "!");
 			e.printStackTrace();
@@ -331,7 +362,8 @@ public class MySQLDatabase {
 			statement.setString(1, playerName);
 			statement.setInt(2, createdId);
 			statement.setInt(3, uid);
-			return statement.execute();
+			statement.execute();
+			return true;
 		} catch (SQLException e) {
 			plugin.getLogger().log(Level.SEVERE, "Unable to set active character of " + playerName + " to " + uid + "!");
 			e.printStackTrace();
@@ -416,7 +448,8 @@ public class MySQLDatabase {
 			statement.setLong(3, cci.getCreatedUTC());
 			statement.setString(4, cci.getGenerationMethod());
 
-			return statement.execute();
+			statement.execute();
+			return true;
 		}catch(SQLException e) {
 			plugin.getLogger().log(Level.SEVERE, "Unable to add created character info " + cci);
 			e.printStackTrace();
@@ -430,14 +463,163 @@ public class MySQLDatabase {
 
 			statement.setInt(1, id);
 
-			return statement.execute();
+			statement.execute();
+			return true;
 		}catch(SQLException e) {
 			plugin.getLogger().log(Level.SEVERE, "Unable to retrieve clear created character info for id " + id);
 			e.printStackTrace();
 			return false;
 		}
 	}
+	
+	public boolean inflictWound(GildorymCharacter gChar, Wound w) {
+		try {
+			PreparedStatement statement;
+			if(gChar.getWoundsID() == -1) {
+				// Assign a wound id
+				statement = conn.prepareStatement("SELECT max(wound_id) FROM wound");
+				
+				ResultSet resultSet = statement.executeQuery();
+				resultSet.next();
+				
+				int max = resultSet.getInt(1);
+				
+				resultSet.close();
+				
+				gChar.setWoundsID(max + 1);
+				saveCharacter(gChar);
+				w.setWoundID(max + 1);
+				
+			}
+			statement = conn.prepareStatement(INSERT_WOUND);
 
+			statement.setInt(1, w.getWoundID());
+			statement.setLong(2, w.getTimestamp());
+			statement.setString(3, w.getDamageType().name());
+			statement.setLong(4, w.getTimeRegen());
+			statement.setString(5, w.getNotes());
+			
+			statement.execute();
+			return true;
+		}catch(SQLException e) {
+			plugin.getLogger().log(Level.SEVERE, "Unable to inflict wound " + w + " on " + gChar.getName() + " [" + gChar.getUid() + "]");
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/**
+	 * Removes any wounds that have healed from the gildorym character,
+	 * and reloads the wounds. Can be used in replace of loadWounds if
+	 * this behavior is preferred
+	 * 
+	 * @param gChar the character
+	 * @return if the call was successful
+	 */
+	public boolean pruneWounds(GildorymCharacter gChar) {
+		if(gChar.getWoundsID() == -1) {
+			return true;
+			
+		}
+		try {
+			PreparedStatement statement;
+			
+			statement = conn.prepareStatement(PRUNE_WOUNDS_BY_ID);
+
+			statement.setInt(1, gChar.getWoundsID());
+			statement.setLong(2, System.currentTimeMillis());
+			
+			statement.execute();
+			
+			loadWounds(gChar);
+			if(gChar.getWounds().isEmpty()) {
+				gChar.setWoundsID(-1);
+				saveCharacter(gChar);
+			}
+			return true;
+		}catch(SQLException e) {
+			plugin.getLogger().log(Level.SEVERE, "Unable to prune wounds on " + gChar.getName() + " [" + gChar.getUid() + "]");
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public boolean loadWounds(GildorymCharacter gChar) {
+		if(gChar.getWoundsID() == -1)
+			return true;
+		
+		try {
+			PreparedStatement statement;
+			
+			statement = conn.prepareStatement(SELECT_WOUNDS_BY_ID);
+			statement.setInt(1, gChar.getWoundsID());
+			
+			ResultSet resultSet = statement.executeQuery();
+			
+			Wound w;
+			while(resultSet.next()) {
+				w = new Wound(resultSet.getInt("wound_id"));
+				w.setTimestamp(resultSet.getLong("timestamp"));
+				w.setDamageType(DamageType.valueOf(resultSet.getString("damage_type")));
+				w.setDamageAmount(resultSet.getInt("damage_amount"));
+				w.setTimeRegen(resultSet.getLong("regen_time"));
+				w.setNotes(resultSet.getString("notes"));
+				
+				gChar.addWound(w);
+			}
+			return true;
+		}catch(SQLException e) {
+			plugin.getLogger().log(Level.SEVERE, "Unable to load wounds on " + gChar.getName() + " [" + gChar.getUid() + "]");
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/**
+	 * Deletes the wound from the character, if that was the last
+	 * wound in the characters IN-MEMORY list of wounds, then the wounds
+	 * on the character is reloaded from the database. If the list is
+	 * still empty, the wound id is set to -1. Because this may take 3 
+	 * db calls, its best to use clearWounds when sensible, rather than
+	 * iteratively delete the mall
+	 * 
+	 * @param gChar The character
+	 * @param w The wound
+	 * @return whether the operation was successful or not
+	 */
+	public boolean deleteWound(GildorymCharacter gChar, Wound w) {
+		try {
+			PreparedStatement statement;
+			
+			statement = conn.prepareStatement(DELETE_WOUND);
+
+			statement.setInt(1, w.getWoundID());
+			statement.setLong(2, w.getTimestamp());
+			statement.setString(3, w.getDamageType().name());
+			statement.setInt(4, w.getDamageAmount());
+			statement.setLong(5, w.getTimeRegen());
+			statement.setString(6, w.getNotes());
+			
+			statement.execute();
+			
+			gChar.removeWound(w);
+			
+			if(gChar.getWounds().size() == 0) {
+				loadWounds(gChar);
+				
+				if(gChar.getWounds().size() == 0) {
+					gChar.setWoundsID(-1);
+					saveCharacter(gChar);
+				}
+			}
+			return true;
+		}catch(SQLException e) {
+			plugin.getLogger().log(Level.SEVERE, "Unable to prune wounds on " + gChar.getName() + " [" + gChar.getUid() + "]");
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
 	private String csv(Enum<?>[] e) {
 		if(e == null || e.length == 0 || e[0] == null)
 			return null;
