@@ -98,11 +98,10 @@ public class MySQLDatabase {
 			"SELECT * FROM wounds WHERE wound_id = ?";
 	
 	private static final String PRUNE_WOUNDS_BY_ID = 
-			"DELETE * FROM wounds WHERE wound_id = ? AND regen_time < ?";
+			"DELETE FROM wounds WHERE wound_id = ? AND regen_time < ?";
 	
 	private static final String DELETE_WOUND =
-			"DELETE * FROM wounds WHERE wound_id = ? AND timestamp = ? AND damageType = ? " +
-			"AND damage_amount = ? AND regen_time = ? AND notes = ? LIMIT 1";
+			"DELETE FROM wounds WHERE wound_uid = ? LIMIT 1";
 
 	private final String HOSTNAME;
 	private final String PORT;
@@ -185,12 +184,14 @@ public class MySQLDatabase {
 					");");
 			
 			statement.execute("CREATE TABLE IF NOT EXISTS `wounds` (" +
+					"`wound_uid` int(11) NOT NULL AUTO_INCREMENT, " +
 					"`wound_id` int(11) NOT NULL, " +
 					"`timestamp` BIGINT NOT NULL DEFAULT -1," +
 					"`damage_type` text DEFAULT NULL, " +
 					"`damage_amount` TINYINT DEFAULT NULL," +
 					"`regen_time` BIGINT NOT NULL DEFAULT -1," +
-					"`notes` text DEFAULT NULL" +
+					"`notes` text DEFAULT NULL, " +
+					"PRIMARY KEY (`wound_uid`)" +
 					");");
 		}catch(SQLException ex) {
 			ex.printStackTrace();
@@ -476,32 +477,44 @@ public class MySQLDatabase {
 			PreparedStatement statement;
 			if(gChar.getWoundsID() == -1) {
 				// Assign a wound id
-				statement = conn.prepareStatement("SELECT max(wound_id) FROM wound");
+				statement = conn.prepareStatement("SELECT max(wound_id) FROM wounds");
 				
 				ResultSet resultSet = statement.executeQuery();
 				resultSet.next();
 				
 				int max = resultSet.getInt(1);
-				
+				System.out.println("Assigned wound id " + (max + 1) + " to " + gChar.getName());
 				resultSet.close();
 				
 				gChar.setWoundsID(max + 1);
 				saveCharacter(gChar);
 				w.setWoundID(max + 1);
 				
+			}else {
+				w.setWoundID(gChar.getWoundsID());
 			}
+			
 			statement = conn.prepareStatement(INSERT_WOUND);
 
 			statement.setInt(1, w.getWoundID());
 			statement.setLong(2, w.getTimestamp());
 			statement.setString(3, w.getDamageType().name());
-			statement.setLong(4, w.getTimeRegen());
-			statement.setString(5, w.getNotes());
+			statement.setInt(4, w.getDamageAmount());
+			statement.setLong(5, w.getTimeRegen());
+			statement.setString(6, w.getNotes());
 			
 			statement.execute();
+			
+			statement = conn.prepareStatement("SELECT LAST_INSERT_ID()");
+			
+			ResultSet resultSet = statement.executeQuery();
+			resultSet.next();
+			int uid = resultSet.getInt(1);
+			resultSet.close();
+			w.setWoundUID(uid);
 			return true;
 		}catch(SQLException e) {
-			plugin.getLogger().log(Level.SEVERE, "Unable to inflict wound " + w + " on " + gChar.getName() + " [" + gChar.getUid() + "]");
+//			plugin.getLogger().log(Level.SEVERE, "Unable to inflict wound " + w + " on " + gChar.getName() + " [" + gChar.getUid() + "]");
 			e.printStackTrace();
 			return false;
 		}
@@ -557,7 +570,8 @@ public class MySQLDatabase {
 			
 			Wound w;
 			while(resultSet.next()) {
-				w = new Wound(resultSet.getInt("wound_id"));
+				w = new Wound(resultSet.getInt("wound_uid"));
+				w.setWoundID(resultSet.getInt("wound_id"));
 				w.setTimestamp(resultSet.getLong("timestamp"));
 				w.setDamageType(DamageType.valueOf(resultSet.getString("damage_type")));
 				w.setDamageAmount(resultSet.getInt("damage_amount"));
@@ -592,12 +606,7 @@ public class MySQLDatabase {
 			
 			statement = conn.prepareStatement(DELETE_WOUND);
 
-			statement.setInt(1, w.getWoundID());
-			statement.setLong(2, w.getTimestamp());
-			statement.setString(3, w.getDamageType().name());
-			statement.setInt(4, w.getDamageAmount());
-			statement.setLong(5, w.getTimeRegen());
-			statement.setString(6, w.getNotes());
+			statement.setInt(1, w.getWoundUID());
 			
 			statement.execute();
 			

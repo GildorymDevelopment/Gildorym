@@ -1,6 +1,7 @@
 package com.gildorymrp.gildorym;
 
 public class Wound {
+	private int woundUid;
 	private int woundID;
 	
 	private long timestamp;
@@ -9,8 +10,8 @@ public class Wound {
 	private long timeRegen; // When the wound is regened, e.g. if it was inflicted at 5 and it took 5 seconds to heal, timeRegen would be 10 (5 + 5)
 	private String notes;
 	
-	public Wound(int id) {
-		this.woundID = id;
+	public Wound(int uid) {
+		this.woundUid = uid;
 	}
 	
 	public int getWoundID() {
@@ -19,6 +20,13 @@ public class Wound {
 	public void setWoundID(int woundID) {
 		this.woundID = woundID;
 	}
+	public int getWoundUID() {
+		return woundUid;
+	}
+	public void setWoundUID(int woundUid) {
+		this.woundUid = woundUid;
+	}
+	
 	public long getTimestamp() {
 		return timestamp;
 	}
@@ -52,16 +60,17 @@ public class Wound {
 
 	@Override
 	public String toString() {
-		return "Wound [woundID=" + woundID + ", timestamp=" + timestamp
-				+ ", damageType=" + damageType + ", damageAmount="
-				+ damageAmount + ", timeRegen=" + timeRegen + ", notes="
-				+ notes + "]";
+		return "Wound [woundUID=" + woundUid + ", woundID=" + woundID +
+				", timestamp=" + timestamp + ", damageType=" + damageType + 
+				", damageAmount=" + damageAmount + ", timeRegen=" + timeRegen + 
+				", notes=" + notes + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + woundUid;
 		result = prime * result + damageAmount;
 		result = prime * result
 				+ ((damageType == null) ? 0 : damageType.hashCode());
@@ -81,6 +90,8 @@ public class Wound {
 		if (getClass() != obj.getClass())
 			return false;
 		Wound other = (Wound) obj;
+		if(woundUid != other.woundUid)
+			return false;
 		if (damageAmount != other.damageAmount)
 			return false;
 		if (damageType != other.damageType)
