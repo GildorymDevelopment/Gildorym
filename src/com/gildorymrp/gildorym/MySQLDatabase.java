@@ -13,6 +13,7 @@ import com.gildorymrp.charactercards.CharacterCard;
 import com.gildorymrp.charactercards.CharacterMorality;
 import com.gildorymrp.charactercards.Gender;
 import com.gildorymrp.charactercards.Race;
+import com.gildorymrp.charactercards.Subrace;
 import com.gildorymrp.gildorymclasses.CharacterProfession;
 
 public class MySQLDatabase {
@@ -26,6 +27,31 @@ public class MySQLDatabase {
 					"gender, " +
 					"description, " +
 					"race, " +
+					"sub_race, " +
+					"health, " +
+					"`class`, " +
+					"professions, " +
+					"`level`, " +
+					"experience, " +
+					"stamina, " +
+					"magical_stamina, " +
+					"morality, " +
+					"behavior, " +
+					"wounds_id, " +
+					"x, " +
+					"y, " +
+					"z, " +
+					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+	private static final String INSERT_CHAR_STATEMENT =
+			"INSERT INTO characters (" +
+					"char_name, " +
+					"minecraft_account_name, " +
+					"age, " +
+					"gender, " +
+					"description, " +
+					"race, " +
+					"sub_race, " +
 					"health, " +
 					"`class`, " +
 					"professions, " +
@@ -40,29 +66,6 @@ public class MySQLDatabase {
 					"y, " +
 					"z, " +
 					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-
-	private static final String INSERT_CHAR_STATEMENT =
-			"INSERT INTO characters (" +
-					"char_name, " +
-					"minecraft_account_name, " +
-					"age, " +
-					"gender, " +
-					"description, " +
-					"race, " +
-					"health, " +
-					"`class`, " +
-					"professions, " +
-					"`level`, " +
-					"experience, " +
-					"stamina, " +
-					"magical_stamina, " +
-					"morality, " +
-					"behavior, " +
-					"wounds_id, " +
-					"x, " +
-					"y, " +
-					"z, " +
-					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	private static final String SELECT_CHAR_STATEMENT =
 			"SELECT * FROM characters WHERE uid=?";
@@ -153,6 +156,7 @@ public class MySQLDatabase {
 					"`gender` varchar(10) DEFAULT NULL," +
 					"`description` text," +
 					"`race` varchar(20) DEFAULT NULL," +
+					"`sub_race` TEXT DEFAULT NULL," +
 					"`health` int(11) DEFAULT NULL," +
 					"`class` text," +
 					"`professions` text," +
@@ -226,39 +230,43 @@ public class MySQLDatabase {
 	 */
 	public boolean saveCharacter(GildorymCharacter gChar) {
 		try {
-			int posMod = 0; // In the event that we are including ID, then we must increase these
+			int position = 1; // In the event that we are including ID, then we must increase these
 			// numbers by this amount.
 			PreparedStatement statement = null;
 			if(gChar.getUid() != -1) {
 				statement = conn.prepareStatement(REPLACE_CHAR_STATEMENT);
 
 				statement.setInt(1, gChar.getUid());
-				posMod = 1;
+				position = 2;
 
 			}else {
 				statement = conn.prepareStatement(INSERT_CHAR_STATEMENT);
 			}
 
-			statement.setString(1 + posMod, gChar.getName());
-			statement.setString(2 + posMod, gChar.getMcName());
-			statement.setInt(3 + posMod, gChar.getCharCard().getAge());
-			statement.setString(4 + posMod, gChar.getCharCard().getGender().name());
-			statement.setString(5 + posMod, gChar.getCharCard().getDescription());
-			statement.setString(6 + posMod, gChar.getCharCard().getRace().name());
-			statement.setInt(7 + posMod, gChar.getCharCard().getHealth());
-			statement.setString(8 + posMod, gChar.getCharClass() != null ? gChar.getCharClass().name() : null);
-			statement.setString(9 + posMod, csv(gChar.getProfessions()));
-			statement.setInt(10 + posMod, gChar.getLevel());
-			statement.setInt(11 + posMod, gChar.getExperience());
-			statement.setInt(12 + posMod, gChar.getStamina());
-			statement.setInt(13 + posMod, gChar.getMagicalStamina());
-			statement.setString(14 + posMod, gChar.getCharCard().getMorality() != null ? gChar.getCharCard().getMorality().name() : null);
-			statement.setString(15 + posMod, gChar.getCharCard().getBehavior() != null ? gChar.getCharCard().getBehavior().name() : null);
-			statement.setInt(16 + posMod, gChar.getWoundsID());
-			statement.setDouble(17 + posMod, gChar.getX());
-			statement.setDouble(18 + posMod, gChar.getY());
-			statement.setDouble(19 + posMod, gChar.getZ());
-			statement.setString(20 + posMod, gChar.getWorld());
+			statement.setString(position++, gChar.getName());
+			statement.setString(position++, gChar.getMcName());
+			statement.setInt(position++, gChar.getCharCard().getAge());
+			statement.setString(position++, gChar.getCharCard().getGender().name());
+			statement.setString(position++, gChar.getCharCard().getDescription());
+			statement.setString(position++, gChar.getCharCard().getRace().name());
+			Subrace subrace = 
+					gChar.getCharCard().getSubrace() == null ? Subrace.defaultSubrace(gChar.getCharCard().getRace()) :
+					gChar.getCharCard().getSubrace();
+			statement.setString(position++, subrace.name());
+			statement.setInt(position++, gChar.getCharCard().getHealth());
+			statement.setString(position++, gChar.getCharClass() != null ? gChar.getCharClass().name() : null);
+			statement.setString(position++, csv(gChar.getProfessions()));
+			statement.setInt(position++, gChar.getLevel());
+			statement.setInt(position++, gChar.getExperience());
+			statement.setInt(position++, gChar.getStamina());
+			statement.setInt(position++, gChar.getMagicalStamina());
+			statement.setString(position++, gChar.getCharCard().getMorality() != null ? gChar.getCharCard().getMorality().name() : null);
+			statement.setString(position++, gChar.getCharCard().getBehavior() != null ? gChar.getCharCard().getBehavior().name() : null);
+			statement.setInt(position++, gChar.getWoundsID());
+			statement.setDouble(position++, gChar.getX());
+			statement.setDouble(position++, gChar.getY());
+			statement.setDouble(position++, gChar.getZ());
+			statement.setString(position++, gChar.getWorld());
 
 			boolean res = statement.execute();
 
@@ -283,8 +291,9 @@ public class MySQLDatabase {
 			return res;
 
 		} catch (SQLException e) {
-			plugin.getLogger().log(Level.SEVERE, "Unable to save character " + gChar + "!");
+//			plugin.getLogger().log(Level.SEVERE, "Unable to save character " + gChar + "!");
 			e.printStackTrace();
+			System.exit(0);
 		}
 		return false;
 	}
@@ -300,27 +309,30 @@ public class MySQLDatabase {
 			results.next();
 
 			GildorymCharacter result = new GildorymCharacter(uid);
-			result.setName(results.getString(2));
-			result.setMcName(results.getString(3));
-			result.setCharCard(new CharacterCard(results.getInt(4),
-					Gender.valueOf(results.getString(5)),
-					results.getString(6),
-					Race.valueOf(results.getString(7)),
-					results.getInt(8),
-					CharacterClass.valueOf(results.getString(9)), 
-					results.getString(16) != null ? CharacterBehavior.valueOf(results.getString(16)) : CharacterBehavior.NEUTRAL, 
-							results.getString(15) != null ? CharacterMorality.valueOf(results.getString(15)) : CharacterMorality.NEUTRAL));
-			result.setCharClass(CharacterClass.valueOf(results.getString(9)));
-			result.setProfessions(csv(results.getString(10)));
-			result.setLevel(results.getInt(11));
-			result.setExperience(results.getInt(12));
-			result.setStamina(results.getInt(13));
-			result.setMagicalStamina(results.getInt(14));
-			result.setWoundsID(results.getInt(17));
-			result.setX(results.getDouble(18));
-			result.setY(results.getDouble(19));
-			result.setZ(results.getDouble(20));
-			result.setWorld(results.getString(21));
+			result.setName("char_name");
+			result.setMcName("minecraft_account_name");
+			result.setCharCard(new CharacterCard(
+					results.getInt("age"),
+					Gender.valueOf(results.getString("gender")),
+					results.getString("description"),
+					Race.valueOf(results.getString("race")),
+					Subrace.valueOf(results.getString("sub_race")),
+					results.getInt("health"),
+					CharacterClass.valueOf(results.getString("class")), 
+					results.getString("behavior") != null ? 
+							CharacterBehavior.valueOf(results.getString("behavior")) : CharacterBehavior.NEUTRAL, 
+							results.getString("morality") != null ? CharacterMorality.valueOf(results.getString("morality")) : CharacterMorality.NEUTRAL));
+			result.setCharClass(CharacterClass.valueOf(results.getString("class")));
+			result.setProfessions(csv(results.getString("professions")));
+			result.setLevel(results.getInt("level"));
+			result.setExperience(results.getInt("experience"));
+			result.setStamina(results.getInt("stamina"));
+			result.setMagicalStamina(results.getInt("magical_stamina"));
+			result.setWoundsID(results.getInt("wounds_id"));
+			result.setX(results.getDouble("x"));
+			result.setY(results.getDouble("y"));
+			result.setZ(results.getDouble("z"));
+			result.setWorld(results.getString("world"));
 
 			results.close();
 

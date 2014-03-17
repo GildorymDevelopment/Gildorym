@@ -21,6 +21,7 @@ import com.gildorymrp.charactercards.CharacterCard;
 import com.gildorymrp.charactercards.CharacterMorality;
 import com.gildorymrp.charactercards.Gender;
 import com.gildorymrp.charactercards.Race;
+import com.gildorymrp.charactercards.Subrace;
 import com.gildorymrp.gildorymclasses.CharacterClass;
 
 public class Gildorym extends JavaPlugin {
@@ -405,6 +406,7 @@ public class Gildorym extends JavaPlugin {
 						Gender.UNKNOWN,
 						"",
 						Race.UNKNOWN,
+						Subrace.UNKNOWN,
 						1,
 						null,
 						CharacterBehavior.UNKNOWN,
