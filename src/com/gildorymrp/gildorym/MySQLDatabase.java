@@ -36,13 +36,14 @@ public class MySQLDatabase {
 					"experience, " +
 					"stamina, " +
 					"magical_stamina, " +
+					"lockpick_stamina, " +
 					"morality, " +
 					"behavior, " +
 					"wounds_id, " +
 					"x, " +
 					"y, " +
 					"z, " +
-					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	private static final String INSERT_CHAR_STATEMENT =
 			"INSERT INTO characters (" +
@@ -61,13 +62,14 @@ public class MySQLDatabase {
 					"experience, " +
 					"stamina, " +
 					"magical_stamina, " +
+					"lockpick_stamina, " +
 					"morality, " +
 					"behavior, " +
 					"wounds_id, " +
 					"x, " +
 					"y, " +
 					"z, " +
-					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	private static final String SELECT_CHAR_STATEMENT =
 			"SELECT * FROM characters WHERE uid=?";
@@ -167,6 +169,7 @@ public class MySQLDatabase {
 					"`experience` int(11) DEFAULT NULL," +
 					"`stamina` int(11) DEFAULT NULL," +
 					"`magical_stamina` int(11) DEFAULT NULL," +
+					"`lockpick_stamina` int(11) DEFAULT NULL," +
 					"`morality` varchar(10) DEFAULT NULL," +
 					"`behavior` varchar(10) DEFAULT NULL," +
 					"`wounds_id` int(11) DEFAULT NULL," +
@@ -264,6 +267,7 @@ public class MySQLDatabase {
 			statement.setInt(position++, gChar.getExperience());
 			statement.setInt(position++, gChar.getStamina());
 			statement.setInt(position++, gChar.getMagicalStamina());
+			statement.setInt(position++, gChar.getLockpickStamina());
 			statement.setString(position++, gChar.getCharCard().getMorality() != null ? gChar.getCharCard().getMorality().name() : null);
 			statement.setString(position++, gChar.getCharCard().getBehavior() != null ? gChar.getCharCard().getBehavior().name() : null);
 			statement.setInt(position++, gChar.getWoundsID());
@@ -333,6 +337,7 @@ public class MySQLDatabase {
 			result.setExperience(results.getInt("experience"));
 			result.setStamina(results.getInt("stamina"));
 			result.setMagicalStamina(results.getInt("magical_stamina"));
+			result.setLockpickStamina(results.getInt("lockpick_stamina"));
 			result.setWoundsID(results.getInt("wounds_id"));
 			result.setX(results.getDouble("x"));
 			result.setY(results.getDouble("y"));

@@ -25,6 +25,7 @@ public class GildorymCharacter {
 	private int experience;
 	private int stamina;
 	private int magicalStamina;
+	private int lockpickStamina;
 	private double x, y, z;
 	private String world;
 	private int woundsID;
@@ -39,8 +40,8 @@ public class GildorymCharacter {
 	public GildorymCharacter(int uid, String name, String mcName,
 			CharacterCard charCard, CharacterProfession profession1,
 			CharacterProfession profession2, CharacterClass charClass, int level,
-			int experience, int stamina, int magicalStamina, int woundsID, double x,
-			double y, double z, String world) {
+			int experience, int stamina, int magicalStamina, int lockpickStamina,
+			int woundsID, double x, double y, double z, String world) {
 		this(uid);
 		this.mcName = mcName;
 		this.charCard = charCard;
@@ -51,6 +52,7 @@ public class GildorymCharacter {
 		this.experience = experience;
 		this.stamina = stamina;
 		this.magicalStamina = magicalStamina;
+		this.lockpickStamina = lockpickStamina;
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -126,6 +128,12 @@ public class GildorymCharacter {
 	public void setMagicalStamina(int magicalStamina) {
 		this.magicalStamina = magicalStamina;
 	}
+	public int getLockpickStamina() {
+		return lockpickStamina;
+	}
+	public void setLockpickStamina(int lockpickStamina) {
+		this.lockpickStamina = lockpickStamina;
+	}
 	public double getX() {
 		return x;
 	}
@@ -193,10 +201,11 @@ public class GildorymCharacter {
 				+ profession1 + ", profession2=" + profession2 + ", charClass="
 				+ charClass + ", level=" + level + ", experience=" + experience
 				+ ", stamina=" + stamina + ", magicalStamina=" + magicalStamina
-				+ ", x=" + x + ", y=" + y + ", z=" + z + ", world=" + world
-				+ ", woundsID=" + woundsID + ", wounds=" + wounds + "]";
+				+ ", lockpickStamina=" + lockpickStamina + ", x=" + x + ", y="
+				+ y + ", z=" + z + ", world=" + world + ", woundsID="
+				+ woundsID + ", wounds=" + wounds + "]";
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -216,6 +225,8 @@ public class GildorymCharacter {
 		if (experience != other.experience)
 			return false;
 		if (level != other.level)
+			return false;
+		if (lockpickStamina != other.lockpickStamina)
 			return false;
 		if (magicalStamina != other.magicalStamina)
 			return false;
@@ -257,5 +268,4 @@ public class GildorymCharacter {
 			return false;
 		return true;
 	}
-	
 }
