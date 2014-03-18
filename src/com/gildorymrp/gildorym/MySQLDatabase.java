@@ -30,7 +30,8 @@ public class MySQLDatabase {
 					"sub_race, " +
 					"health, " +
 					"`class`, " +
-					"professions, " +
+					"profession1, " +
+					"profession2, " +
 					"`level`, " +
 					"experience, " +
 					"stamina, " +
@@ -41,7 +42,7 @@ public class MySQLDatabase {
 					"x, " +
 					"y, " +
 					"z, " +
-					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	private static final String INSERT_CHAR_STATEMENT =
 			"INSERT INTO characters (" +
@@ -54,7 +55,8 @@ public class MySQLDatabase {
 					"sub_race, " +
 					"health, " +
 					"`class`, " +
-					"professions, " +
+					"profession1, " +
+					"profession2, " +
 					"`level`, " +
 					"experience, " +
 					"stamina, " +
@@ -65,7 +67,7 @@ public class MySQLDatabase {
 					"x, " +
 					"y, " +
 					"z, " +
-					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	private static final String SELECT_CHAR_STATEMENT =
 			"SELECT * FROM characters WHERE uid=?";
@@ -159,7 +161,8 @@ public class MySQLDatabase {
 					"`sub_race` TEXT DEFAULT NULL," +
 					"`health` int(11) DEFAULT NULL," +
 					"`class` text," +
-					"`professions` text," +
+					"`profession1` varchar(20)," +
+					"`profession2` varchar(20)," +
 					"`level` int(11) DEFAULT NULL," +
 					"`experience` int(11) DEFAULT NULL," +
 					"`stamina` int(11) DEFAULT NULL," +
@@ -255,7 +258,8 @@ public class MySQLDatabase {
 			statement.setString(position++, subrace.name());
 			statement.setInt(position++, gChar.getCharCard().getHealth());
 			statement.setString(position++, gChar.getCharClass() != null ? gChar.getCharClass().name() : null);
-			statement.setString(position++, csv(gChar.getProfessions()));
+			statement.setString(position++, gChar.getProfession1() == null ? null : gChar.getProfession1().name());
+			statement.setString(position++, gChar.getProfession2() == null ? null : gChar.getProfession2().name());
 			statement.setInt(position++, gChar.getLevel());
 			statement.setInt(position++, gChar.getExperience());
 			statement.setInt(position++, gChar.getStamina());
@@ -323,7 +327,8 @@ public class MySQLDatabase {
 							CharacterBehavior.valueOf(results.getString("behavior")) : CharacterBehavior.NEUTRAL, 
 							results.getString("morality") != null ? CharacterMorality.valueOf(results.getString("morality")) : CharacterMorality.NEUTRAL));
 			result.setCharClass(CharacterClass.valueOf(results.getString("class")));
-			result.setProfessions(csv(results.getString("professions")));
+			result.setProfession1(results.getString("profession1") == null ? null : CharacterProfession.valueOf(results.getString("profession1")));
+			result.setProfession2(results.getString("profession2") == null ? null : CharacterProfession.valueOf(results.getString("profession2")));
 			result.setLevel(results.getInt("level"));
 			result.setExperience(results.getInt("experience"));
 			result.setStamina(results.getInt("stamina"));
@@ -638,31 +643,6 @@ public class MySQLDatabase {
 			e.printStackTrace();
 			return false;
 		}
-	}
-	
-	private String csv(Enum<?>[] e) {
-		if(e == null || e.length == 0 || e[0] == null)
-			return null;
-		StringBuilder result = new StringBuilder(e[0].name());
-
-		for(int i = 1; i < e.length; i++) {
-			result.append(",").append(e[i].name());
-		}
-
-		return result.toString();
-	}
-
-	private CharacterProfession[] csv(String string) {
-		if(string == null)
-			return new CharacterProfession[]{};
-		String[] spl = string.split(",");
-		CharacterProfession[] result = new CharacterProfession[spl.length];
-
-		for(int i = 0; i < spl.length; i++) {
-			result[i] = CharacterProfession.valueOf(spl[i]);
-		}
-
-		return result;
 	}
 
 }

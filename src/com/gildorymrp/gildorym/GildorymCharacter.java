@@ -1,10 +1,8 @@
 package com.gildorymrp.gildorym;
 
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 
 import com.gildorymrp.charactercards.CharacterCard;
 import com.gildorymrp.gildorymclasses.CharacterClass;
@@ -20,7 +18,8 @@ public class GildorymCharacter {
 	private String name;
 	private String mcName;
 	private CharacterCard charCard;
-	private CharacterProfession[] professions;
+	private CharacterProfession profession1;
+	private CharacterProfession profession2;
 	private CharacterClass charClass;
 	private int level;
 	private int experience;
@@ -38,13 +37,15 @@ public class GildorymCharacter {
 	}
 	
 	public GildorymCharacter(int uid, String name, String mcName,
-			CharacterCard charCard, CharacterProfession[] professions,
-			CharacterClass charClass, int level, int experience, int stamina,
-			int magicalStamina, int woundsID, double x, double y, double z, String world) {
+			CharacterCard charCard, CharacterProfession profession1,
+			CharacterProfession profession2, CharacterClass charClass, int level,
+			int experience, int stamina, int magicalStamina, int woundsID, double x,
+			double y, double z, String world) {
 		this(uid);
 		this.mcName = mcName;
 		this.charCard = charCard;
-		this.professions = professions;
+		this.profession1 = profession1;
+		this.profession2 = profession2;
 		this.charClass = charClass;
 		this.level = level;
 		this.experience = experience;
@@ -83,11 +84,17 @@ public class GildorymCharacter {
 	public void setCharCard(CharacterCard charCard) {
 		this.charCard = charCard;
 	}
-	public CharacterProfession[] getProfessions() {
-		return professions;
+	public CharacterProfession getProfession1() {
+		return profession1;
 	}
-	public void setProfessions(CharacterProfession[] professions) {
-		this.professions = professions;
+	public CharacterProfession getProfession2() {
+		return profession2;
+	}
+	public void setProfession1(CharacterProfession profession1) {
+		this.profession1 = profession1;
+	}
+	public void setProfession2(CharacterProfession profession2) {
+		this.profession2 = profession2;
 	}
 	public CharacterClass getCharClass() {
 		return charClass;
@@ -178,16 +185,16 @@ public class GildorymCharacter {
 	public List<Wound> getWounds() {
 		return wounds;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "GildorymCharacter [uid=" + uid + ", name=" + name + ", mcName="
-				+ mcName + ", charCard=" + charCard + ", professions="
-				+ Arrays.toString(professions) + ", charClass=" + charClass
-				+ ", level=" + level + ", experience=" + experience
+				+ mcName + ", charCard=" + charCard + ", profession1="
+				+ profession1 + ", profession2=" + profession2 + ", charClass="
+				+ charClass + ", level=" + level + ", experience=" + experience
 				+ ", stamina=" + stamina + ", magicalStamina=" + magicalStamina
 				+ ", x=" + x + ", y=" + y + ", z=" + z + ", world=" + world
-				+ ", woundsID=" + woundsID + "]";
+				+ ", woundsID=" + woundsID + ", wounds=" + wounds + "]";
 	}
 
 	@Override
@@ -222,7 +229,9 @@ public class GildorymCharacter {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (!Arrays.equals(professions, other.professions))
+		if (profession1 != other.profession1)
+			return false;
+		if (profession2 != other.profession2)
 			return false;
 		if (stamina != other.stamina)
 			return false;
@@ -232,6 +241,11 @@ public class GildorymCharacter {
 			if (other.world != null)
 				return false;
 		} else if (!world.equals(other.world))
+			return false;
+		if (wounds == null) {
+			if (other.wounds != null)
+				return false;
+		} else if (!wounds.equals(other.wounds))
 			return false;
 		if (woundsID != other.woundsID)
 			return false;
@@ -243,6 +257,5 @@ public class GildorymCharacter {
 			return false;
 		return true;
 	}
-	
 	
 }

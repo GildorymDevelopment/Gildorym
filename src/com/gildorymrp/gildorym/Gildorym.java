@@ -412,6 +412,7 @@ public class Gildorym extends JavaPlugin {
 						CharacterBehavior.UNKNOWN,
 						CharacterMorality.UNKNOWN), 
 						null,
+						null, 
 						CharacterClass.UNKNOWN,
 						1, 
 						0,
