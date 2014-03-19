@@ -32,6 +32,8 @@ public class MySQLDatabase {
 					"`class`, " +
 					"profession1, " +
 					"profession2, " +
+					"deity, " + 
+					"birthday, " +
 					"`level`, " +
 					"experience, " +
 					"stamina, " +
@@ -43,7 +45,7 @@ public class MySQLDatabase {
 					"x, " +
 					"y, " +
 					"z, " +
-					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	private static final String INSERT_CHAR_STATEMENT =
 			"INSERT INTO characters (" +
@@ -58,6 +60,8 @@ public class MySQLDatabase {
 					"`class`, " +
 					"profession1, " +
 					"profession2, " +
+					"deity, " + 
+					"birthday, " +
 					"`level`, " +
 					"experience, " +
 					"stamina, " +
@@ -69,7 +73,7 @@ public class MySQLDatabase {
 					"x, " +
 					"y, " +
 					"z, " +
-					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	private static final String SELECT_CHAR_STATEMENT =
 			"SELECT * FROM characters WHERE uid=?";
@@ -165,6 +169,8 @@ public class MySQLDatabase {
 					"`class` text," +
 					"`profession1` varchar(20)," +
 					"`profession2` varchar(20)," +
+					"`deity` TEXT DEFAULT NULL, " + 
+					"`birthday` int(11) DEFAULT NULL, " +
 					"`level` int(11) DEFAULT NULL," +
 					"`experience` int(11) DEFAULT NULL," +
 					"`stamina` int(11) DEFAULT NULL," +
@@ -263,6 +269,8 @@ public class MySQLDatabase {
 			statement.setString(position++, gChar.getCharClass() != null ? gChar.getCharClass().name() : null);
 			statement.setString(position++, gChar.getProfession1() == null ? null : gChar.getProfession1().name());
 			statement.setString(position++, gChar.getProfession2() == null ? null : gChar.getProfession2().name());
+			statement.setString(position++, gChar.getDeity());
+			statement.setInt(position++, gChar.getBirthday());
 			statement.setInt(position++, gChar.getLevel());
 			statement.setInt(position++, gChar.getExperience());
 			statement.setInt(position++, gChar.getStamina());
@@ -333,6 +341,8 @@ public class MySQLDatabase {
 			result.setCharClass(CharacterClass.valueOf(results.getString("class")));
 			result.setProfession1(results.getString("profession1") == null ? null : CharacterProfession.valueOf(results.getString("profession1")));
 			result.setProfession2(results.getString("profession2") == null ? null : CharacterProfession.valueOf(results.getString("profession2")));
+			result.setDeity(results.getString("deity"));
+			result.setBirthday(results.getInt("birthday"));
 			result.setLevel(results.getInt("level"));
 			result.setExperience(results.getInt("experience"));
 			result.setStamina(results.getInt("stamina"));

@@ -399,31 +399,34 @@ public class Gildorym extends JavaPlugin {
 
 
 	public static GildorymCharacter createDefaultCharacter(Player player) {
-		return new GildorymCharacter(-1, 
-				"", 
-				player.getName(), 
-				new CharacterCard(0,
-						Gender.UNKNOWN,
-						"",
-						Race.UNKNOWN,
-						Subrace.UNKNOWN,
-						1,
-						null,
-						CharacterBehavior.UNKNOWN,
-						CharacterMorality.UNKNOWN), 
-						null,
-						null, 
-						CharacterClass.UNKNOWN,
-						1, 
-						0,
-						0, 
-						0,
-						0,
-						-1,
-						player.getLocation().getX(), 
-						player.getLocation().getY(), 
-						player.getLocation().getZ(), 
-						player.getWorld().toString());
+		return new GildorymCharacter(-1, // uid
+				"", // mc name
+				player.getName(), // name
+				new CharacterCard(0, // age
+						Gender.UNKNOWN, // gender 
+						"", // description
+						Race.UNKNOWN, // race
+						Subrace.UNKNOWN, // subrace 
+						1, // level
+						CharacterClass.UNKNOWN, // class
+						CharacterBehavior.UNKNOWN, // behavior
+						CharacterMorality.UNKNOWN),  // morality
+						null, // profession 1
+						null, // profession 2
+						CharacterClass.UNKNOWN, // class
+						null, // deity
+						1, // birthday
+						0, // level
+						0, // experience
+						0, // stamina 
+						0, // magical stamina 
+						0, // lockpick stamina
+						player.getLocation().getX(), // x
+						player.getLocation().getY(), // y
+						player.getLocation().getZ(), // z
+						player.getWorld().toString(), // world 
+						-1, // wounds id
+						null); // init wounds
 	}
 
 	public MySQLDatabase getMySQLDatabase() {

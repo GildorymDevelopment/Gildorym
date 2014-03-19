@@ -21,6 +21,8 @@ public class GildorymCharacter {
 	private CharacterProfession profession1;
 	private CharacterProfession profession2;
 	private CharacterClass charClass;
+	private String deity;
+	private int birthday; // TODO: GildorymTime
 	private int level;
 	private int experience;
 	private int stamina;
@@ -39,15 +41,19 @@ public class GildorymCharacter {
 	
 	public GildorymCharacter(int uid, String name, String mcName,
 			CharacterCard charCard, CharacterProfession profession1,
-			CharacterProfession profession2, CharacterClass charClass, int level,
-			int experience, int stamina, int magicalStamina, int lockpickStamina,
-			int woundsID, double x, double y, double z, String world) {
-		this(uid);
+			CharacterProfession profession2, CharacterClass charClass,
+			String deity, int birthday, int level, int experience, int stamina,
+			int magicalStamina, int lockpickStamina, double x, double y,
+			double z, String world, int woundsID, List<Wound> wounds) {
+		this.uid = uid;
+		this.name = name;
 		this.mcName = mcName;
 		this.charCard = charCard;
 		this.profession1 = profession1;
 		this.profession2 = profession2;
 		this.charClass = charClass;
+		this.deity = deity;
+		this.birthday = birthday;
 		this.level = level;
 		this.experience = experience;
 		this.stamina = stamina;
@@ -58,10 +64,9 @@ public class GildorymCharacter {
 		this.z = z;
 		this.world = world;
 		this.woundsID = woundsID;
+		this.wounds = wounds;
 	}
-
-
-
+	
 	public int getUid() {
 		return uid;
 	}
@@ -194,18 +199,35 @@ public class GildorymCharacter {
 		return wounds;
 	}
 
+	public String getDeity() {
+		return deity;
+	}
+
+	public void setDeity(String deity) {
+		this.deity = deity;
+	}
+
+	public int getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(int birthday) {
+		this.birthday = birthday;
+	}
+
 	@Override
 	public String toString() {
 		return "GildorymCharacter [uid=" + uid + ", name=" + name + ", mcName="
 				+ mcName + ", charCard=" + charCard + ", profession1="
 				+ profession1 + ", profession2=" + profession2 + ", charClass="
-				+ charClass + ", level=" + level + ", experience=" + experience
+				+ charClass + ", deity=" + deity + ", birthday=" + birthday
+				+ ", level=" + level + ", experience=" + experience
 				+ ", stamina=" + stamina + ", magicalStamina=" + magicalStamina
 				+ ", lockpickStamina=" + lockpickStamina + ", x=" + x + ", y="
 				+ y + ", z=" + z + ", world=" + world + ", woundsID="
 				+ woundsID + ", wounds=" + wounds + "]";
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -215,12 +237,19 @@ public class GildorymCharacter {
 		if (getClass() != obj.getClass())
 			return false;
 		GildorymCharacter other = (GildorymCharacter) obj;
+		if (birthday != other.birthday)
+			return false;
 		if (charCard == null) {
 			if (other.charCard != null)
 				return false;
 		} else if (!charCard.equals(other.charCard))
 			return false;
 		if (charClass != other.charClass)
+			return false;
+		if (deity == null) {
+			if (other.deity != null)
+				return false;
+		} else if (!deity.equals(other.deity))
 			return false;
 		if (experience != other.experience)
 			return false;
@@ -268,4 +297,6 @@ public class GildorymCharacter {
 			return false;
 		return true;
 	}
+	
+	
 }
