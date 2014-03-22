@@ -36,16 +36,14 @@ public class MySQLDatabase {
 					"birthday, " +
 					"`level`, " +
 					"experience, " +
-					"stamina, " +
-					"magical_stamina, " +
-					"lockpick_stamina, " +
+					"stats_uid," +
 					"morality, " +
 					"behavior, " +
 					"wounds_id, " +
 					"x, " +
 					"y, " +
 					"z, " +
-					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	private static final String INSERT_CHAR_STATEMENT =
 			"INSERT INTO characters (" +
@@ -64,16 +62,14 @@ public class MySQLDatabase {
 					"birthday, " +
 					"`level`, " +
 					"experience, " +
-					"stamina, " +
-					"magical_stamina, " +
-					"lockpick_stamina, " +
+					"stats_uid, " +
 					"morality, " +
 					"behavior, " +
 					"wounds_id, " +
 					"x, " +
 					"y, " +
 					"z, " +
-					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	private static final String SELECT_CHAR_STATEMENT =
 			"SELECT * FROM characters WHERE uid=?";
@@ -113,6 +109,19 @@ public class MySQLDatabase {
 	
 	private static final String DELETE_WOUND =
 			"DELETE FROM wounds WHERE wound_uid = ? LIMIT 1";
+	
+	private static final String INSERT_STATS = 
+			"INSERT INTO stats (stamina, magical_stamina, lockpick_stamina) VALUES(?, ?, ?)";
+	
+	private static final String REPLACE_STATS = 
+			"INSERT INTO stats (stats_uid, stamina, magical_stamina, lockpick_stamina) VALUES(?, ?, ?, ?)";
+	
+	private static final String SELECT_STATS_BY_ID = 
+			"SELECT * FROM stats WHERE stats_uid = ?";
+	
+	private static final String DELETE_STATS =
+			"DELETE FROM stats WHERE stats_uid = ? LIMIT 1";
+	
 
 	private final String HOSTNAME;
 	private final String PORT;
@@ -173,11 +182,9 @@ public class MySQLDatabase {
 					"`birthday` int(11) DEFAULT NULL, " +
 					"`level` int(11) DEFAULT NULL," +
 					"`experience` int(11) DEFAULT NULL," +
-					"`stamina` int(11) DEFAULT NULL," +
-					"`magical_stamina` int(11) DEFAULT NULL," +
-					"`lockpick_stamina` int(11) DEFAULT NULL," +
 					"`morality` varchar(10) DEFAULT NULL," +
 					"`behavior` varchar(10) DEFAULT NULL," +
+					"`stats_uid` int(11) DEFAULT NULL," +
 					"`wounds_id` int(11) DEFAULT NULL," +
 					"`x` double DEFAULT NULL," +
 					"`y` double DEFAULT NULL," +
@@ -210,6 +217,13 @@ public class MySQLDatabase {
 					"`notes` text DEFAULT NULL, " +
 					"PRIMARY KEY (`wound_uid`)" +
 					");");
+			statement.execute("CREATE TABLE IF NOT EXISTS `stats` (" +
+					"`stats_uid` int(11) NOT NULL AUTO_INCREMENT, " +
+					"`stamina` int(11) DEFAULT NULL, " +
+					"`magical_stamina` int(11) DEFAULT NULL," +
+					"`lockpick_stamina` int(11) DEFAULT NULL," +
+					"PRIMARY KEY (`stats_uid`)" +
+					");");
 		}catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -223,7 +237,7 @@ public class MySQLDatabase {
 	private void deleteEverything() {
 		try {
 			Statement statement = conn.createStatement();
-			statement.execute("DROP TABLE IF EXISTS characters, players, created_characters, wounds");
+			statement.execute("DROP TABLE IF EXISTS characters, players, created_characters, wounds, stats");
 		}catch(SQLException ex) {
 			throw new RuntimeException(ex);
 		}
@@ -252,6 +266,9 @@ public class MySQLDatabase {
 	 * resemble the new character id, and the created character id will be created
 	 * and accessible by {@code getActive(gChar.getMcName()}
 	 * 
+	 * This does not save the actual wounds and the actual stats, if those need to be
+	 * saved another function call is required.
+	 * 
 	 * @param gChar the character to save / update
 	 * @return success if no error has occured
 	 */
@@ -268,6 +285,10 @@ public class MySQLDatabase {
 
 			}else {
 				statement = conn.prepareStatement(INSERT_CHAR_STATEMENT);
+			}
+			
+			if(gChar.getStats().getStatsUid() == -1) {
+				saveStats(gChar.getStats());
 			}
 
 			statement.setString(position++, gChar.getName());
@@ -288,9 +309,7 @@ public class MySQLDatabase {
 			statement.setInt(position++, gChar.getBirthday());
 			statement.setInt(position++, gChar.getLevel());
 			statement.setInt(position++, gChar.getExperience());
-			statement.setInt(position++, gChar.getStamina());
-			statement.setInt(position++, gChar.getMagicalStamina());
-			statement.setInt(position++, gChar.getLockpickStamina());
+			statement.setInt(position++, gChar.getStats().getStatsUid());
 			statement.setString(position++, gChar.getCharCard().getMorality() != null ? gChar.getCharCard().getMorality().name() : null);
 			statement.setString(position++, gChar.getCharCard().getBehavior() != null ? gChar.getCharCard().getBehavior().name() : null);
 			statement.setInt(position++, gChar.getWoundsID());
@@ -322,13 +341,22 @@ public class MySQLDatabase {
 			return res;
 
 		} catch (SQLException e) {
-//			plugin.getLogger().log(Level.SEVERE, "Unable to save character " + gChar + "!");
+			plugin.getLogger().log(Level.SEVERE, "Unable to save character " + gChar + "!");
 			e.printStackTrace();
 			System.exit(0);
 		}
 		return false;
 	}
 
+	/**
+	 * Loads the character into memory. It should be noted that
+	 * for the wounds and stats, only the id is loaded and not the
+	 * underlying data. If those need to be loaded (which they probably do),
+	 * the appropriate funciton must be called
+	 * 
+	 * @param uid
+	 * @return
+	 */
 	public GildorymCharacter loadCharacter(int uid) {
 		PreparedStatement statement;
 		try {
@@ -360,9 +388,7 @@ public class MySQLDatabase {
 			result.setBirthday(results.getInt("birthday"));
 			result.setLevel(results.getInt("level"));
 			result.setExperience(results.getInt("experience"));
-			result.setStamina(results.getInt("stamina"));
-			result.setMagicalStamina(results.getInt("magical_stamina"));
-			result.setLockpickStamina(results.getInt("lockpick_stamina"));
+			result.setStats(new GildorymStats(results.getInt("stats_uid")));
 			result.setWoundsID(results.getInt("wounds_id"));
 			result.setX(results.getDouble("x"));
 			result.setY(results.getDouble("y"));
@@ -563,7 +589,7 @@ public class MySQLDatabase {
 			w.setWoundUID(uid);
 			return true;
 		}catch(SQLException e) {
-//			plugin.getLogger().log(Level.SEVERE, "Unable to inflict wound " + w + " on " + gChar.getName() + " [" + gChar.getUid() + "]");
+			plugin.getLogger().log(Level.SEVERE, "Unable to inflict wound " + w + " on " + gChar.getName() + " [" + gChar.getUid() + "]");
 			e.printStackTrace();
 			return false;
 		}
@@ -677,4 +703,88 @@ public class MySQLDatabase {
 		}
 	}
 
+	public boolean saveStats(GildorymStats stats) {
+		try {
+			PreparedStatement statement;
+			int position = 1;
+			
+			if(stats.getStatsUid() == -1) {
+				statement = conn.prepareStatement(INSERT_STATS);
+			}else {
+				statement = conn.prepareStatement(REPLACE_STATS);
+				statement.setInt(position++, stats.getStatsUid());
+			}
+			
+			statement.setInt(position++, stats.getStamina());
+			statement.setInt(position++, stats.getMagicalStamina());
+			statement.setInt(position++, stats.getLockpickStamina());
+			
+			statement.execute();
+			
+			if(stats.getStatsUid() == -1) {
+				statement = conn.prepareStatement("SELECT LAST_INSERT_ID()");
+				ResultSet results = statement.executeQuery();
+				
+				results.next();
+				stats.setStatsUid(results.getInt(1));
+				results.close();
+			}
+			
+			return true;
+		}catch(SQLException e) {
+			plugin.getLogger().log(Level.SEVERE, "Unable to save stats " + stats);
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/**
+	 * Deletes the stats from the character, and sets the stats uid to -1.
+	 * 
+	 * @param gChar the character
+	 * @return if the operation was probably successful
+	 */
+	public boolean deleteStats(GildorymCharacter gChar) {
+		try {
+			PreparedStatement statement;
+			
+			statement = conn.prepareStatement(DELETE_STATS);
+
+			statement.setInt(1, gChar.getStats().getStatsUid());
+			
+			statement.execute();
+			
+			gChar.getStats().setStatsUid(-1); 
+			return true;
+		}catch(SQLException e) {
+			plugin.getLogger().log(Level.SEVERE, "Unable to delete stats from " + gChar.getName() + " (" + gChar + ")");
+			return false;
+		}
+	}
+	
+	public GildorymStats getStats(int statsUid) {
+		try {
+			PreparedStatement statement;
+			
+			statement = conn.prepareStatement(SELECT_STATS_BY_ID);
+			
+			statement.setInt(1, statsUid);
+			
+			ResultSet resultSet = statement.executeQuery();
+			
+			GildorymStats stats = new GildorymStats( 
+					statsUid,
+					resultSet.getInt("stamina"),
+					resultSet.getInt("magical_stamina"),
+					resultSet.getInt("lockpick_stamina")
+					);
+			
+			resultSet.close();
+			return stats;
+		}catch(SQLException e) {
+			plugin.getLogger().log(Level.SEVERE, "Unable to retrieve stats on uid " + statsUid);
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

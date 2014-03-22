@@ -418,9 +418,12 @@ public class Gildorym extends JavaPlugin {
 						1, // birthday
 						0, // level
 						0, // experience
-						0, // stamina 
-						0, // magical stamina 
-						0, // lockpick stamina
+						new GildorymStats(
+								-1, // stats id
+								0, // stamina 
+								0, // magical stamina 
+								0  // lockpick stamina
+						), 
 						player.getLocation().getX(), // x
 						player.getLocation().getY(), // y
 						player.getLocation().getZ(), // z

@@ -25,9 +25,7 @@ public class GildorymCharacter {
 	private int birthday; // TODO: GildorymTime
 	private int level;
 	private int experience;
-	private int stamina;
-	private int magicalStamina;
-	private int lockpickStamina;
+	private GildorymStats stats;
 	private double x, y, z;
 	private String world;
 	private int woundsID;
@@ -42,9 +40,9 @@ public class GildorymCharacter {
 	public GildorymCharacter(int uid, String name, String mcName,
 			CharacterCard charCard, CharacterProfession profession1,
 			CharacterProfession profession2, CharacterClass charClass,
-			String deity, int birthday, int level, int experience, int stamina,
-			int magicalStamina, int lockpickStamina, double x, double y,
-			double z, String world, int woundsID, List<Wound> wounds) {
+			String deity, int birthday, int level, int experience,
+			GildorymStats stats, double x, double y, double z, String world,
+			int woundsID, List<Wound> wounds) {
 		this.uid = uid;
 		this.name = name;
 		this.mcName = mcName;
@@ -56,9 +54,7 @@ public class GildorymCharacter {
 		this.birthday = birthday;
 		this.level = level;
 		this.experience = experience;
-		this.stamina = stamina;
-		this.magicalStamina = magicalStamina;
-		this.lockpickStamina = lockpickStamina;
+		this.stats = stats;
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -66,7 +62,7 @@ public class GildorymCharacter {
 		this.woundsID = woundsID;
 		this.wounds = wounds;
 	}
-	
+
 	public int getUid() {
 		return uid;
 	}
@@ -121,24 +117,14 @@ public class GildorymCharacter {
 	public void setExperience(int experience) {
 		this.experience = experience;
 	}
-	public int getStamina() {
-		return stamina;
+	public GildorymStats getStats() {
+		return stats;
 	}
-	public void setStamina(int stamina) {
-		this.stamina = stamina;
+
+	public void setStats(GildorymStats stats) {
+		this.stats = stats;
 	}
-	public int getMagicalStamina() {
-		return magicalStamina;
-	}
-	public void setMagicalStamina(int magicalStamina) {
-		this.magicalStamina = magicalStamina;
-	}
-	public int getLockpickStamina() {
-		return lockpickStamina;
-	}
-	public void setLockpickStamina(int lockpickStamina) {
-		this.lockpickStamina = lockpickStamina;
-	}
+
 	public double getX() {
 		return x;
 	}
@@ -222,12 +208,11 @@ public class GildorymCharacter {
 				+ profession1 + ", profession2=" + profession2 + ", charClass="
 				+ charClass + ", deity=" + deity + ", birthday=" + birthday
 				+ ", level=" + level + ", experience=" + experience
-				+ ", stamina=" + stamina + ", magicalStamina=" + magicalStamina
-				+ ", lockpickStamina=" + lockpickStamina + ", x=" + x + ", y="
-				+ y + ", z=" + z + ", world=" + world + ", woundsID="
-				+ woundsID + ", wounds=" + wounds + "]";
+				+ ", stats=" + stats + ", x=" + x + ", y=" + y + ", z=" + z
+				+ ", world=" + world + ", woundsID=" + woundsID + ", wounds="
+				+ wounds + "]";
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -255,10 +240,6 @@ public class GildorymCharacter {
 			return false;
 		if (level != other.level)
 			return false;
-		if (lockpickStamina != other.lockpickStamina)
-			return false;
-		if (magicalStamina != other.magicalStamina)
-			return false;
 		if (mcName == null) {
 			if (other.mcName != null)
 				return false;
@@ -273,7 +254,10 @@ public class GildorymCharacter {
 			return false;
 		if (profession2 != other.profession2)
 			return false;
-		if (stamina != other.stamina)
+		if (stats == null) {
+			if (other.stats != null)
+				return false;
+		} else if (!stats.equals(other.stats))
 			return false;
 		if (uid != other.uid)
 			return false;
@@ -297,6 +281,4 @@ public class GildorymCharacter {
 			return false;
 		return true;
 	}
-	
-	
 }
