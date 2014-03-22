@@ -61,7 +61,7 @@ public class NewCharacterCommand implements CommandExecutor {
 
       int createdCharacterId = sqlDB.getActive(player.getName())[1];
 
-      CreatedCharacterInfo cci = new CreatedCharacterInfo(gChar.getUid(), createdCharacterId, System.currentTimeMillis(), "CREATED_BY_PLAYER");
+      CreatedCharacterInfo cci = new CreatedCharacterInfo(gChar.getUid(), createdCharacterId, System.currentTimeMillis(), -1, "CREATED_BY_PLAYER");
       sqlDB.addCreatedCharacterInfo(cci);
       
       

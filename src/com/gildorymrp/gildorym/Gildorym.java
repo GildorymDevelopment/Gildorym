@@ -170,7 +170,7 @@ public class Gildorym extends JavaPlugin {
 				
 				int createdCharacterId = sqlDB.getActive(player.getName())[1];
 				
-				CreatedCharacterInfo cci = new CreatedCharacterInfo(result.getUid(), createdCharacterId, System.currentTimeMillis(), "AUTO-GENERATED");
+				CreatedCharacterInfo cci = new CreatedCharacterInfo(result.getUid(), createdCharacterId, System.currentTimeMillis(), -1, "AUTO-GENERATED");
 				sqlDB.addCreatedCharacterInfo(cci);
 			}
 		}else {

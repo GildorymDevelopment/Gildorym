@@ -95,8 +95,8 @@ public class MySQLDatabase {
 			"SELECT * FROM created_characters WHERE id = ?;";
 
 	private static final String INSERT_CREATED_CHAR =
-			"INSERT INTO created_characters (id, char_uid, created_utc, generation_method) " +
-					"VALUES(?, ?, ?, ?);";
+			"INSERT INTO created_characters (id, char_uid, created_utc, generation_method, stored_utc) " +
+					"VALUES(?, ?, ?, ?, ?);";
 
 	private static final String CLEAR_CREATED_CHARS =
 			"DELETE FROM created_characters WHERE id = ?;";
@@ -196,7 +196,8 @@ public class MySQLDatabase {
 					"`id` int(11) NOT NULL, " +
 					"`char_uid` int(11) NOT NULL DEFAULT -1," +
 					"`created_utc` BIGINT NOT NULL DEFAULT -1, " +
-					"`generation_method` TEXT DEFAULT NULL" +
+					"`generation_method` TEXT DEFAULT NULL, " +
+					"`stored_utc` BIGINT NOT NULL DEFAULT -1" +
 					");");
 			
 			statement.execute("CREATE TABLE IF NOT EXISTS `wounds` (" +
@@ -211,6 +212,20 @@ public class MySQLDatabase {
 					");");
 		}catch(SQLException ex) {
 			ex.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Use reflection if you want to do this, this is for testing
+	 * only
+	 */
+	@SuppressWarnings("unused")
+	private void deleteEverything() {
+		try {
+			Statement statement = conn.createStatement();
+			statement.execute("DROP TABLE IF EXISTS characters, players, created_characters, wounds");
+		}catch(SQLException ex) {
+			throw new RuntimeException(ex);
 		}
 	}
 
@@ -459,6 +474,7 @@ public class MySQLDatabase {
 				cci.setCharUid(resultSet.getInt("char_uid"));
 				cci.setCreatedUTC(resultSet.getLong("created_utc"));
 				cci.setGenerationMethod(resultSet.getString("generation_method"));
+				cci.setStoredUTC(resultSet.getLong("stored_utc"));
 				result.add(cci);
 			}
 
@@ -479,6 +495,7 @@ public class MySQLDatabase {
 			statement.setInt(2, cci.getCharUid());
 			statement.setLong(3, cci.getCreatedUTC());
 			statement.setString(4, cci.getGenerationMethod());
+			statement.setLong(5, cci.getStoredUTC());
 
 			statement.execute();
 			return true;

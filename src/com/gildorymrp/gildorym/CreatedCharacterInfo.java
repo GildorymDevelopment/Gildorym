@@ -4,10 +4,12 @@ public class CreatedCharacterInfo {
 	private int id;
 	private int charUid;
 	private long createdUTC;
+	private long storedUTC;
 	private String generationMethod;
 	
 	public CreatedCharacterInfo(int id) {
 		this.id = id;
+		this.storedUTC = -1;
 	}
 	
 	/**
@@ -15,13 +17,15 @@ public class CreatedCharacterInfo {
 	 * @param id
 	 * @param charUid
 	 * @param createdUTC
+	 * @param storedUTC
 	 * @param generationMethod
 	 */
-	public CreatedCharacterInfo(int id, int charUid, long createdUTC,
+	public CreatedCharacterInfo(int id, int charUid, long createdUTC, long storedUTC,
 			String generationMethod) {
 		this.id = id;
 		this.charUid = charUid;
 		this.createdUTC = createdUTC;
+		this.storedUTC = storedUTC;
 		this.generationMethod = generationMethod;
 	}
 
@@ -49,6 +53,14 @@ public class CreatedCharacterInfo {
 		this.createdUTC = createdUTC;
 	}
 
+	public long getStoredUTC() {
+		return storedUTC;
+	}
+
+	public void setStoredUTC(long storedUTC) {
+		this.storedUTC = storedUTC;
+	}
+
 	public String getGenerationMethod() {
 		return generationMethod;
 	}
@@ -60,19 +72,21 @@ public class CreatedCharacterInfo {
 	@Override
 	public String toString() {
 		return "CreatedCharacterInfo [id=" + id + ", charUid=" + charUid
-				+ ", createdUTC=" + createdUTC + ", generationMethod=" + generationMethod
-				+ "]";
+				+ ", createdUTC=" + createdUTC + ", storedUTC=" + storedUTC
+				+ ", generationMethod=" + generationMethod + "]";
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((generationMethod == null) ? 0 : generationMethod.hashCode());
 		result = prime * result + charUid;
 		result = prime * result + (int) (createdUTC ^ (createdUTC >>> 32));
+		result = prime
+				* result
+				+ ((generationMethod == null) ? 0 : generationMethod.hashCode());
 		result = prime * result + id;
+		result = prime * result + (int) (storedUTC ^ (storedUTC >>> 32));
 		return result;
 	}
 
@@ -85,16 +99,18 @@ public class CreatedCharacterInfo {
 		if (getClass() != obj.getClass())
 			return false;
 		CreatedCharacterInfo other = (CreatedCharacterInfo) obj;
+		if (charUid != other.charUid)
+			return false;
+		if (createdUTC != other.createdUTC)
+			return false;
 		if (generationMethod == null) {
 			if (other.generationMethod != null)
 				return false;
 		} else if (!generationMethod.equals(other.generationMethod))
 			return false;
-		if (charUid != other.charUid)
-			return false;
-		if (createdUTC != other.createdUTC)
-			return false;
 		if (id != other.id)
+			return false;
+		if (storedUTC != other.storedUTC)
 			return false;
 		return true;
 	}
