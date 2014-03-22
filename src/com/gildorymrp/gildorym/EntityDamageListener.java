@@ -23,7 +23,7 @@ public class EntityDamageListener implements Listener {
 	public void onEntityDamage(EntityDamageEvent event) {
 		Random randomGenerator = new Random();
 
-		int fall = (int) event.getEntity().getFallDistance();
+		int fall = (int) event.getEntity().getFallDistance() + 1;
 		int roll = randomGenerator.nextInt(20) + 1;
 
 		if (event.isCancelled() != true) {
