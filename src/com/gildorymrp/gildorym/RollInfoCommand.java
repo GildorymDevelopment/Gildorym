@@ -34,7 +34,9 @@ public class RollInfoCommand implements CommandExecutor {
 			CharacterClass characterClass = null;
 			Race race = null;
 			int level = 0;
-
+			int age = 0;
+			boolean isAdult = true;
+			
 			try {
 				characterClass = gildorymClasses.classes.get(player.getName());
 				level = gildorymClasses.levels.get(player.getName());
@@ -208,6 +210,7 @@ public class RollInfoCommand implements CommandExecutor {
 			try {
 				race = gildorymCharacterCards.getCharacterCards()
 						.get(player.getName()).getRace();
+				age = gildorymCharacterCards.getCharacterCards().get(player.getName()).getAge();
 			} catch (Exception ex) {
 				sender.sendMessage(ChatColor.RED
 						+ "You must set your race first!");
@@ -217,16 +220,19 @@ public class RollInfoCommand implements CommandExecutor {
 			case DWARF:
 				magicAttack -= 2;
 				fortitude += 1;
-				if (level > 1) {
+				if (level > 1)
 					magicAttack -= (0.125 * level);
-				}
+				if (age < 40)
+					isAdult = false;
+				
 				break;
 			case ELF:
 				rangedAttack += 2;
 				reflex += 1;
-				if (level > 1) {
+				if (level > 1)
 					rangedAttack += (0.125 * level);
-				}
+				if (age < 20)
+					isAdult = false;
 				break;
 			case GNOME:
 				meleeAttack -= 2;
@@ -236,8 +242,12 @@ public class RollInfoCommand implements CommandExecutor {
 					meleeAttack -= (0.125 * level);
 					rangedAttack -= (0.125 * level);
 				}
+				if (age < 40)
+					isAdult = false;
 				break;
 			case HALFELF:
+				if (age < 20)
+					isAdult = false;
 				break;
 			case HALFLING:
 				reflex += 1;
@@ -247,6 +257,8 @@ public class RollInfoCommand implements CommandExecutor {
 					meleeAttack -= (0.125 * level);
 					rangedAttack += (0.125 * level);
 				}
+				if (age < 20)
+					isAdult = false;
 				break;
 			case HALFORC:
 				meleeAttack += 2;
@@ -259,8 +271,12 @@ public class RollInfoCommand implements CommandExecutor {
 					magicAttack -= (0.25 * level);
 					magicDefence -= (0.125 * level);
 				}
+				if (age < 14)
+					isAdult = false;
 				break;
 			case HUMAN:
+				if (age < 15)
+					isAdult = false;
 				break;
 			case OTHER:
 				break;
@@ -433,6 +449,19 @@ public class RollInfoCommand implements CommandExecutor {
 				}
 			}
 
+			if (!isAdult){
+				
+				meleeAttack /= 2;
+				meleeDefence /= 2;
+				rangedAttack /= 2;
+				rangedDefence /= 2;
+				magicAttack /= 2;
+				magicDefence /= 2;
+				fortitude /= 2;
+				reflex /= 2;
+				will /= 2;
+			}
+			
 			sender.sendMessage(ChatColor.GRAY + "======================");
 			sender.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + player.getDisplayName() + "'s Roll Info");
 			sender.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "Class: " + characterClass);
