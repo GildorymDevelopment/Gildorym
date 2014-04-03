@@ -20,6 +20,7 @@ public class GildorymCharacter {
 	private CharacterCard charCard;
 	private CharacterProfession profession1;
 	private CharacterProfession profession2;
+	private Specialization specialization;
 	private CharacterClass charClass;
 	private String deity;
 	private int birthday; // TODO: GildorymTime
@@ -39,16 +40,17 @@ public class GildorymCharacter {
 	
 	public GildorymCharacter(int uid, String name, String mcName,
 			CharacterCard charCard, CharacterProfession profession1,
-			CharacterProfession profession2, CharacterClass charClass,
-			String deity, int birthday, int level, int experience,
-			GildorymStats stats, double x, double y, double z, String world,
-			int woundsID, List<Wound> wounds) {
+			CharacterProfession profession2, Specialization specialization, 
+			CharacterClass charClass, String deity, int birthday, int level, 
+			int experience, GildorymStats stats, double x, double y, double z,
+			String world, int woundsID, List<Wound> wounds) {
 		this.uid = uid;
 		this.name = name;
 		this.mcName = mcName;
 		this.charCard = charCard;
 		this.profession1 = profession1;
 		this.profession2 = profession2;
+		this.specialization = specialization;
 		this.charClass = charClass;
 		this.deity = deity;
 		this.birthday = birthday;
@@ -93,11 +95,17 @@ public class GildorymCharacter {
 	public CharacterProfession getProfession2() {
 		return profession2;
 	}
+	public Specialization getSpecialization() {
+		return specialization;
+	}
 	public void setProfession1(CharacterProfession profession1) {
 		this.profession1 = profession1;
 	}
 	public void setProfession2(CharacterProfession profession2) {
 		this.profession2 = profession2;
+	}
+	public void setSpecialization(Specialization specialization) {
+		this.specialization = specialization;
 	}
 	public CharacterClass getCharClass() {
 		return charClass;
@@ -205,10 +213,10 @@ public class GildorymCharacter {
 	public String toString() {
 		return "GildorymCharacter [uid=" + uid + ", name=" + name + ", mcName="
 				+ mcName + ", charCard=" + charCard + ", profession1="
-				+ profession1 + ", profession2=" + profession2 + ", charClass="
-				+ charClass + ", deity=" + deity + ", birthday=" + birthday
-				+ ", level=" + level + ", experience=" + experience
-				+ ", stats=" + stats + ", x=" + x + ", y=" + y + ", z=" + z
+				+ profession1 + ", profession2=" + profession2 + ", specializationId=" 
+				+ specialization + "charClass=" + charClass + ", deity=" + deity
+				+ ", birthday=" + birthday + ", level=" + level + ", experience="
+				+ experience + ", stats=" + stats + ", x=" + x + ", y=" + y + ", z=" + z
 				+ ", world=" + world + ", woundsID=" + woundsID + ", wounds="
 				+ wounds + "]";
 	}
@@ -254,6 +262,13 @@ public class GildorymCharacter {
 			return false;
 		if (profession2 != other.profession2)
 			return false;
+		if(specialization == null) {
+			if(other.specialization != null) {
+				return false;
+			}
+		} else if(!specialization.equals(other.specialization)) {
+			return false;
+		}
 		if (stats == null) {
 			if (other.stats != null)
 				return false;

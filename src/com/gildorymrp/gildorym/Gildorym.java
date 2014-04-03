@@ -413,6 +413,13 @@ public class Gildorym extends JavaPlugin {
 						CharacterMorality.UNKNOWN),  // morality
 						null, // profession 1
 						null, // profession 2
+						new Specialization(-1, // specialization id
+								-1, // child specialization
+								0, // base attack
+								0, // fort save
+								0, // ref save
+								0, // will save
+								-1), // feat id
 						CharacterClass.UNKNOWN, // class
 						null, // deity
 						1, // birthday

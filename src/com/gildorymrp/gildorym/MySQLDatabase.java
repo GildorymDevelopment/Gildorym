@@ -32,6 +32,7 @@ public class MySQLDatabase {
 					"`class`, " +
 					"profession1, " +
 					"profession2, " +
+					"specialization_id, " +
 					"deity, " + 
 					"birthday, " +
 					"`level`, " +
@@ -43,7 +44,7 @@ public class MySQLDatabase {
 					"x, " +
 					"y, " +
 					"z, " +
-					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	private static final String INSERT_CHAR_STATEMENT =
 			"INSERT INTO characters (" +
@@ -58,6 +59,7 @@ public class MySQLDatabase {
 					"`class`, " +
 					"profession1, " +
 					"profession2, " +
+					"specialization_id, " +
 					"deity, " + 
 					"birthday, " +
 					"`level`, " +
@@ -69,7 +71,7 @@ public class MySQLDatabase {
 					"x, " +
 					"y, " +
 					"z, " +
-					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+					"world) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 	private static final String SELECT_CHAR_STATEMENT =
 			"SELECT * FROM characters WHERE uid=?";
@@ -122,7 +124,20 @@ public class MySQLDatabase {
 	private static final String DELETE_STATS =
 			"DELETE FROM stats WHERE stats_uid = ? LIMIT 1";
 	
-
+	private static final String INSERT_SPECIALIZATION = 
+			"INSERT INTO specializations (child_specialization, " +
+			"base_attack, fort_save, ref_save, will_save, feat_id) VALUES(?, ?, ?, ?, ?, ?)";
+	
+	private static final String REPLACE_SPECIALIZATION = 
+			"INSERT INTO specializations (specialization_uid, child_specialization, " +
+			"base_attack, fort_save, ref_save, will_save, feat_id) VALUES(?, ?, ?, ?, ?, ?, ?)";
+	
+	private static final String SELECT_SPECIALIZATION_BY_ID = 
+			"SELECT * FROM specializations WHERE specialization_uid = ?";
+	
+	private static final String DELETE_SPECIALIZATION =
+			"DELETE FROM specializations WHERE specialization_uid = ? LIMIT 1";
+	
 	private final String HOSTNAME;
 	private final String PORT;
 	private final String DATABASE;
@@ -178,6 +193,7 @@ public class MySQLDatabase {
 					"`class` text," +
 					"`profession1` varchar(20)," +
 					"`profession2` varchar(20)," +
+					"`specialization_id` int," +
 					"`deity` TEXT DEFAULT NULL, " + 
 					"`birthday` int(11) DEFAULT NULL, " +
 					"`level` int(11) DEFAULT NULL," +
@@ -223,6 +239,16 @@ public class MySQLDatabase {
 					"`magical_stamina` int(11) DEFAULT NULL," +
 					"`lockpick_stamina` int(11) DEFAULT NULL," +
 					"PRIMARY KEY (`stats_uid`)" +
+					");");
+			statement.execute("CREATE TABLE IF NOT EXISTS `specializations` (" +
+					"`specialization_uid` int(11) NOT NULL AUTO_INCREMENT, " +
+					"`child_specialization` int(11) NOT NULL DEFAULT -1, " +
+					"`base_attack` int(11) DEFAULT NULL, " +
+					"`fort_save` int(11) DEFAULT NULL, " +
+					"`ref_save` int(11) DEFAULT NULL, " +
+					"`will_save` int(11) DEFAULT NULL, " +
+					"`feat_id` int(11) DEFAULT NULL, " +
+					"PRIMARY KEY (`specialization_uid`)" +
 					");");
 		}catch(SQLException ex) {
 			ex.printStackTrace();
@@ -305,6 +331,7 @@ public class MySQLDatabase {
 			statement.setString(position++, gChar.getCharClass() != null ? gChar.getCharClass().name() : null);
 			statement.setString(position++, gChar.getProfession1() == null ? null : gChar.getProfession1().name());
 			statement.setString(position++, gChar.getProfession2() == null ? null : gChar.getProfession2().name());
+			statement.setInt(position++, gChar.getSpecialization() == null ? -1 : gChar.getSpecialization().getId());
 			statement.setString(position++, gChar.getDeity());
 			statement.setInt(position++, gChar.getBirthday());
 			statement.setInt(position++, gChar.getLevel());
@@ -384,6 +411,7 @@ public class MySQLDatabase {
 			result.setCharClass(CharacterClass.valueOf(results.getString("class")));
 			result.setProfession1(results.getString("profession1") == null ? null : CharacterProfession.valueOf(results.getString("profession1")));
 			result.setProfession2(results.getString("profession2") == null ? null : CharacterProfession.valueOf(results.getString("profession2")));
+			result.setSpecialization(getSpecialization(results.getInt("specialization_id")));
 			result.setDeity(results.getString("deity"));
 			result.setBirthday(results.getInt("birthday"));
 			result.setLevel(results.getInt("level"));
@@ -786,5 +814,70 @@ public class MySQLDatabase {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public boolean saveSpecialization(Specialization specialization) {
+		try {
+			PreparedStatement statement;
+			int position = 1;
+			
+			if(specialization.getId() == -1) {
+				statement = conn.prepareStatement(INSERT_SPECIALIZATION);
+			}else {
+				statement = conn.prepareStatement(REPLACE_SPECIALIZATION);
+				statement.setInt(position++, specialization.getId());
+			}
+			
+			statement.setInt(position++, specialization.getBaseAttackMod());
+			statement.setInt(position++, specialization.getFortSave());
+			statement.setInt(position++, specialization.getRefSave());
+			statement.setInt(position++, specialization.getWillSave());
+			statement.setInt(position++, specialization.getFeatId());
+			
+			statement.execute();
+			
+			if(specialization.getId() == -1) {
+				statement = conn.prepareStatement("SELECT LAST_INSERT_ID()");
+				ResultSet results = statement.executeQuery();
+				
+				results.next();
+				specialization.setId(results.getInt(1));
+				results.close();
+			}
+			
+			return true;
+		}catch(SQLException e) {
+			plugin.getLogger().log(Level.SEVERE, "Unable to save specialization " + specialization);
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private Specialization getSpecialization(int id) {
+		try {
+			PreparedStatement statement;
+			
+			statement = conn.prepareStatement(SELECT_SPECIALIZATION_BY_ID);
+			statement.setInt(1, id);
+			
+			ResultSet rSet = statement.executeQuery();
+			
+			if(!rSet.next())
+				return null;
+			
+			Specialization result = new Specialization(rSet.getInt("specialization_id"),
+					rSet.getInt("child_specialization"), 
+					rSet.getInt("base_attack"),
+					rSet.getInt("fort_save"),
+					rSet.getInt("ref_save"),
+					rSet.getInt("will_save"),
+					rSet.getInt("feat_id"));
+			rSet.close();
+			return result;
+		}catch(SQLException e) {
+//			plugin.getLogger().log(Level.SEVERE, "Unable to retrieve specialization (id=" + id + ")");
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
