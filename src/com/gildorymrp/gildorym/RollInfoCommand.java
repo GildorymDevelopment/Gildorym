@@ -142,10 +142,11 @@ public class RollInfoCommand implements CommandExecutor {
 				fortitude += 2 + (level / 2);
 				reflex += 2 + (level / 2);
 				will += 2 + (level / 2);
-				if ((player.getInventory().getBoots() == null) && (player.getInventory().getLeggings() == null) && (player.getInventory().getChestplate() == null) && (player.getInventory().getHelmet() == null)) {
-					meleeDefence += (0.25 * level);
-					rangedDefence += (0.25 * level);
-				}
+				boolean notArmored = notArmored(player);
+					if (notArmored) {
+						meleeDefence += (0.25 * level);
+						rangedDefence += (0.25 * level);
+					}
 				break;
 			case PALADIN:
 				meleeAttack += (4 + BAB_avg);
@@ -290,7 +291,6 @@ public class RollInfoCommand implements CommandExecutor {
 
 			switch (itemType) {
 			// Melee Attack +1
-			case WOOD_SWORD:
 			case STONE_SPADE:
 			case WOOD_PICKAXE:
 			case STONE_PICKAXE:
@@ -298,19 +298,29 @@ public class RollInfoCommand implements CommandExecutor {
 			case IRON_HOE:
 				meleeAttack += 1.0D;
 				break;
+			case WOOD_SWORD:
+				meleeAttack += 1.0D;
+				rangedAttack += 1.0D;
+				break;
 			// Melee Attack +2
 			case STONE_SWORD:
 			case WOOD_AXE:
-			case STONE_AXE:
 			case DIAMOND_PICKAXE:
 				meleeAttack += 2.0D;
 				break;
+			case STONE_AXE:
+				meleeAttack += 2.0D;
+				rangedAttack += 2.0D;
+				break;
 			// Melee Attack +3
 			case IRON_SWORD:
-			case IRON_AXE:
 			case IRON_SPADE:
+			case IRON_AXE:
+				meleeAttack += 3.0D;
+				break;
 			case DIAMOND_HOE:
 				meleeAttack += 3.0D;
+				rangedAttack += 3.0D;
 				break;
 			// Melee Attack +4
 			case DIAMOND_SPADE:
@@ -449,7 +459,7 @@ public class RollInfoCommand implements CommandExecutor {
 				}
 			}
 
-			if (!isAdult){
+			/*if (!isAdult){
 				
 				meleeAttack /= 2;
 				meleeDefence /= 2;
@@ -460,7 +470,7 @@ public class RollInfoCommand implements CommandExecutor {
 				fortitude /= 2;
 				reflex /= 2;
 				will /= 2;
-			}
+			}*/
 			
 			sender.sendMessage(ChatColor.GRAY + "======================");
 			sender.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + player.getDisplayName() + "'s Roll Info");
@@ -476,6 +486,60 @@ public class RollInfoCommand implements CommandExecutor {
 			sender.sendMessage(ChatColor.DARK_RED + "Could not find that player!");
 		}
 		return true;
+	}
+
+	private boolean notArmored(Player player) {
+		Material helmet, chest, legs, boots;
+		helmet = player.getInventory().getHelmet().getType();
+		chest = player.getInventory().getChestplate().getType();
+		legs = player.getInventory().getLeggings().getType();
+		boots = player.getInventory().getBoots().getType();
+		boolean noArmor = false;
+		
+		switch(helmet){
+		case LEATHER_HELMET:
+		case CHAINMAIL_HELMET:
+		case IRON_HELMET:
+		case DIAMOND_HELMET:
+			return false;
+		default:
+			noArmor = true;
+		}
+		
+		switch(chest){
+		case LEATHER_CHESTPLATE:
+		case CHAINMAIL_CHESTPLATE:
+		case IRON_CHESTPLATE:
+		case DIAMOND_CHESTPLATE:
+			return false;
+		default:
+			noArmor = true;
+		}
+		
+		switch(legs){
+		case LEATHER_LEGGINGS:
+		case CHAINMAIL_LEGGINGS:
+		case IRON_LEGGINGS:
+		case DIAMOND_LEGGINGS:
+			return false;
+		default:
+			noArmor = true;
+		}
+		
+		switch(boots){
+		case LEATHER_BOOTS:
+		case CHAINMAIL_BOOTS:
+		case IRON_BOOTS:
+		case DIAMOND_BOOTS:
+			return false;
+		default:
+			noArmor = true;
+		}
+		
+		if (noArmor)
+			return true;
+		
+		return false;
 	}
 
 }
