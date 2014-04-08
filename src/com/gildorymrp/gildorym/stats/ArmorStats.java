@@ -2,35 +2,35 @@ package com.gildorymrp.gildorym.stats;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class ArmorStats {
 	
 	public double getArmorMelee(Player player){
-		Material helmet = player.getInventory().getHelmet().getType();
-		Material chest = player.getInventory().getChestplate().getType();
-		Material legs = player.getInventory().getLeggings().getType();
-		Material feet = player.getInventory().getBoots().getType();
+		ItemStack helmet = player.getInventory().getHelmet();
+		ItemStack chest = player.getInventory().getChestplate();
+		ItemStack legs = player.getInventory().getLeggings();
+		ItemStack feet = player.getInventory().getBoots();
 		double armor = 0;
 		
-		if (helmet != null && chest != null && legs != null && feet !=null)
-			armor = getHelmetMelee(helmet) + getChestMelee(chest) + getLegMelee(legs) + getFootMelee(feet);
+		armor = getHelmetMelee(helmet) + getChestMelee(chest) + getLegMelee(legs) + getFootMelee(feet);
 		
 		return armor;
 	}
 	
 	public double getArmorRanged(Player player){
-		Material helmet = player.getInventory().getHelmet().getType();
-		Material chest = player.getInventory().getChestplate().getType();
-		Material legs = player.getInventory().getLeggings().getType();
-		Material feet = player.getInventory().getBoots().getType();
+		ItemStack helmet = player.getInventory().getHelmet();
+		ItemStack chest = player.getInventory().getChestplate();
+		ItemStack legs = player.getInventory().getLeggings();
+		ItemStack feet = player.getInventory().getBoots();
 		double armor = getHelmetRanged(helmet) + getChestRanged(chest) + getLegRanged(legs) + getFootRanged(feet);
 		
 		return armor;
 	}
 	
-	public double getHelmetMelee(Material helmet){
+	public double getHelmetMelee(ItemStack helmet){
 		if (helmet != null)
-			switch(helmet){
+			switch(helmet.getType()){
 			case LEATHER_HELMET:
 				return 0.25;
 			case CHAINMAIL_HELMET:
@@ -46,9 +46,9 @@ public class ArmorStats {
 		
 	}
 	
-	public double getChestMelee(Material chest){
+	public double getChestMelee(ItemStack chest){
 		if (chest != null)
-			switch(chest){
+			switch(chest.getType()){
 			case LEATHER_CHESTPLATE:
 				return 1.75;
 			case CHAINMAIL_CHESTPLATE:
@@ -63,9 +63,9 @@ public class ArmorStats {
 		return 0;
 	}
 	
-	public double getLegMelee(Material legs){
+	public double getLegMelee(ItemStack legs){
 		if(legs != null)
-			switch(legs){
+			switch(legs.getType()){
 			case LEATHER_LEGGINGS:
 				return 0.75;
 			case CHAINMAIL_LEGGINGS:
@@ -80,9 +80,9 @@ public class ArmorStats {
 		return 0;
 	}
 	
-	public double getFootMelee(Material feet){
+	public double getFootMelee(ItemStack feet){
 		if(feet != null)
-			switch(feet){
+			switch(feet.getType()){
 			case LEATHER_BOOTS:
 				return 0.25;
 			case CHAINMAIL_BOOTS:
@@ -97,9 +97,9 @@ public class ArmorStats {
 		return 0;
 	}
 	
-	public double getHelmetRanged(Material helmet){
+	public double getHelmetRanged(ItemStack helmet){
 		if (helmet != null)
-			switch(helmet){
+			switch(helmet.getType()){
 			case LEATHER_HELMET:
 				return 0.25;
 			case CHAINMAIL_HELMET:
@@ -114,9 +114,9 @@ public class ArmorStats {
 		return 0;
 	}
 	
-	public double getChestRanged(Material chest){
+	public double getChestRanged(ItemStack chest){
 		if (chest != null)
-			switch(chest){
+			switch(chest.getType()){
 			case LEATHER_CHESTPLATE:
 				return 1.75;
 			case CHAINMAIL_CHESTPLATE:
@@ -131,9 +131,9 @@ public class ArmorStats {
 		return 0;
 	}
 	
-	public double getLegRanged(Material legs){
+	public double getLegRanged(ItemStack legs){
 		if(legs != null)
-			switch(legs){
+			switch(legs.getType()){
 			case LEATHER_LEGGINGS:
 				return 0.75;
 			case CHAINMAIL_LEGGINGS:
@@ -148,9 +148,9 @@ public class ArmorStats {
 		return 0;
 	}
 	
-	public double getFootRanged(Material feet){
+	public double getFootRanged(ItemStack feet){
 		if(feet != null)
-			switch(feet){
+			switch(feet.getType()){
 			case LEATHER_BOOTS:
 				return 0.25;
 			case CHAINMAIL_BOOTS:
