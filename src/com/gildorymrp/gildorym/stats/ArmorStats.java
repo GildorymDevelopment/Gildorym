@@ -10,7 +10,10 @@ public class ArmorStats {
 		Material chest = player.getInventory().getChestplate().getType();
 		Material legs = player.getInventory().getLeggings().getType();
 		Material feet = player.getInventory().getBoots().getType();
-		double armor = getHelmetMelee(helmet) + getChestMelee(chest) + getLegMelee(legs) + getFootMelee(feet);
+		double armor = 0;
+		
+		if (helmet != null && chest != null && legs != null && feet !=null)
+			armor = getHelmetMelee(helmet) + getChestMelee(chest) + getLegMelee(legs) + getFootMelee(feet);
 		
 		return armor;
 	}

@@ -3,9 +3,6 @@ package com.gildorymrp.gildorym.stats;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import com.gildorymrp.charactercards.Race;
-import com.gildorymrp.gildorymclasses.CharacterClass;
-
 public class CharacterStats {
 
 	private RaceStats Race;
@@ -29,6 +26,7 @@ public class CharacterStats {
 		
 		meleeAttack += Class.getMeleeAttack(player);
 		meleeAttack += Race.getMeleeAttack(player);
+	if (weapon != null)
 		meleeAttack += Weapon.getMeleeAttack(weapon);
 		
 		return meleeAttack;
@@ -47,6 +45,7 @@ public class CharacterStats {
 		
 		rangedAttack += Class.getRangedAttack(player);
 		rangedAttack += Race.getRangedDefence(player);
+		if (weapon != null)
 		rangedAttack += Weapon.getRangedAttack(weapon);
 				
 		return rangedAttack;
@@ -66,6 +65,7 @@ public class CharacterStats {
 		
 		magicAttack += Class.getMagicAttack(player);
 		magicAttack += Race.getMagicAttack(player);
+		if (weapon != null)
 		magicAttack += Weapon.getMagicAttack(weapon);
 		
 		return magicAttack;
