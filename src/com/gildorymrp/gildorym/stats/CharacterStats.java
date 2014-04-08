@@ -2,6 +2,7 @@ package com.gildorymrp.gildorym.stats;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class CharacterStats {
 
@@ -19,10 +20,10 @@ public class CharacterStats {
 	double fortitude = 0.0;
 	double reflex = 0.0;
 	double will = 0.0;
-	Material weapon;
+	ItemStack weapon;
 	
 	public double getMeleeAttack(Player player){
-		weapon = player.getInventory().getItemInHand().getType();
+		weapon = player.getInventory().getItemInHand();
 		
 		meleeAttack += Class.getMeleeAttack(player);
 		meleeAttack += Race.getMeleeAttack(player);
@@ -41,7 +42,7 @@ public class CharacterStats {
 	}
 	
 	public double getRangedAttack(Player player){
-		weapon = player.getInventory().getItemInHand().getType();
+		weapon = player.getInventory().getItemInHand();
 		
 		rangedAttack += Class.getRangedAttack(player);
 		rangedAttack += Race.getRangedDefence(player);
@@ -61,7 +62,7 @@ public class CharacterStats {
 	}
 	
 	public double getMagicAttack(Player player){
-		weapon = player.getInventory().getItemInHand().getType();
+		weapon = player.getInventory().getItemInHand();
 		
 		magicAttack += Class.getMagicAttack(player);
 		magicAttack += Race.getMagicAttack(player);
