@@ -4,7 +4,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class WeaponStats {
 
-	public int getMeleeAttack(ItemStack weapon) {
+	public static int getMeleeAttack(ItemStack weapon) {
 		if (weapon != null)
 			switch (weapon.getType()) {
 			case IRON_PICKAXE:
@@ -42,7 +42,7 @@ public class WeaponStats {
 
 	}
 
-	public int getRangedAttack(ItemStack weapon) {
+	public static int getRangedAttack(ItemStack weapon) {
 		if (weapon != null)	
 		switch (weapon.getType()) {
 			case WOOD_SWORD:
@@ -63,7 +63,7 @@ public class WeaponStats {
 
 	}
 
-	public int getMagicAttack(ItemStack weapon) {
+	public static int getMagicAttack(ItemStack weapon) {
 		if (weapon != null)
 			switch (weapon.getType()) {
 			case ENDER_PEARL:

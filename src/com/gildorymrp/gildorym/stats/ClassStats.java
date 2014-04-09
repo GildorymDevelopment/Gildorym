@@ -6,31 +6,12 @@ import com.gildorymrp.gildorymclasses.CharacterClass;
 
 public class ClassStats {
 
-	private Util Util;
-	private Stats Stats;
-	private ArmorStats Armor;
-	
-	double meleeAttack = 0.0D;
-	double meleeDefence = 0.0D;
-	double rangedAttack = 0.0D;
-	double rangedDefence = 0.0D;
-	double magicAttack = 0.0D;
-	double magicDefence = 0.0D;
-	int saveGood;
-	int saveBad;
-	int babGood = 0;
-	int babAvg = 0;
-	int babPoor = 0;
-	int level;
-	boolean isArmored = true;
-	CharacterClass clazz;
-	
-	public double getMeleeAttack(Player player){
-		level = Util.getLevel(player);
-		clazz = Util.getClazz(player);
-		babGood = Stats.getBabGood(level);
-		babAvg = Stats.getBabAvg(level);
-		babPoor = Stats.getBabPoor(level);
+	public static double getMeleeAttack(Player player){
+		int level = Util.getLevel(player);
+		CharacterClass clazz = Util.getClazz(player);
+		int babGood = Stats.getBabGood(level);
+		int babAvg = Stats.getBabAvg(level);
+		int babPoor = Stats.getBabPoor(level);
 		
 		switch(clazz){
 		case BARBARIAN:
@@ -60,14 +41,16 @@ public class ClassStats {
 		}
 	}
 	
-	public double getMeleeDefence(Player player){
-		level = Util.getLevel(player);
-		clazz = Util.getClazz(player);
-		babGood = Stats.getBabGood(level);
-		babAvg = Stats.getBabAvg(level);
-		babPoor = Stats.getBabPoor(level);
+	public static double getMeleeDefence(Player player){
+		int level = Util.getLevel(player);
+		CharacterClass clazz = Util.getClazz(player);
+		int babGood = Stats.getBabGood(level);
+		int babAvg = Stats.getBabAvg(level);
+		int babPoor = Stats.getBabPoor(level);
+		boolean isArmored = true;
+		double meleeDefence;
 		
-		if (Armor.getArmorMelee(player) == 0 && Armor.getArmorRanged(player) == 0)
+		if (ArmorStats.getArmorMelee(player) == 0 && ArmorStats.getArmorRanged(player) == 0)
 			isArmored = false;
 		
 		switch(clazz){
@@ -103,12 +86,12 @@ public class ClassStats {
 		return meleeDefence;
 	}
 	
-	public double getRangedAttack(Player player){
-		level = Util.getLevel(player);
-		clazz = Util.getClazz(player);
-		babGood = Stats.getBabGood(level);
-		babAvg = Stats.getBabAvg(level);
-		babPoor = Stats.getBabPoor(level);
+	public static double getRangedAttack(Player player){
+		int level = Util.getLevel(player);
+		CharacterClass clazz = Util.getClazz(player);
+		int babGood = Stats.getBabGood(level);
+		int babAvg = Stats.getBabAvg(level);
+		int babPoor = Stats.getBabPoor(level);
 		
 		switch(clazz){
 		case BARBARIAN:
@@ -138,14 +121,16 @@ public class ClassStats {
 		}
 	}
 	
-	public double getRangedDefence(Player player){
-		level = Util.getLevel(player);
-		clazz = Util.getClazz(player);
-		babGood = Stats.getBabGood(level);
-		babAvg = Stats.getBabAvg(level);
-		babPoor = Stats.getBabPoor(level);
+	public static double getRangedDefence(Player player){
+		int level = Util.getLevel(player);
+		CharacterClass clazz = Util.getClazz(player);
+		int babGood = Stats.getBabGood(level);
+		int babAvg = Stats.getBabAvg(level);
+		int babPoor = Stats.getBabPoor(level);
+		double rangedDefence = 0;
+		boolean isArmored = true;
 		
-		if (Armor.getArmorMelee(player) == 0 && Armor.getArmorRanged(player) == 0)
+		if (ArmorStats.getArmorMelee(player) == 0 && ArmorStats.getArmorRanged(player) == 0)
 			isArmored = false;
 		
 		switch(clazz){
@@ -181,12 +166,11 @@ public class ClassStats {
 		return rangedDefence;
 	}
 	
-	public double getMagicAttack(Player player){
-		level = Util.getLevel(player);
-		clazz = Util.getClazz(player);
-		babGood = Stats.getBabGood(level);
-		babAvg = Stats.getBabAvg(level);
-		babPoor = Stats.getBabPoor(level);
+	public static double getMagicAttack(Player player){
+		int level = Util.getLevel(player);
+		CharacterClass clazz = Util.getClazz(player);
+		int babGood = Stats.getBabGood(level);
+		int babAvg = Stats.getBabAvg(level);
 	
 		switch(clazz){
 		case BARBARIAN:
@@ -206,7 +190,7 @@ public class ClassStats {
 		case RANGER:
 			return 1 + babAvg;
 		case ROGUE:
-			magicAttack = 0.0D;
+			return 0.0D;
 		case SORCERER:
 			return 5 + babGood;
 		case WIZARD:
@@ -216,12 +200,12 @@ public class ClassStats {
 		}
 	}
 	
-	public double getMagicDefence(Player player){
-		level = Util.getLevel(player);
-		clazz = Util.getClazz(player);
-		babGood = Stats.getBabGood(level);
-		babAvg = Stats.getBabAvg(level);
-		babPoor = Stats.getBabPoor(level);
+	public static double getMagicDefence(Player player){
+		int level = Util.getLevel(player);
+		CharacterClass clazz = Util.getClazz(player);
+		int babGood = Stats.getBabGood(level);
+		int babAvg = Stats.getBabAvg(level);
+		int babPoor = Stats.getBabPoor(level);
 		
 		switch(clazz){
 		case BARBARIAN:
@@ -251,11 +235,11 @@ public class ClassStats {
 		}
 	}
 	
-	public int getFortitude(Player player){
-		level = Util.getLevel(player);
-		clazz = Util.getClazz(player);
-		saveGood = Stats.getSaveGood(level);
-		saveBad = Stats.getSaveBad(level);
+	public static int getFortitude(Player player){
+		int level = Util.getLevel(player);
+		CharacterClass clazz = Util.getClazz(player);
+		int saveGood = Stats.getSaveGood(level);
+		int saveBad = Stats.getSaveBad(level);
 		
 		switch(clazz){
 		case BARBARIAN:
@@ -285,11 +269,11 @@ public class ClassStats {
 		}
 	}
 	
-	public int getReflex(Player player){
-		level = Util.getLevel(player);
-		clazz = Util.getClazz(player);
-		saveGood = Stats.getSaveGood(level);
-		saveBad = Stats.getSaveBad(level);
+	public static int getReflex(Player player){
+		int level = Util.getLevel(player);
+		CharacterClass clazz = Util.getClazz(player);
+		int saveGood = Stats.getSaveGood(level);
+		int saveBad = Stats.getSaveBad(level);
 		
 		switch(clazz){
 		case BARBARIAN:
@@ -319,11 +303,11 @@ public class ClassStats {
 		}
 	}
 	
-	public int getWill(Player player){
-		level = Util.getLevel(player);
-		clazz = Util.getClazz(player);
-		saveGood = Stats.getSaveGood(level);
-		saveBad = Stats.getSaveBad(level);
+	public static int getWill(Player player){
+		int level = Util.getLevel(player);
+		CharacterClass clazz = Util.getClazz(player);
+		int saveGood = Stats.getSaveGood(level);
+		int saveBad = Stats.getSaveBad(level);
 		
 		switch(clazz){
 		case BARBARIAN:

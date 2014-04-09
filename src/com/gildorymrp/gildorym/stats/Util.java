@@ -10,35 +10,40 @@ import com.gildorymrp.gildorymclasses.GildorymClasses;
 
 public class Util {
 
-	GildorymClasses gildorymClasses = (GildorymClasses) Bukkit.getServer().getPluginManager().getPlugin("GildorymClasses");
-	GildorymCharacterCards gildorymCharacterCards = (GildorymCharacterCards) Bukkit.getServer().getPluginManager().getPlugin("GildorymCharacterCards");
-	
-	public int getLevel(Player player){
+	private static GildorymClasses gildorymClasses = (GildorymClasses) Bukkit
+			.getServer().getPluginManager().getPlugin("GildorymClasses");
+	private static GildorymCharacterCards gildorymCharacterCards = (GildorymCharacterCards) Bukkit
+			.getServer().getPluginManager().getPlugin("GildorymCharacterCards");
+
+	public static int getLevel(Player player) {
 		if (player != null)
-			try{
+			try {
 				return gildorymClasses.levels.get(player.getName());
-			}catch(Exception NullPointerException){
+			} catch (Exception NullPointerException) {
 				return 1;
 			}
-		return 1;	
+		return 1;
 	}
-	public CharacterClass getClazz(Player player){
+
+	public static CharacterClass getClazz(Player player) {
 		if (player != null)
-			try{
+			try {
 				return gildorymClasses.classes.get(player.getName());
-			}catch(Exception NullPointerException){
+			} catch (Exception NullPointerException) {
 				return null;
 			}
 		return null;
 	}
-	public Race getRace(Player player){
+
+	public static Race getRace(Player player) {
 		if (player != null)
-			try{
-				return gildorymCharacterCards.getCharacterCards().get(player.getName()).getRace();
-			}catch (Exception NullPointerException){
+			try {
+				return gildorymCharacterCards.getCharacterCards()
+						.get(player.getName()).getRace();
+			} catch (Exception NullPointerException) {
 				return null;
 			}
 		return null;
 	}
-	
+
 }

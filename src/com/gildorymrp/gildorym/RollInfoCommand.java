@@ -12,10 +12,6 @@ import com.gildorymrp.gildorym.stats.Util;
 
 public class RollInfoCommand implements CommandExecutor {
 
-	private Util Util;
-	private CharacterStats CharacterStats;
-
-	@SuppressWarnings("unused")
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
@@ -26,18 +22,18 @@ public class RollInfoCommand implements CommandExecutor {
 			player = Bukkit.getServer().getPlayer(args[0]);
 		}
 		if (player != null) {
-			CharacterStats CStats = CharacterStats;
-			Util util = Util;
 			
-			double meleeAttack = CStats.getMeleeAttack(player);
-			double meleeDefence = CStats.getMeleeDefence(player);
-			double rangedAttack = CStats.getRangedAttack(player);
-			double rangedDefence = CStats.getRangedDefence(player);
-			double magicAttack = CStats.getMagicAttack(player);
-			double magicDefence = CStats.getMagicDefence(player);
-			double fortitude = CStats.getFortitude(player);
-			double reflex = CStats.getReflex(player);
-			double will = CStats.getWill(player);
+			CharacterStats cStats = new CharacterStats(player);
+
+			double meleeAttack = cStats.getMeleeAttack();
+			double meleeDefence = cStats.getMeleeDefence();
+			double rangedAttack = cStats.getRangedAttack();
+			double rangedDefence = cStats.getRangedDefence();
+			double magicAttack = cStats.getMagicAttack();
+			double magicDefence = cStats.getMagicDefence();
+			double fortitude = cStats.getFortitude();
+			double reflex = cStats.getReflex();
+			double will = cStats.getWill();
 
 			sender.sendMessage(ChatColor.GRAY + "======================");
 			sender.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + player.getDisplayName() + "'s Roll Info");

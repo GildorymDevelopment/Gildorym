@@ -5,26 +5,11 @@ import org.bukkit.entity.Player;
 import com.gildorymrp.charactercards.Race;
 
 public class RaceStats {
-
-	private Util Util;
-	private Stats Stats;
 	
-	double meleeAttack, meleeDefence, rangedAttack, rangedDefence, magicAttack, magicDefence;
-	int saveGood;
-	int saveBad;
-	int babGood = 0;
-	int babAvg = 0;
-	int babPoor = 0;
-	int level;
-	Race race;
-	
-	public double getMeleeAttack(Player player){
-		level = Util.getLevel(player);
-		race = Util.getRace(player);
-		babGood = Stats.getBabGood(level);
-		babAvg = Stats.getBabAvg(level);
-		babPoor = Stats.getBabPoor(level);
-		meleeAttack = 0;
+	public static double getMeleeAttack(Player player){
+		int level = Util.getLevel(player);
+		Race race = Util.getRace(player);
+		int meleeAttack = 0;
 		
 		switch(race){
 		case GNOME:
@@ -45,24 +30,16 @@ public class RaceStats {
 		return meleeAttack;
 	}
 	
-	public double getMeleeDefence(Player player){
-		level = Util.getLevel(player);
-		race = Util.getRace(player);
-		babGood = Stats.getBabGood(level);
-		babAvg = Stats.getBabAvg(level);
-		babPoor = Stats.getBabPoor(level);
-		meleeDefence = 0;
+	public static double getMeleeDefence(Player player){
+		int meleeDefence = 0;
 		
 		return meleeDefence;
 	}
 	
-	public double getRangedAttack(Player player){
-		level = Util.getLevel(player);
-		race = Util.getRace(player);
-		babGood = Stats.getBabGood(level);
-		babAvg = Stats.getBabAvg(level);
-		babPoor = Stats.getBabPoor(level);
-		rangedAttack = 0;
+	public static double getRangedAttack(Player player){
+		int level = Util.getLevel(player);
+		Race race = Util.getRace(player);
+		int rangedAttack = 0;
 		
 		switch (race){
 		case ELF:
@@ -87,24 +64,16 @@ public class RaceStats {
 		return rangedAttack;
 	}
 	
-	public double getRangedDefence(Player player){
-		level = Util.getLevel(player);
-		race = Util.getRace(player);
-		babGood = Stats.getBabGood(level);
-		babAvg = Stats.getBabAvg(level);
-		babPoor = Stats.getBabPoor(level);
-		rangedDefence = 0;
+	public static double getRangedDefence(Player player){
+		int rangedDefence = 0;
 		
 		return rangedDefence;
 	}
 	
-	public double getMagicAttack(Player player){
-		level = Util.getLevel(player);
-		race = Util.getRace(player);
-		babGood = Stats.getBabGood(level);
-		babAvg = Stats.getBabAvg(level);
-		babPoor = Stats.getBabPoor(level);
-		magicAttack = 0;
+	public static double getMagicAttack(Player player){
+		int level = Util.getLevel(player);
+		Race race = Util.getRace(player);
+		int magicAttack = 0;
 		
 		switch (race){
 		case DWARF:
@@ -124,13 +93,10 @@ public class RaceStats {
 		return magicAttack;
 	}
 	
-	public double getMagicDefence(Player player){
-		level = Util.getLevel(player);
-		race = Util.getRace(player);
-		babGood = Stats.getBabGood(level);
-		babAvg = Stats.getBabAvg(level);
-		babPoor = Stats.getBabPoor(level);
-		magicDefence = 0;
+	public static double getMagicDefence(Player player){
+		int level = Util.getLevel(player);
+		Race race = Util.getRace(player);
+		int magicDefence = 0;
 		
 		switch (race){
 		case HALFORC:
@@ -145,8 +111,8 @@ public class RaceStats {
 		return magicDefence;
 	}
 	
-	public int getFortitude(Player player){
-		race = Util.getRace(player);
+	public static int getFortitude(Player player){
+		Race race = Util.getRace(player);
 		switch (race){
 		case DWARF:
 			return 1;
@@ -158,8 +124,8 @@ public class RaceStats {
 		
 	}
 	
-	public int getReflex(Player player){
-		race = Util.getRace(player);
+	public static int getReflex(Player player){
+		Race race = Util.getRace(player);
 		switch (race){
 		case ELF:
 			return 1;
@@ -171,11 +137,8 @@ public class RaceStats {
 		
 	}
 	
-	public int getWill(Player player){
-		race = Util.getRace(player);
-		
+	public static int getWill(Player player){
 		return 0;
-		
 	}
 	
 }

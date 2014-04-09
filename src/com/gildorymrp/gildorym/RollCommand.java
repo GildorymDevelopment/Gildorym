@@ -147,26 +147,34 @@ public class RollCommand implements CommandExecutor {
 			rollInfo[0] = 1;
 		}
 
-		// If roll is in form ?+x, sets arithmetic modifier of roll to x
-		if (rollString.contains("+")) {
-			String modString = rollString.split("\\+")[1];
-			rollInfo[2] = Integer.parseInt(modString);
-			rollString = rollString.split("\\+")[0];
-		}
+		// Determines size of die to use
+		String sizeString = rollString.split("\\D")[0];
+		rollInfo[1] = Integer.parseInt(sizeString);
+		rollString = rollString.substring(sizeString.length());
 
-		// If roll is in form ?-x, sets arithmetic modifier of roll to -x
-		if (rollString.contains("-")) {
-			if (!rollString.split("-")[0].equals(null)) {
-				String modString = rollString.split("-")[1];
-				rollInfo[2] = -1 * Integer.parseInt(modString);
-				rollString = rollString.split("-")[0];
-			} else {
-				rollInfo[2] = 0;
+		// Determines roll modifier by parsing addition expression
+		rollInfo[2] = 0;
+		if (rollString.length() > 0) {
+			for (String ps : rollString.split("\\+")) {
+				if (ps != null) {
+					if (!ps.contains("\\-")) {
+						rollInfo[2] += Integer.parseInt(ps);
+					} else {
+						String[] ns = ps.split("\\-");
+						for (int i = 0; i < ns.length; i++) {
+							if (ns[i] != null) {
+								if (i == 0) {
+									rollInfo[2] += Integer.parseInt(ns[i]);
+								} else {
+									rollInfo[2] -= Integer.parseInt(ns[i]);
+								}
+							}
+						}
+					}
+				}
 			}
-		}
+		} 
 
-		// What remains of the string is set as the size of the dice to be used
-		rollInfo[1] = Integer.parseInt(rollString);
 
 		return rollInfo;
 	}
