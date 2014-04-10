@@ -7,8 +7,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.gildorymrp.gildorym.stats.CharacterStats;
-import com.gildorymrp.gildorym.stats.Util;
+import com.gildorymrp.gildorym.api.stats.CharacterStats;
+import com.gildorymrp.gildorym.api.stats.Util;
 
 public class RollInfoCommand implements CommandExecutor {
 
