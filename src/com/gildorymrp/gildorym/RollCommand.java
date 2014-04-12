@@ -156,13 +156,13 @@ public class RollCommand implements CommandExecutor {
 		rollInfo[2] = 0;
 		if (rollString.length() > 0) {
 			for (String ps : rollString.split("\\+")) {
-				if (ps != null) {
-					if (!ps.contains("\\-")) {
+				if (ps != null && !ps.isEmpty()) {
+					if (!ps.contains("-")) {
 						rollInfo[2] += Integer.parseInt(ps);
 					} else {
 						String[] ns = ps.split("\\-");
 						for (int i = 0; i < ns.length; i++) {
-							if (ns[i] != null) {
+							if (ns[i] != null && !ns[i].isEmpty()) {
 								if (i == 0) {
 									rollInfo[2] += Integer.parseInt(ns[i]);
 								} else {
@@ -174,7 +174,6 @@ public class RollCommand implements CommandExecutor {
 				}
 			}
 		} 
-
 
 		return rollInfo;
 	}
