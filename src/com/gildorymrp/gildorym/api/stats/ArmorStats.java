@@ -6,12 +6,10 @@ import org.bukkit.inventory.ItemStack;
 public class ArmorStats {
 
 	public static double getArmorMelee(Player player) {
-		player.sendMessage("DEBUG: Armor Melee");
 		ItemStack helmet = player.getInventory().getHelmet();
 		ItemStack chest = player.getInventory().getChestplate();
 		ItemStack legs = player.getInventory().getLeggings();
 		ItemStack feet = player.getInventory().getBoots();
-		player.sendMessage("DEBUG: Got Armor Pieces");
 		double armor = 0;
 
 		armor = getHelmetMelee(helmet) + getChestMelee(chest)
