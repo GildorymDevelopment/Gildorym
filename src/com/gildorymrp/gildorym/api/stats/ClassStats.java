@@ -21,7 +21,7 @@ public class ClassStats {
 		case CLERIC:
 			return 3 + babAvg;
 		case DRUID:
-			return 3 + babGood;
+			return 3 + babAvg;
 		case FIGHTER:
 			return 5 + babGood;
 		case MONK:
@@ -55,30 +55,30 @@ public class ClassStats {
 		
 		switch(clazz){
 		case BARBARIAN:
-			return 5 + babAvg;
+			return 3 + babGood;
 		case BARD:
-			return 3 + babAvg;
+			return 1 + babAvg;
 		case CLERIC:
-			return 1 + babPoor;
+			return 2 + babGood;
 		case DRUID:
-			return 1 + babPoor;
+			return 2 + babAvg;
 		case FIGHTER:
-			return 3 + babAvg;
+			return 5 + babGood;
 		case MONK:
-			meleeDefence = 3 + babAvg;
-			if(!isArmored)
+			meleeDefence = 6 + babGood;
+			if (!isArmored)
 				meleeDefence += (0.25 * level);
 			break;
 		case PALADIN:
-			return 2 + babAvg;
-		case RANGER:
 			return 4 + babGood;
-		case ROGUE:
-			return 3 + babGood;
-		case SORCERER:
-			return 1 + babAvg;
-		case WIZARD:
+		case RANGER:
 			return 2 + babAvg;
+		case ROGUE:
+			return 4 + babAvg;
+		case SORCERER:
+			return 2 + babPoor;
+		case WIZARD:
+			return 1 + babPoor;
 		default:
 			return 0;
 		}
