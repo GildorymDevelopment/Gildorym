@@ -50,10 +50,12 @@ public class RaceStats {
 			rangedAttack += 2;
 			if (level > 1)
 				rangedAttack += 0.125 * level;
+			break;
 		case GNOME:
 			rangedAttack -= 2;
 			if (level > 1)
 				rangedAttack -= 0.125 * level;
+			break;
 		case HALFLING:
 			rangedAttack += 2;
 			if (level > 1)
@@ -63,6 +65,7 @@ public class RaceStats {
 			rangedAttack += 2;
 			if (level > 1)
 				rangedAttack += 0.125 * level;
+			break;
 		default:
 			break;
 		}
