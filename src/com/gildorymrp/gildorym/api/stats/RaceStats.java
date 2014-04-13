@@ -15,12 +15,12 @@ public class RaceStats {
 		case GNOME:
 			meleeAttack -= 2;
 			if (level > 1)
-				rangedAttack -= 0.125 * level;
+				meleeAttack -= 0.125 * level;
 			break;
 		case HALFLING:
 			meleeAttack -= 2;
 			if (level > 1)
-				rangedAttack -= 0.125 * level;
+				meleeAttack -= 0.125 * level;
 			break;
 		case HALFORC:
 			meleeAttack += 2;
