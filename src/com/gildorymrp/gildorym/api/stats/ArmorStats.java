@@ -25,8 +25,6 @@ public class ArmorStats {
 		ItemStack feet = player.getInventory().getBoots();
 		double armor = getHelmetRanged(helmet) + getChestRanged(chest)
 				+ getLegRanged(legs) + getFootRanged(feet);
-		//THE GIT GODS HAVE BEEN APESED!
-
 		return armor;
 	}
 
