@@ -88,7 +88,7 @@ public class CharacterStats {
 
 		rangedAttack = 0;
 		rangedAttack += ClassStats.getRangedAttack(player);
-		rangedAttack += RaceStats.getRangedDefence(player);
+		rangedAttack += RaceStats.getRangedAttack(player);
 		rangedAttack += WeaponStats.getRangedAttack(weapon);
 	}
 
