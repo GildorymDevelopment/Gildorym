@@ -49,10 +49,9 @@ public class WeaponStats {
 				return 1;
 			case STONE_AXE:
 				return 2;
-			case DIAMOND_HOE:
-				return 3;
 			case BOW:
 			case CARROT_STICK:
+			case DIAMOND_HOE:
 				return 3;
 			case GOLD_PICKAXE:
 				return 4;
