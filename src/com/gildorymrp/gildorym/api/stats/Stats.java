@@ -5,7 +5,7 @@ public class Stats {
 	public static int getBabPoor(int level) {
 
 		if (level == 1) {
-			return 1;
+			return 0;
 		} else if (level > 1 && level <= 20) {
 			return (int) Math.floor(((double) level) * 0.5D);
 		} else if (level > 20)
@@ -15,7 +15,7 @@ public class Stats {
 
 	public static int getBabAvg(int level) {
 		if (level == 1) {
-			return 1;
+			return 0;
 		} else if (level > 1 && level <= 20) {
 			return (int) Math.floor(((double) level) * 0.75D);
 		} else if (level > 20)
