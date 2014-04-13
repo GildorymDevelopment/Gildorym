@@ -10,11 +10,8 @@ public class ArmorStats {
 		ItemStack chest = player.getInventory().getChestplate();
 		ItemStack legs = player.getInventory().getLeggings();
 		ItemStack feet = player.getInventory().getBoots();
-		double armor = 0;
-
-		armor = getHelmetMelee(helmet) + getChestMelee(chest)
+		double armor = getHelmetMelee(helmet) + getChestMelee(chest)
 				+ getLegMelee(legs) + getFootMelee(feet);
-
 		return armor;
 	}
 
