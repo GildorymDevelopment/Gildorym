@@ -14,9 +14,13 @@ public class RaceStats {
 		switch(race){
 		case GNOME:
 			meleeAttack -= 2;
+			if (level > 1)
+				rangedAttack -= 0.125 * level;
 			break;
 		case HALFLING:
 			meleeAttack -= 2;
+			if (level > 1)
+				rangedAttack -= 0.125 * level;
 			break;
 		case HALFORC:
 			meleeAttack += 2;
@@ -44,6 +48,8 @@ public class RaceStats {
 		switch (race){
 		case ELF:
 			rangedAttack += 2;
+			if (level > 1)
+				rangedAttack += 0.125 * level;
 		case GNOME:
 			rangedAttack -= 2;
 			if (level > 1)
@@ -112,29 +118,11 @@ public class RaceStats {
 	}
 	
 	public static int getFortitude(Player player){
-		Race race = Util.getRace(player);
-		switch (race){
-		case DWARF:
-			return 1;
-		case GNOME:
-			return 1;
-		default:
-			return 0;
-		}
-		
+		return 0;
 	}
 	
 	public static int getReflex(Player player){
-		Race race = Util.getRace(player);
-		switch (race){
-		case ELF:
-			return 1;
-		case HALFLING:
-			return 1;
-		default:
-			return 0;
-		}
-		
+		return 0;
 	}
 	
 	public static int getWill(Player player){
