@@ -135,7 +135,8 @@ public class MySQLDatabase {
 	private static final String SELECT_SPECIALIZATION_BY_ID = 
 			"SELECT * FROM specializations WHERE specialization_uid = ?";
 	
-	private static final String DELETE_SPECIALIZATION =
+	@SuppressWarnings("unused")
+	private static final String DELETE_SPECIALIZATION = // TODO implement this
 			"DELETE FROM specializations WHERE specialization_uid = ? LIMIT 1";
 	
 	private final String HOSTNAME;
@@ -875,7 +876,7 @@ public class MySQLDatabase {
 			rSet.close();
 			return result;
 		}catch(SQLException e) {
-//			plugin.getLogger().log(Level.SEVERE, "Unable to retrieve specialization (id=" + id + ")");
+			plugin.getLogger().log(Level.SEVERE, "Unable to retrieve specialization (id=" + id + ")");
 			e.printStackTrace();
 		}
 		return null;
