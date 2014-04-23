@@ -39,7 +39,7 @@ public class Gildorym extends JavaPlugin {
 			this.setEnabled(false);
 		}
 				
-		this.getCommand("newcharacter").setExecutor(new NewCharacterCommand(sqlDB, (IEssentials) this.getServer().getPluginManager().getPlugin("Essentials")));
+		this.getCommand("newcharacter").setExecutor(new NewCharacterCommand(this, (IEssentials) this.getServer().getPluginManager().getPlugin("Essentials")));
 		this.getCommand("setname").setExecutor(new SetNameCommand(this));
 		this.getCommand("setnameother").setExecutor(new SetNameOtherCommand(this));
 		this.getCommand("rollinfo").setExecutor(new RollInfoCommand(this));
@@ -70,6 +70,8 @@ public class Gildorym extends JavaPlugin {
 		sqlDB = new MySQLDatabase(this, dbHost, port, db, user, pass);
 		sqlDB.connect();
 		sqlDB.initDatabase();
+		
+		getLogger().info("Successfully connected to MySQL Database");
 		
 	}
 	
@@ -130,7 +132,7 @@ public class Gildorym extends JavaPlugin {
 		GildorymCharacter result = null;
 		int[] activeAndCreated = sqlDB.getActive(player.getName());
 		
-		int active = activeAndCreated != null ? activeAndCreated[0] : -1;
+		int active = activeAndCreated != null ? activeAndCreated[0] : 0;
 		if(active == 0) {
 			if(activeAndCreated != null) {
 				/*
@@ -434,7 +436,7 @@ public class Gildorym extends JavaPlugin {
 						player.getLocation().getX(), // x
 						player.getLocation().getY(), // y
 						player.getLocation().getZ(), // z
-						player.getWorld().toString(), // world 
+						player.getWorld().getName(), // world 
 						-1, // wounds id
 						null); // init wounds
 	}

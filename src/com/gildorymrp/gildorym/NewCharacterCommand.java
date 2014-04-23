@@ -18,16 +18,17 @@ import com.earth2me.essentials.User;
 
 
 public class NewCharacterCommand implements CommandExecutor {
+	private Gildorym gildorym;
 	private IEssentials ess;
-	private MySQLDatabase sqlDB;
 	
-	public NewCharacterCommand(MySQLDatabase sqlDB, IEssentials essentials) {
-		this.sqlDB = sqlDB;
+	public NewCharacterCommand(Gildorym plugin, IEssentials essentials) {
+		this.gildorym = plugin;
 		this.ess = essentials;
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		MySQLDatabase sqlDB = gildorym.getMySQLDatabase();
 		if(!(sender instanceof Player)) {
 			sender.sendMessage("You can't do that from console, silly");
 			return true;

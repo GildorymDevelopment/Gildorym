@@ -2,6 +2,7 @@ name: Gildorym
 authors: [Lucariatias, godpuppet, melodichand, Hohahihehu, tjstretchalot]
 version: 3.0
 main: com.gildorymrp.gildorym.Gildorym
+depend: [Essentials]
 database: true
 commands:
     newcharacter:

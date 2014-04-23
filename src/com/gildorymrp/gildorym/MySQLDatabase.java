@@ -346,7 +346,7 @@ public class MySQLDatabase {
 			statement.setDouble(position++, gChar.getZ());
 			statement.setString(position++, gChar.getWorld());
 
-			boolean res = statement.execute();
+			statement.execute();
 
 			if(gChar.getUid() == -1) {
 				statement = conn.prepareStatement("SELECT LAST_INSERT_ID()");
@@ -366,7 +366,7 @@ public class MySQLDatabase {
 				this.setPlayerCharactersCreatedAndActive(gChar.getMcName(), id, gChar.getUid());
 				results.close();
 			}
-			return res;
+			return true;
 
 		} catch (SQLException e) {
 			plugin.getLogger().log(Level.SEVERE, "Unable to save character " + gChar + "!");

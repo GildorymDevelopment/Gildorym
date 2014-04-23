@@ -12,11 +12,9 @@ import com.earth2me.essentials.Essentials;
 public class SetNameOtherCommand implements CommandExecutor {
 
 	private Gildorym gildorym;
-	private MySQLDatabase sqlDB;
 
 	public SetNameOtherCommand(Gildorym gildorym) {
 		this.gildorym = gildorym;
-		this.sqlDB = gildorym.getMySQLDatabase();
 	}
 	
 	@Override
@@ -74,7 +72,7 @@ public class SetNameOtherCommand implements CommandExecutor {
 		GildorymCharacter gChar = gildorym.getActiveCharacters().get(target.getName());
 		if(!gChar.getName().equals(name)) {
 			gChar.setName(name);
-			sqlDB.saveCharacter(gChar);
+			gildorym.getMySQLDatabase().saveCharacter(gChar);
 		}
 
 		return true;
