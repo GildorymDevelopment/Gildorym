@@ -44,6 +44,7 @@ public class Gildorym extends JavaPlugin {
 		this.getCommand("setnameother").setExecutor(new SetNameOtherCommand(this));
 		this.getCommand("rollinfo").setExecutor(new RollInfoCommand(this));
 		this.getCommand("radiusemote").setExecutor(new RadiusEmoteCommand());
+		this.getCommand("wound").setExecutor(new WoundCommand(this));
 		RollCommand rc = new RollCommand(this);
 		this.getCommand("roll").setExecutor(rc);
 		this.getCommand("dmroll").setExecutor(rc);

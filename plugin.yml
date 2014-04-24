@@ -41,7 +41,13 @@ commands:
     dmroll:
         usage: /<command> [roll]
         description: Allows a DM to roll without broadcasting the result.
+    wound:
+        usage: /<command> ((player) [damage type] [damage amount] [time regen (seconds)] (notes))
+        description: Applies a wound on a player directly.
 permissions:
+    gildorym.command.wound:
+        description: Allows access to /wound
+        default: op
     gildorym.dmroll:
         description: Allows you to roll silently.
         default: op
