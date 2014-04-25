@@ -661,6 +661,7 @@ public class MySQLDatabase {
 	}
 
 	public boolean loadWounds(GildorymCharacter gChar) {
+		gChar.clearWounds();
 		if(gChar.getWoundsID() == -1)
 			return true;
 		

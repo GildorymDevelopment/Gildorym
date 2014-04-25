@@ -44,9 +44,15 @@ commands:
     wound:
         usage: /<command> ((player) [damage type] [damage amount] [time regen (seconds)] (notes))
         description: Applies a wound on a player directly.
+    wounds:
+        usage: /<command>
+        description: Shows your current wounds
 permissions:
     gildorym.command.wound:
         description: Allows access to /wound
+        default: op
+    gildorym.command.wounds:
+        description: Allows access to /wounds
         default: op
     gildorym.dmroll:
         description: Allows you to roll silently.

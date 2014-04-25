@@ -14,6 +14,17 @@ public class Wound {
 		this.woundUid = uid;
 	}
 	
+	public Wound(long timestamp, DamageType damageType, int damageAmount,
+			long timeRegen, String notes) {
+		this.timestamp = timestamp;
+		this.damageType = damageType;
+		this.damageAmount = damageAmount;
+		this.timeRegen = timeRegen;
+		this.notes = notes;
+	}
+
+
+
 	public int getWoundID() {
 		return woundID;
 	}

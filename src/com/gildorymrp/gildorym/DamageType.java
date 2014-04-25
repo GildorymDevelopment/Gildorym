@@ -12,6 +12,11 @@ public enum DamageType {
 	DamageType(String cName) {
 		commandName = cName;
 	}
+	
+	public String commandName() {
+		return commandName;
+	}
+	
 	public static DamageType commandName(String str) {
 		DamageType[] vls = DamageType.values();
 		
