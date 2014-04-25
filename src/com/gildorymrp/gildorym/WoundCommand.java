@@ -13,12 +13,14 @@ public class WoundCommand implements CommandExecutor {
 			ChatColor.RED + "You do not have enough permission to do that." + ChatColor.RESET;
 	private static final String TARGET_NOT_FOUND = 
 			ChatColor.RED + "There is no user named %s on the server right now" + ChatColor.RESET;
+	private static final String CONSOLE_NEEDS_TARGET = 
+			ChatColor.RED + "Non-player command senders must specify a target" + ChatColor.RESET;
 	private static final String DAMAGE_TYPE_INVALID =
 			ChatColor.RED + "Valid damage types include FallDamage, PlayerAttack, MonsterAttack, Drowning, and Other" + ChatColor.RESET;
 	private static final String INVALID_DAMAGE_AMOUNT =
-			ChatColor.RED + "Must deal at least 1 damage" + ChatColor.RESET;
+			ChatColor.RED + "Cannot deal negative damage" + ChatColor.RESET;
 	private static final String INVALID_TIME_REGEN_AMOUNT =
-			ChatColor.RED + "Must last at least 1 second" + ChatColor.RESET;
+			ChatColor.RED + "Must last at least 1 second (-1 for forever)" + ChatColor.RESET;
 	private static final String NULL_CHARACTER =
 			ChatColor.YELLOW + "The targets character is null, which shouldn't happen. Contact a developer. " + ChatColor.RESET;
 	private static final String NULL_CHARACTER2 =
@@ -55,8 +57,14 @@ public class WoundCommand implements CommandExecutor {
 			return true;
 		}
 		
-		if(args.length < 4)
-			return false;
+		if(args.length < 4) {
+			if(args.length == 0 || args[0].equalsIgnoreCase("help")) {
+				showWoundHelp(sender);
+				return true;
+			}else {
+				return false;
+			}
+		}
 		
 		Player target = sender.getServer().getPlayer(args[0]);
 		if(target == null) {
@@ -69,16 +77,17 @@ public class WoundCommand implements CommandExecutor {
 			return false;
 		}
 		int damageAmount = safeParse(args[2]);
-		if(damageAmount <= 0) {
+		if(damageAmount < 0) {
 			sender.sendMessage(INVALID_DAMAGE_AMOUNT);
 			return false;
 		}
 		
-		int timeRegenSeconds = safeParse(args[3]);
-		if(timeRegenSeconds <= 0) {
+		long timeRegenSeconds = safeParse(args[3]);
+		if(timeRegenSeconds < -1 || timeRegenSeconds == 0) {
 			sender.sendMessage(INVALID_TIME_REGEN_AMOUNT);
 			return false;
-		}
+		}else if(timeRegenSeconds == -1)
+			timeRegenSeconds = Long.MAX_VALUE;
 		
 		StringBuilder notes = new StringBuilder();
 		if(args.length > 4)
@@ -102,13 +111,42 @@ public class WoundCommand implements CommandExecutor {
 		sender.sendMessage("Wound successfully inflicted!");
 		return true;
 	}
+	
+	private void showWoundHelp(CommandSender sender) {
+		sender.sendMessage("Usage:   /wound ((player) [damage type] [damage amount] [time regen (seconds)] (notes))");
+		sender.sendMessage("Example: /wound Tjstretchalot FallDamage 1 600 Failed a skill check");
+		StringBuilder line = new StringBuilder("Dmg. Types: ");
+		
+		DamageType[] types = DamageType.values();
+		line.append(types[0].commandName());
+		for(int i = 1; i < types.length; i++) {
+			line.append(", ").append(types[i].commandName());
+		}
+		sender.sendMessage(line.toString());
+	}
+
 	private boolean onWoundsCommand(CommandSender sender, Command c, String label,
 			String[] args) {
 		if(!sender.hasPermission("gildorym.command.wounds")) {
 			sender.sendMessage(NOT_ENOUGH_PERMS);
 			return true;
 		}
-		GildorymCharacter gChar = gildorym.getActiveCharacters().get(sender.getName());
+		
+		Player target = null;
+		if(args.length == 1) {
+			target = sender.getServer().getPlayer(args[0]);
+			if(target == null) {
+				sender.sendMessage(String.format(TARGET_NOT_FOUND, args[0]));
+				return false;
+			}
+		}else {
+			if(!(sender instanceof Player)) {
+				sender.sendMessage(CONSOLE_NEEDS_TARGET);
+				return false;
+			}
+			target = (Player) sender;
+		}
+		GildorymCharacter gChar = gildorym.getActiveCharacters().get(target.getName());
 		gildorym.getMySQLDatabase().pruneWounds(gChar);
 		if(gChar == null) {
 			sender.sendMessage(NULL_CHARACTER2);
@@ -121,7 +159,8 @@ public class WoundCommand implements CommandExecutor {
 			return true;
 		}
 		
-		StringBuilder msg = new StringBuilder("You have ");
+		StringBuilder msg = new StringBuilder(target.getName());
+		msg.append(" has ");
 		if(wounds.size() <= 1) {
 			msg.append(ChatColor.GREEN);
 		}else if(wounds.size() <= 2) {
@@ -139,20 +178,22 @@ public class WoundCommand implements CommandExecutor {
 		
 		sender.sendMessage(msg.toString());
 		for(Wound w : wounds) {
-			sender.sendMessage("  " + w.getDamageType().commandName() + " hurts for " + w.getDamageAmount() + " damage for the next " + remainingTime(w));
+			sender.sendMessage("  " + w.getDamageType().commandName() + " causes " + w.getDamageAmount() + " damage until " + remainingTime(w) + " pass");
 			sender.sendMessage("      Notes: " + w.getNotes());
 		}
 		return true;
 	}
 	
 	private String remainingTime(Wound w) {
+		if(w.getTimeRegen() == Long.MAX_VALUE)
+			return "an exceptionally long time";
+		
 		long timeMs = (w.getTimeRegen() - System.currentTimeMillis());
 		long secondsTotal = timeMs / 1000;
 		
 		long minutesTotal = secondsTotal / 60;
 		long hoursTotal = minutesTotal / 60;
 		long daysTotal = hoursTotal / 24;
-		
 		StringBuilder res = new StringBuilder();
 		
 		if(daysTotal >= 1) {

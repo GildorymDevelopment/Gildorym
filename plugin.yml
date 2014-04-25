@@ -42,7 +42,7 @@ commands:
         usage: /<command> [roll]
         description: Allows a DM to roll without broadcasting the result.
     wound:
-        usage: /<command> ((player) [damage type] [damage amount] [time regen (seconds)] (notes))
+        usage: /<command> [player] [damage type] [damage amount] [time regen (seconds)] (notes)
         description: Applies a wound on a player directly.
     wounds:
         usage: /<command>
