@@ -178,7 +178,7 @@ public class WoundCommand implements CommandExecutor {
 		
 		sender.sendMessage(msg.toString());
 		for(Wound w : wounds) {
-			sender.sendMessage("  " + w.getDamageType().commandName() + " causes " + w.getDamageAmount() + " damage. Time remaining: " + remainingTime(w));
+			sender.sendMessage("  " + w.getDamageType().commandName() + " causes " + w.getDamageAmount() + " damage for " + remainingTime(w));
 			sender.sendMessage("      Notes: " + w.getNotes());
 		}
 		return true;
