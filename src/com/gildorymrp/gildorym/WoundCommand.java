@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 public class WoundCommand implements CommandExecutor {
 	private static final String NOT_ENOUGH_PERMS = 
 			ChatColor.RED + "You do not have enough permission to do that." + ChatColor.RESET;
+	private static final String NOT_ENOUGH_PARAMS = 
+			ChatColor.RED + "Insufficient parameters from this command!" + ChatColor.RESET;
 	private static final String TARGET_NOT_FOUND = 
 			ChatColor.RED + "There is no user named %s on the server right now" + ChatColor.RESET;
 	private static final String CONSOLE_NEEDS_TARGET = 
@@ -25,6 +27,10 @@ public class WoundCommand implements CommandExecutor {
 			ChatColor.RED + "Potion effects are between 0 (no effect) and 23" + ChatColor.RESET;
 	private static final String INVALID_POTION_EFFECT_LEVEL =
 			ChatColor.RED + "Potion levels must be 0 (no effect) or positive and finite" + ChatColor.RESET;
+	private static final String INVALID_WOUND_NUMBER = 
+			ChatColor.RED + "Wound numbers look like 1, 2, 3, etc." + ChatColor.RESET;
+	private static final String INVALID_WOUND_NUMBER2 = 
+			ChatColor.RED + "(S)he doesn't have that many wounds!" + ChatColor.RESET;
 	private static final String NULL_CHARACTER =
 			ChatColor.YELLOW + "The targets character is null, which shouldn't happen. Contact a developer. " + ChatColor.RESET;
 	private static final String NULL_CHARACTER2 =
@@ -32,6 +38,8 @@ public class WoundCommand implements CommandExecutor {
 	
 	private static final String NO_WOUNDS = 
 			ChatColor.GREEN + "You have no wounds! Stay healthy and live long." + ChatColor.RESET;
+	private static final String WOUND_DELETED = 
+			ChatColor.GREEN + "Wound successfully removed!" + ChatColor.RESET;
 	
 	private Gildorym gildorym;
 	
@@ -50,10 +58,11 @@ public class WoundCommand implements CommandExecutor {
 			return onWoundCommand(sender, c, label, args);
 		}else if(label.equalsIgnoreCase("wounds")) {
 			return onWoundsCommand(sender, c, label, args);
+		}else if(label.equalsIgnoreCase("removewound")) {
+			return onRemoveWoundCommand(sender, c, label, args);
 		}
 		return false;
 	}
-
 	private boolean onWoundCommand(CommandSender sender, Command c, String label,
 			String[] args) {
 		if(!sender.hasPermission("gildorym.command.wound")) {
@@ -201,6 +210,51 @@ public class WoundCommand implements CommandExecutor {
 		}
 		return true;
 	}
+
+	private boolean onRemoveWoundCommand(CommandSender sender, Command c,
+			String label, String[] args) {
+		// /removewound [player] [Wound #]
+		// ex: /removewound Tjstretchalot 1 - removes the first wound on Tjstretchalot
+		if(!sender.hasPermission("gildorym.command.removewound")) {
+			sender.sendMessage(NOT_ENOUGH_PERMS);
+			return true; // Don't give usage info -,-
+		}
+
+		if(args.length != 2) {
+			sender.sendMessage(NOT_ENOUGH_PARAMS);
+			return false;
+		}
+		
+		Player target = null;
+		target = gildorym.getServer().getPlayer(args[0]);
+		if(target == null) {
+			sender.sendMessage(String.format(TARGET_NOT_FOUND, args[0]));
+			return false;
+		}
+		
+		int woundNum = safeParse(args[1]);
+		if(woundNum < 1) {
+			sender.sendMessage(INVALID_WOUND_NUMBER);
+			return false;
+		}
+		
+		GildorymCharacter gc = gildorym.getActiveCharacters().get(target.getName());
+		if(gc == null) {
+			sender.sendMessage(NULL_CHARACTER);
+			return false;
+		}
+		
+		List<Wound> wounds = gc.getWounds();
+		if(wounds == null || wounds.size() < woundNum) {
+			sender.sendMessage(INVALID_WOUND_NUMBER2);
+			return false;
+		}
+		
+		gildorym.getMySQLDatabase().deleteWound(gc,  wounds.get(woundNum - 1));
+		sender.sendMessage(WOUND_DELETED);
+		return true;
+	}
+
 	
 	private String remainingTime(Wound w) {
 		if(w.getTimeRegen() == Long.MAX_VALUE)

@@ -47,6 +47,7 @@ public class Gildorym extends JavaPlugin {
 		WoundCommand wc = new WoundCommand(this);
 		this.getCommand("wound").setExecutor(wc);
 		this.getCommand("wounds").setExecutor(wc);
+		this.getCommand("removewound").setExecutor(wc);
 		RollCommand rc = new RollCommand(this);
 		this.getCommand("roll").setExecutor(rc);
 		this.getCommand("dmroll").setExecutor(rc);

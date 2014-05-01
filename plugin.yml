@@ -42,17 +42,23 @@ commands:
         usage: /<command> [roll]
         description: Allows a DM to roll without broadcasting the result.
     wound:
-        usage: /<command> [player] [damage type] [damage amount] [time regen (seconds)] (notes)
+        usage: /<command> [player] [damage type] [damage amount] [time regen (seconds)] [effect number] [effect level] (notes)
         description: Applies a wound on a player directly.
     wounds:
         usage: /<command>
         description: Shows your current wounds
+    removewound:
+        usage: /<command> [player] [wound num]
+        description: Removes the specified wound
 permissions:
     gildorym.command.wound:
         description: Allows access to /wound
         default: op
     gildorym.command.wounds:
         description: Allows access to /wounds
+        default: op
+    gildorym.command.removewound:
+        description: Allows access to /removewound
         default: op
     gildorym.dmroll:
         description: Allows you to roll silently.
