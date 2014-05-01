@@ -77,9 +77,7 @@ public class MySQLDatabase {
 			"SELECT * FROM characters WHERE uid=?";
 
 	private static final String REPLACE_PLAYER_CUR_CHAR =
-			"REPLACE INTO players (" +
-					"minecraft_account_name," +
-					"current_character_uid) VALUES (?, ?);";
+			"UPDATE  players SET current_character_uid = ? WHERE minecraft_account_name = ?;";
 	private static final String REPLACE_PLAYER_CUR_CHAR_CREATED_CHAR =
 			"REPLACE INTO players (" +
 					"minecraft_account_name, " +
@@ -92,8 +90,11 @@ public class MySQLDatabase {
 	private static final String SELECT_CREATED_CHARS =
 			"SELECT * FROM created_characters WHERE id = ?;";
 
-	private static final String INSERT_CREATED_CHAR =
-			"INSERT INTO created_characters (id, char_uid, created_utc, generation_method, stored_utc) " +
+	private static final String SELECT_CREATED_CHAR_BY_UID = 
+			"SELECT * FROM created_characters WHERE id = ?";
+
+	private static final String INSERT_OR_UPDATE_CREATED_CHAR =
+			"REPLACE INTO created_characters (id, char_uid, created_utc, generation_method, stored_utc) " +
 					"VALUES(?, ?, ?, ?, ?);";
 
 	private static final String CLEAR_CREATED_CHARS =
@@ -212,18 +213,18 @@ public class MySQLDatabase {
 					");");
 
 			statement.execute("CREATE TABLE IF NOT EXISTS `players` (" +
-					"`minecraft_account_name` text NOT NULL," +
+					"`minecraft_account_name` varchar(100) NOT NULL," +
 					"`created_characters_id` int(11) DEFAULT NULL," +
-					"`current_character_uid` int(11) DEFAULT NULL" +
-					");");
+					"`current_character_uid` int(11) DEFAULT NULL," +
+					"PRIMARY KEY (`minecraft_account_name`));");
 
 			statement.execute("CREATE TABLE IF NOT EXISTS `created_characters` (" +
 					"`id` int(11) NOT NULL, " +
 					"`char_uid` int(11) NOT NULL DEFAULT -1," +
 					"`created_utc` BIGINT NOT NULL DEFAULT -1, " +
 					"`generation_method` TEXT DEFAULT NULL, " +
-					"`stored_utc` BIGINT NOT NULL DEFAULT -1" +
-					");");
+					"`stored_utc` BIGINT NOT NULL DEFAULT -1, " +
+					"PRIMARY KEY (`char_uid`));");
 			
 			statement.execute("CREATE TABLE IF NOT EXISTS `wounds` (" +
 					"`wound_uid` int(11) NOT NULL AUTO_INCREMENT, " +
@@ -360,11 +361,17 @@ public class MySQLDatabase {
 				results.close();
 				gChar.setUid(uid);
 				
-				statement = conn.prepareStatement("SELECT max(created_characters_id) FROM players");
-				results = statement.executeQuery();
-				
-				results.next();
-				int id = results.getInt(1) + 1;
+				int[] activeAndCreated = getActive(gChar.getMcName());
+				int id = 0;
+				if(activeAndCreated != null)
+					id = activeAndCreated[1];
+				else {
+					statement = conn.prepareStatement("SELECT max(created_characters_id) FROM players");
+					results = statement.executeQuery();
+
+					results.next();
+					id = results.getInt(1) + 1;
+				}
 				
 				this.setPlayerCharactersCreatedAndActive(gChar.getMcName(), id, gChar.getUid());
 				results.close();
@@ -399,8 +406,8 @@ public class MySQLDatabase {
 			results.next();
 
 			GildorymCharacter result = new GildorymCharacter(uid);
-			result.setName("char_name");
-			result.setMcName("minecraft_account_name");
+			result.setName(results.getString("char_name"));
+			result.setMcName(results.getString("minecraft_account_name"));
 			result.setCharCard(new CharacterCard(
 					results.getInt("age"),
 					Gender.valueOf(results.getString("gender")),
@@ -442,8 +449,8 @@ public class MySQLDatabase {
 	public boolean setCurrentCharacter(String playerName, int uid) {
 		try {
 			PreparedStatement statement = conn.prepareStatement(REPLACE_PLAYER_CUR_CHAR);
-			statement.setString(1, playerName);
-			statement.setInt(2, uid);
+			statement.setInt(1, uid);
+			statement.setString(2, playerName);
 			statement.execute();
 			return true;
 		}catch(SQLException e) {
@@ -544,10 +551,41 @@ public class MySQLDatabase {
 		}
 		return null;
 	}
-
-	public boolean addCreatedCharacterInfo(CreatedCharacterInfo cci) {
+	
+	/**
+	 * Gets the created character info corresponding to a characters uid
+	 * @param charUid the uid
+	 * @return the created character info
+	 */
+	public CreatedCharacterInfo getCreatedCharacterInfoByChar(int charUid) {
 		try {
-			PreparedStatement statement = conn.prepareStatement(INSERT_CREATED_CHAR);
+			PreparedStatement statement = conn.prepareStatement(SELECT_CREATED_CHAR_BY_UID);
+
+			statement.setInt(1, charUid);
+
+			ResultSet resultSet = statement.executeQuery();
+
+			if(resultSet.next()) {
+				CreatedCharacterInfo cci = new CreatedCharacterInfo(resultSet.getInt("id"));
+				cci.setCharUid(resultSet.getInt("char_uid"));
+				cci.setCreatedUTC(resultSet.getLong("created_utc"));
+				cci.setGenerationMethod(resultSet.getString("generation_method"));
+				cci.setStoredUTC(resultSet.getLong("stored_utc"));
+				resultSet.close();
+				return cci;
+			}
+
+			return null;
+		}catch(SQLException e) {
+			plugin.getLogger().log(Level.SEVERE, "Unable to retrieve created character info for uid " + charUid);
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public boolean addOrUpdateCreatedCharacterInfo(CreatedCharacterInfo cci) {
+		try {
+			PreparedStatement statement = conn.prepareStatement(INSERT_OR_UPDATE_CREATED_CHAR);
 
 			statement.setInt(1, cci.getId());
 			statement.setInt(2, cci.getCharUid());

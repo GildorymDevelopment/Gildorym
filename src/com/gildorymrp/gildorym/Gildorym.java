@@ -178,7 +178,7 @@ public class Gildorym extends JavaPlugin {
 				int createdCharacterId = sqlDB.getActive(player.getName())[1];
 				
 				CreatedCharacterInfo cci = new CreatedCharacterInfo(result.getUid(), createdCharacterId, System.currentTimeMillis(), -1, "AUTO-GENERATED");
-				sqlDB.addCreatedCharacterInfo(cci);
+				sqlDB.addOrUpdateCreatedCharacterInfo(cci);
 			}
 		}else {
 			result = sqlDB.loadCharacter(activeAndCreated[0]);
@@ -407,8 +407,8 @@ public class Gildorym extends JavaPlugin {
 
 	public static GildorymCharacter createDefaultCharacter(Player player) {
 		return new GildorymCharacter(-1, // uid
-				"", // mc name
-				player.getName(), // name
+				"", // name
+				player.getName(), // mc name
 				new CharacterCard(0, // age
 						Gender.UNKNOWN, // gender 
 						"", // description
