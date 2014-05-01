@@ -21,6 +21,10 @@ public class WoundCommand implements CommandExecutor {
 			ChatColor.RED + "Cannot deal negative damage" + ChatColor.RESET;
 	private static final String INVALID_TIME_REGEN_AMOUNT =
 			ChatColor.RED + "Must last at least 1 second (-1 for forever)" + ChatColor.RESET;
+	private static final String INVALID_POTION_EFFECT_NUMBER =
+			ChatColor.RED + "Potion effects are between 0 (no effect) and 23" + ChatColor.RESET;
+	private static final String INVALID_POTION_EFFECT_LEVEL =
+			ChatColor.RED + "Potion levels must be 0 (no effect) or positive and finite" + ChatColor.RESET;
 	private static final String NULL_CHARACTER =
 			ChatColor.YELLOW + "The targets character is null, which shouldn't happen. Contact a developer. " + ChatColor.RESET;
 	private static final String NULL_CHARACTER2 =
@@ -39,7 +43,7 @@ public class WoundCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command c, String label, String[] args) {
 		/*
 		 * usage: /<command> [player] [damage type] [damage amount] [time regen (seconds)] (notes)
-		 * example: /wound Tjstretchalot FallDamage 1 600 Failed a skill check
+		 * example: /wound Tjstretchalot FallDamage 1 600 2 1 Failed a skill check
 		 */
 		
 		if(label.equalsIgnoreCase("wound")) {
@@ -89,10 +93,22 @@ public class WoundCommand implements CommandExecutor {
 		}else if(timeRegenSeconds == -1)
 			timeRegenSeconds = Long.MAX_VALUE;
 		
+		int potionEffect = safeParse(args[4]);
+		if(potionEffect < 0 || potionEffect > 23) {
+			sender.sendMessage(INVALID_POTION_EFFECT_NUMBER);
+			return false;
+		}
+		
+		int potionLevel = safeParse(args[5]) - 1;
+		if(potionLevel < 0) {
+			sender.sendMessage(INVALID_POTION_EFFECT_LEVEL);
+			return false;
+		}
+		
 		StringBuilder notes = new StringBuilder();
-		if(args.length > 4)
-			notes.append(args[4]);
-		for(int i = 5; i < args.length; i++) {
+		if(args.length > 6)
+			notes.append(args[6]);
+		for(int i = 7; i < args.length; i++) {
 			notes.append(" ").append(args[i]);
 		}
 		
@@ -103,7 +119,7 @@ public class WoundCommand implements CommandExecutor {
 		}
 		
 		Wound wound = new Wound(
-				System.currentTimeMillis(), dType, damageAmount, System.currentTimeMillis() + 1000 * timeRegenSeconds, notes.toString()
+				System.currentTimeMillis(), dType, damageAmount, System.currentTimeMillis() + 1000 * timeRegenSeconds, notes.toString(), potionEffect, potionLevel
 				);
 		gildorym.getMySQLDatabase().inflictWound(gChar, wound);
 		gChar.addWound(wound);
@@ -113,8 +129,9 @@ public class WoundCommand implements CommandExecutor {
 	}
 	
 	private void showWoundHelp(CommandSender sender) {
-		sender.sendMessage("Usage:   /wound ((player) [damage type] [damage amount] [time regen (seconds)] (notes))");
-		sender.sendMessage("Example: /wound Tjstretchalot FallDamage 1 600 Failed a skill check");
+		sender.sendMessage("Usage:   /wound ((player) [damage type] [damage amount] [time regen (seconds)] [potion effect number] [potion effect level] (notes))");
+		sender.sendMessage("Example: /wound Tjstretchalot FallDamage 1 600 2 1 Failed a skill check");
+		sender.sendMessage("Note that potion effect number 0 (regardless of level) will cause no effect. Similiarly, level 0 will cause no effect");
 		StringBuilder line = new StringBuilder("Dmg. Types: ");
 		
 		DamageType[] types = DamageType.values();
@@ -179,6 +196,7 @@ public class WoundCommand implements CommandExecutor {
 		sender.sendMessage(msg.toString());
 		for(Wound w : wounds) {
 			sender.sendMessage("  " + w.getDamageType().commandName() + " causes " + w.getDamageAmount() + " damage for " + remainingTime(w));
+			sender.sendMessage("      Effect: " + w.getPotionEffectName() + " level " + (w.getEffectLevel() + 1));
 			sender.sendMessage("      Notes: " + w.getNotes());
 		}
 		return true;

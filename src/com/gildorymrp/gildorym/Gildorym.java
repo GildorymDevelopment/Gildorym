@@ -63,6 +63,7 @@ public class Gildorym extends JavaPlugin {
 		this.getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
 		this.getServer().getPluginManager().registerEvents(new SignChangeListener(), this);
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new WoundEffectApplicator(this), 1 * 20, 5 * 20);
 		
 		String dbHost = this.getConfig().getString("database.host");
 		String port = this.getConfig().getString("database.port");

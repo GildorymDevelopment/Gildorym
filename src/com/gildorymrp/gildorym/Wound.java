@@ -1,5 +1,7 @@
 package com.gildorymrp.gildorym;
 
+import org.bukkit.potion.PotionEffectType;
+
 public class Wound {
 	private int woundUid;
 	private int woundID;
@@ -9,21 +11,23 @@ public class Wound {
 	private int damageAmount;
 	private long timeRegen; // When the wound is regened, e.g. if it was inflicted at 5 and it took 5 seconds to heal, timeRegen would be 10 (5 + 5)
 	private String notes;
+	private int potionEffect;
+	private int potionLevel;
 	
 	public Wound(int uid) {
 		this.woundUid = uid;
 	}
 	
 	public Wound(long timestamp, DamageType damageType, int damageAmount,
-			long timeRegen, String notes) {
+			long timeRegen, String notes, int potionEffect, int potionLevel) {
 		this.timestamp = timestamp;
 		this.damageType = damageType;
 		this.damageAmount = damageAmount;
 		this.timeRegen = timeRegen;
 		this.notes = notes;
+		this.potionEffect = potionEffect;
+		this.potionLevel = potionLevel;
 	}
-
-
 
 	public int getWoundID() {
 		return woundID;
@@ -68,13 +72,34 @@ public class Wound {
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
+	public int getPotionEffect() {
+		return potionEffect;
+	}
+	public void setPotionEffect(int potionEffect) {
+		this.potionEffect = potionEffect;
+	}
+	public String getPotionEffectName() {
+		if(potionEffect == 0)
+			return "NONE";
+		return PotionEffectType.values()[potionEffect].getName();
+	}
 
+	public PotionEffectType getPotionEffectObj() {
+		return PotionEffectType.values()[potionEffect];
+	}
+	public int getEffectLevel() {
+		return potionLevel;
+	}
+	public void setPotionLevel(int potionLevel) {
+		this.potionLevel = potionLevel;
+	}
 	@Override
 	public String toString() {
 		return "Wound [woundUID=" + woundUid + ", woundID=" + woundID +
 				", timestamp=" + timestamp + ", damageType=" + damageType + 
 				", damageAmount=" + damageAmount + ", timeRegen=" + timeRegen + 
-				", notes=" + notes + "]";
+				", notes=" + notes + ", potionEffect=" + potionEffect +
+				", potionLevel=" + potionLevel + "]";
 	}
 
 	@Override
@@ -89,6 +114,8 @@ public class Wound {
 		result = prime * result + (int) (timeRegen ^ (timeRegen >>> 32));
 		result = prime * result + (int) (timestamp ^ (timestamp >>> 32));
 		result = prime * result + woundID;
+		result = prime * result + potionEffect;
+		result = prime * result + potionLevel;
 		return result;
 	}
 
@@ -117,6 +144,10 @@ public class Wound {
 		if (timestamp != other.timestamp)
 			return false;
 		if (woundID != other.woundID)
+			return false;
+		if(potionEffect != other.potionEffect)
+			return false;
+		if(potionLevel != other.potionLevel)
 			return false;
 		return true;
 	}

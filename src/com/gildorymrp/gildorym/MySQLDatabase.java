@@ -101,7 +101,8 @@ public class MySQLDatabase {
 	
 	private static final String INSERT_WOUND = 
 			"INSERT INTO wounds (wound_id, timestamp, damage_type, " +
-			"damage_amount, regen_time, notes) VALUES(?, ?, ?, ?, ?, ?);";
+			"damage_amount, regen_time, potion_effect, effect_level, notes) " +
+			"VALUES(?, ?, ?, ?, ?, ?, ?, ?);";
 	
 	private static final String SELECT_WOUNDS_BY_ID =
 			"SELECT * FROM wounds WHERE wound_id = ?";
@@ -231,6 +232,8 @@ public class MySQLDatabase {
 					"`damage_type` text DEFAULT NULL, " +
 					"`damage_amount` TINYINT DEFAULT NULL," +
 					"`regen_time` BIGINT NOT NULL DEFAULT -1," +
+					"`potion_effect` int(11) NOT NULL, " +
+					"`effect_level` int(11) NOT NULL, " + 
 					"`notes` text DEFAULT NULL, " +
 					"PRIMARY KEY (`wound_uid`)" +
 					");");
@@ -605,7 +608,9 @@ public class MySQLDatabase {
 			statement.setString(3, w.getDamageType().name());
 			statement.setInt(4, w.getDamageAmount());
 			statement.setLong(5, w.getTimeRegen());
-			statement.setString(6, w.getNotes());
+			statement.setInt(6, w.getPotionEffect());
+			statement.setInt(7, w.getEffectLevel());
+			statement.setString(8, w.getNotes());
 			
 			statement.execute();
 			
@@ -681,6 +686,8 @@ public class MySQLDatabase {
 				w.setDamageType(DamageType.valueOf(resultSet.getString("damage_type")));
 				w.setDamageAmount(resultSet.getInt("damage_amount"));
 				w.setTimeRegen(resultSet.getLong("regen_time"));
+				w.setPotionEffect(resultSet.getInt("potion_effect"));
+				w.setPotionLevel(resultSet.getInt("effect_level"));
 				w.setNotes(resultSet.getString("notes"));
 				
 				gChar.addWound(w);
