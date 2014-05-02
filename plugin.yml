@@ -6,7 +6,7 @@ depend: [Essentials]
 database: true
 commands:
     newcharacter:
-        usage: /<command>
+        usage: /<command> [target]
         description: Resets all character data
     setname:
         usage: /cmd <name> <name> <name> <name> <name>
@@ -59,6 +59,12 @@ permissions:
         default: op
     gildorym.command.removewound:
         description: Allows access to /removewound
+        default: op
+    gildorym.command.newcharacter:
+        description: Allows access to /newcharacter
+        default: true
+    gildorym.command.newcharacter.other:
+        description: Allows access to /newcharacter [target]
         default: op
     gildorym.dmroll:
         description: Allows you to roll silently.

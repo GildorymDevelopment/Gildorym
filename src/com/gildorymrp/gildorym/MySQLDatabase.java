@@ -91,7 +91,7 @@ public class MySQLDatabase {
 			"SELECT * FROM created_characters WHERE id = ?;";
 
 	private static final String SELECT_CREATED_CHAR_BY_UID = 
-			"SELECT * FROM created_characters WHERE id = ?";
+			"SELECT * FROM created_characters WHERE char_uid = ?";
 
 	private static final String INSERT_OR_UPDATE_CREATED_CHAR =
 			"REPLACE INTO created_characters (id, char_uid, created_utc, generation_method, stored_utc) " +

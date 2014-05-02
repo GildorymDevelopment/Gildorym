@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import net.ess3.api.IEssentials;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
@@ -16,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.earth2me.essentials.IEssentials;
 import com.gildorymrp.charactercards.CharacterBehavior;
 import com.gildorymrp.charactercards.CharacterCard;
 import com.gildorymrp.charactercards.CharacterMorality;
@@ -38,8 +38,10 @@ public class Gildorym extends JavaPlugin {
 			this.getLogger().severe("Could not find a compatible economy, disabling!");
 			this.setEnabled(false);
 		}
-				
-		this.getCommand("newcharacter").setExecutor(new NewCharacterCommand(this, (IEssentials) this.getServer().getPluginManager().getPlugin("Essentials")));
+		
+		CharacterCommands cc = new CharacterCommands(this, (IEssentials) this.getServer().getPluginManager().getPlugin("Essentials"));
+		this.getCommand("newcharacter").setExecutor(cc);
+		
 		this.getCommand("setname").setExecutor(new SetNameCommand(this));
 		this.getCommand("setnameother").setExecutor(new SetNameOtherCommand(this));
 		this.getCommand("rollinfo").setExecutor(new RollInfoCommand(this));

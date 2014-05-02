@@ -12,7 +12,7 @@ public class WoundCommand implements CommandExecutor {
 	private static final String NOT_ENOUGH_PERMS = 
 			ChatColor.RED + "You do not have enough permission to do that." + ChatColor.RESET;
 	private static final String NOT_ENOUGH_PARAMS = 
-			ChatColor.RED + "Insufficient parameters from this command!" + ChatColor.RESET;
+			ChatColor.RED + "Insufficient parameters for this command!" + ChatColor.RESET;
 	private static final String TARGET_NOT_FOUND = 
 			ChatColor.RED + "There is no user named %s on the server right now" + ChatColor.RESET;
 	private static final String CONSOLE_NEEDS_TARGET = 
