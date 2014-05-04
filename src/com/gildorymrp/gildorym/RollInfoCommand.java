@@ -25,39 +25,28 @@ public class RollInfoCommand implements CommandExecutor {
 			
 			CharacterStats cStats = new CharacterStats(player);
 
-			double meleeAttack = cStats.getMeleeAttack();
-			double meleeDefence = cStats.getMeleeDefence();
-			double rangedAttack = cStats.getRangedAttack();
-			double rangedDefence = cStats.getRangedDefence();
-			double magicAttack = cStats.getMagicAttack();
-			double magicDefence = cStats.getMagicDefence();
-			double fortitude = cStats.getFortitude();
-			double reflex = cStats.getReflex();
-			double will = cStats.getWill();
+			double meleeAttack = Math.floor(cStats.getMeleeAttack());
+			double meleeDefence = Math.floor(cStats.getMeleeDefence());
+			double rangedAttack = Math.floor(cStats.getRangedAttack());
+			double rangedDefence =Math.floor( cStats.getRangedDefence());
+			double magicAttack = Math.floor(cStats.getMagicAttack());
+			double magicDefence = Math.floor(cStats.getMagicDefence());
+			double fortitude = Math.floor(cStats.getFortitude());
+			double reflex = Math.floor(cStats.getReflex());
+			double will = Math.floor(cStats.getWill());
 
 			sender.sendMessage(ChatColor.GRAY + "======================");
 			sender.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + player.getDisplayName() + "'s Roll Info");
 			sender.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "Class: " + "" + Util.getClazz(player));
 			sender.sendMessage(ChatColor.GRAY + "======================");
-			sender.sendMessage(ChatColor.RED + "Melee   - Attack: " + ChatColor.WHITE + (int) Math.floor(meleeAttack) + ChatColor.RED + "  Defence: " + ChatColor.WHITE
-					+ (int) Math.floor(meleeDefence));
-			sender.sendMessage(ChatColor.RED + "Ranged - Attack: "
-					+ ChatColor.WHITE + (int) Math.floor(rangedAttack)
-					+ ChatColor.RED + "  Defence: " + ChatColor.WHITE
-					+ (int) Math.floor(rangedDefence));
-			sender.sendMessage(ChatColor.RED + "Magic   - Attack: "
-					+ ChatColor.WHITE + (int) Math.floor(magicAttack)
-					+ ChatColor.RED + "  Defence: " + ChatColor.WHITE
-					+ (int) Math.floor(magicDefence));
-			sender.sendMessage(ChatColor.RED + "Fort: " + ChatColor.WHITE
-					+ "1d20+" + (int) Math.floor(fortitude));
-			sender.sendMessage(ChatColor.RED + "Ref: " + ChatColor.WHITE
-					+ "1d20+" + (int) Math.floor(reflex));
-			sender.sendMessage(ChatColor.RED + "Will: " + ChatColor.WHITE
-					+ "1d20+" + (int) Math.floor(will));
+			sender.sendMessage(ChatColor.RED + "Melee   - Attack: " + ChatColor.WHITE + "1d20+" + (int) meleeAttack + ChatColor.RED + "  Defence: " + ChatColor.WHITE + "1d20+" + (int) meleeDefence);
+			sender.sendMessage(ChatColor.RED + "Ranged - Attack: " + ChatColor.WHITE + "1d20+" + (int) rangedAttack + ChatColor.RED + "  Defence: " + ChatColor.WHITE + "1d20+" + (int) rangedDefence);
+			sender.sendMessage(ChatColor.RED + "Magic   - Attack: " + ChatColor.WHITE + "1d20+" + (int) magicAttack + ChatColor.RED + "  Defence: " + ChatColor.WHITE + "1d20+" + (int) magicDefence);
+			sender.sendMessage(ChatColor.RED + "Fort: " + ChatColor.WHITE + "1d20+" + (int) Math.floor(fortitude));
+			sender.sendMessage(ChatColor.RED + "Ref: " + ChatColor.WHITE + "1d20+" + (int) Math.floor(reflex));
+			sender.sendMessage(ChatColor.RED + "Will: " + ChatColor.WHITE + "1d20+" + (int) Math.floor(will));
 		} else {
-			sender.sendMessage(ChatColor.DARK_RED
-					+ "Could not find that player!");
+			sender.sendMessage(ChatColor.DARK_RED + "Could not find that player!");
 		}
 		return true;
 	}
