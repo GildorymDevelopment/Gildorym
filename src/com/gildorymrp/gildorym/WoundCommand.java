@@ -180,7 +180,7 @@ public class WoundCommand implements CommandExecutor {
 		}
 		
 		List<Wound> wounds = gChar.getWounds();
-		if(wounds.size() == 0) {
+		if(wounds == null || wounds.size() == 0) {
 			sender.sendMessage(NO_WOUNDS);
 			return true;
 		}
