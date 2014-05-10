@@ -92,8 +92,7 @@ public class RollCommand implements CommandExecutor {
 			// Sends message and output to all players within 24 of sender
 			if (cmd.getName().equalsIgnoreCase("roll")) {
 				for (Player player : ((Player) sender).getWorld().getPlayers()) {
-					if (player.getLocation().distance(
-							((Player) sender).getLocation()) <= 24) {
+					if (player.getLocation().distance(((Player) sender).getLocation()) <= 24) {
 						player.sendMessage(message);
 						player.sendMessage(output);
 					}
@@ -126,17 +125,15 @@ public class RollCommand implements CommandExecutor {
 	private int[] parseArgs(String[] args) throws NumberFormatException {
 		int[] rollInfo = new int[3];
 
-		if (args.length == 0) {
-			//If there are no arguments, defaults to 1d20+0
+		if (args.length == 0)
 			return new int[] { 1, 20, 0 };
-		}
+			//If there are no arguments, defaults to 1d20+0
 
 		String rollString = args[0];
 
-		if (args[0].equals(null)) {
-			// If the arguments are blank, defaults to 1d20+0
+		if (args[0].equals(null))
 			return new int[] { 1, 20, 0 };
-		}
+			// If the arguments are blank, defaults to 1d20+0
 
 		// If roll is in form xd?, sets the amount of dice rolled to x
 		if (rollString.contains("d")) {
@@ -156,22 +153,20 @@ public class RollCommand implements CommandExecutor {
 		rollInfo[2] = 0;
 		if (rollString.length() > 0) {
 			for (String ps : rollString.split("\\+")) {
-				if (ps != null && !ps.isEmpty()) {
+				if (ps != null && !ps.isEmpty())
 					if (!ps.contains("-")) {
 						rollInfo[2] += Integer.parseInt(ps);
 					} else {
 						String[] ns = ps.split("\\-");
 						for (int i = 0; i < ns.length; i++) {
-							if (ns[i] != null && !ns[i].isEmpty()) {
+							if (ns[i] != null && !ns[i].isEmpty())
 								if (i == 0) {
 									rollInfo[2] += Integer.parseInt(ns[i]);
 								} else {
 									rollInfo[2] -= Integer.parseInt(ns[i]);
 								}
-							}
 						}
 					}
-				}
 			}
 		} 
 
